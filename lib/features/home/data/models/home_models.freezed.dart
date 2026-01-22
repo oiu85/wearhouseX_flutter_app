@@ -589,7 +589,7 @@ $CategoryModelCopyWith<$Res>? get category {
 /// @nodoc
 mixin _$StockItemModel {
 
- int get id;@JsonKey(name: 'driver_id') int get driverId;@JsonKey(name: 'product_id') int get productId; int get quantity; ProductModel get product;
+ int get id;@JsonKey(name: 'driver_id') int get driverId;@JsonKey(name: 'product_id') int get productId; int get quantity; ProductModel get product;@JsonKey(name: 'updated_at') String? get updatedAt;
 /// Create a copy of StockItemModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -602,16 +602,16 @@ $StockItemModelCopyWith<StockItemModel> get copyWith => _$StockItemModelCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is StockItemModel&&(identical(other.id, id) || other.id == id)&&(identical(other.driverId, driverId) || other.driverId == driverId)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.product, product) || other.product == product));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is StockItemModel&&(identical(other.id, id) || other.id == id)&&(identical(other.driverId, driverId) || other.driverId == driverId)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.product, product) || other.product == product)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,driverId,productId,quantity,product);
+int get hashCode => Object.hash(runtimeType,id,driverId,productId,quantity,product,updatedAt);
 
 @override
 String toString() {
-  return 'StockItemModel(id: $id, driverId: $driverId, productId: $productId, quantity: $quantity, product: $product)';
+  return 'StockItemModel(id: $id, driverId: $driverId, productId: $productId, quantity: $quantity, product: $product, updatedAt: $updatedAt)';
 }
 
 
@@ -622,7 +622,7 @@ abstract mixin class $StockItemModelCopyWith<$Res>  {
   factory $StockItemModelCopyWith(StockItemModel value, $Res Function(StockItemModel) _then) = _$StockItemModelCopyWithImpl;
 @useResult
 $Res call({
- int id,@JsonKey(name: 'driver_id') int driverId,@JsonKey(name: 'product_id') int productId, int quantity, ProductModel product
+ int id,@JsonKey(name: 'driver_id') int driverId,@JsonKey(name: 'product_id') int productId, int quantity, ProductModel product,@JsonKey(name: 'updated_at') String? updatedAt
 });
 
 
@@ -639,14 +639,15 @@ class _$StockItemModelCopyWithImpl<$Res>
 
 /// Create a copy of StockItemModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? driverId = null,Object? productId = null,Object? quantity = null,Object? product = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? driverId = null,Object? productId = null,Object? quantity = null,Object? product = null,Object? updatedAt = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,driverId: null == driverId ? _self.driverId : driverId // ignore: cast_nullable_to_non_nullable
 as int,productId: null == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
 as int,quantity: null == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
 as int,product: null == product ? _self.product : product // ignore: cast_nullable_to_non_nullable
-as ProductModel,
+as ProductModel,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 /// Create a copy of StockItemModel
@@ -740,10 +741,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'driver_id')  int driverId, @JsonKey(name: 'product_id')  int productId,  int quantity,  ProductModel product)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'driver_id')  int driverId, @JsonKey(name: 'product_id')  int productId,  int quantity,  ProductModel product, @JsonKey(name: 'updated_at')  String? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _StockItemModel() when $default != null:
-return $default(_that.id,_that.driverId,_that.productId,_that.quantity,_that.product);case _:
+return $default(_that.id,_that.driverId,_that.productId,_that.quantity,_that.product,_that.updatedAt);case _:
   return orElse();
 
 }
@@ -761,10 +762,10 @@ return $default(_that.id,_that.driverId,_that.productId,_that.quantity,_that.pro
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'driver_id')  int driverId, @JsonKey(name: 'product_id')  int productId,  int quantity,  ProductModel product)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'driver_id')  int driverId, @JsonKey(name: 'product_id')  int productId,  int quantity,  ProductModel product, @JsonKey(name: 'updated_at')  String? updatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _StockItemModel():
-return $default(_that.id,_that.driverId,_that.productId,_that.quantity,_that.product);case _:
+return $default(_that.id,_that.driverId,_that.productId,_that.quantity,_that.product,_that.updatedAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -781,10 +782,10 @@ return $default(_that.id,_that.driverId,_that.productId,_that.quantity,_that.pro
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(name: 'driver_id')  int driverId, @JsonKey(name: 'product_id')  int productId,  int quantity,  ProductModel product)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(name: 'driver_id')  int driverId, @JsonKey(name: 'product_id')  int productId,  int quantity,  ProductModel product, @JsonKey(name: 'updated_at')  String? updatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _StockItemModel() when $default != null:
-return $default(_that.id,_that.driverId,_that.productId,_that.quantity,_that.product);case _:
+return $default(_that.id,_that.driverId,_that.productId,_that.quantity,_that.product,_that.updatedAt);case _:
   return null;
 
 }
@@ -796,7 +797,7 @@ return $default(_that.id,_that.driverId,_that.productId,_that.quantity,_that.pro
 @JsonSerializable()
 
 class _StockItemModel implements StockItemModel {
-  const _StockItemModel({required this.id, @JsonKey(name: 'driver_id') required this.driverId, @JsonKey(name: 'product_id') required this.productId, required this.quantity, required this.product});
+  const _StockItemModel({required this.id, @JsonKey(name: 'driver_id') required this.driverId, @JsonKey(name: 'product_id') required this.productId, required this.quantity, required this.product, @JsonKey(name: 'updated_at') this.updatedAt});
   factory _StockItemModel.fromJson(Map<String, dynamic> json) => _$StockItemModelFromJson(json);
 
 @override final  int id;
@@ -804,6 +805,7 @@ class _StockItemModel implements StockItemModel {
 @override@JsonKey(name: 'product_id') final  int productId;
 @override final  int quantity;
 @override final  ProductModel product;
+@override@JsonKey(name: 'updated_at') final  String? updatedAt;
 
 /// Create a copy of StockItemModel
 /// with the given fields replaced by the non-null parameter values.
@@ -818,16 +820,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StockItemModel&&(identical(other.id, id) || other.id == id)&&(identical(other.driverId, driverId) || other.driverId == driverId)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.product, product) || other.product == product));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StockItemModel&&(identical(other.id, id) || other.id == id)&&(identical(other.driverId, driverId) || other.driverId == driverId)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.product, product) || other.product == product)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,driverId,productId,quantity,product);
+int get hashCode => Object.hash(runtimeType,id,driverId,productId,quantity,product,updatedAt);
 
 @override
 String toString() {
-  return 'StockItemModel(id: $id, driverId: $driverId, productId: $productId, quantity: $quantity, product: $product)';
+  return 'StockItemModel(id: $id, driverId: $driverId, productId: $productId, quantity: $quantity, product: $product, updatedAt: $updatedAt)';
 }
 
 
@@ -838,7 +840,7 @@ abstract mixin class _$StockItemModelCopyWith<$Res> implements $StockItemModelCo
   factory _$StockItemModelCopyWith(_StockItemModel value, $Res Function(_StockItemModel) _then) = __$StockItemModelCopyWithImpl;
 @override @useResult
 $Res call({
- int id,@JsonKey(name: 'driver_id') int driverId,@JsonKey(name: 'product_id') int productId, int quantity, ProductModel product
+ int id,@JsonKey(name: 'driver_id') int driverId,@JsonKey(name: 'product_id') int productId, int quantity, ProductModel product,@JsonKey(name: 'updated_at') String? updatedAt
 });
 
 
@@ -855,14 +857,15 @@ class __$StockItemModelCopyWithImpl<$Res>
 
 /// Create a copy of StockItemModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? driverId = null,Object? productId = null,Object? quantity = null,Object? product = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? driverId = null,Object? productId = null,Object? quantity = null,Object? product = null,Object? updatedAt = freezed,}) {
   return _then(_StockItemModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,driverId: null == driverId ? _self.driverId : driverId // ignore: cast_nullable_to_non_nullable
 as int,productId: null == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
 as int,quantity: null == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
 as int,product: null == product ? _self.product : product // ignore: cast_nullable_to_non_nullable
-as ProductModel,
+as ProductModel,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

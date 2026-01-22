@@ -345,5 +345,14 @@
     "noStockItems": "No stock items found",
     "availableQuantity": "Available Quantity",
     "pricePerUnit": "Price per Unit"
+  },
+  "stockDetail": {
+    "title": "Product Details",
+    "availableQuantity": "Available Quantity",
+    "pricePerUnit": "Price per Unit",
+    "lastUpdated": "Last Updated",
+    "sellProduct": "Sell this Product",
+    "noDescription": "No description available",
+    "updatedAgo": "Updated {time} ago"
   }
 }

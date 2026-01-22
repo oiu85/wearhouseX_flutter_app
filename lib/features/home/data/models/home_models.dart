@@ -71,6 +71,7 @@ abstract class StockItemModel with _$StockItemModel {
     @JsonKey(name: 'product_id') required int productId,
     required int quantity,
     required ProductModel product,
+    @JsonKey(name: 'updated_at') String? updatedAt,
   }) = _StockItemModel;
 
   factory StockItemModel.fromJson(Map<String, dynamic> json) =>
@@ -86,6 +87,7 @@ extension StockItemModelExtension on StockItemModel {
       productId: productId,
       quantity: quantity,
       product: product.toEntity(),
+      updatedAt: updatedAt != null ? DateTime.tryParse(updatedAt!) : null,
     );
   }
 }

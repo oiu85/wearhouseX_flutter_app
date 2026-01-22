@@ -33,4 +33,24 @@ class HomeRepositoryImpl implements HomeRepository {
       },
     );
   }
+
+  @override
+  Future<Either<Failure, StockItemEntity>> getStockItemById(int stockItemId) async {
+    final result = await remoteDataSource.getStockItemById(stockItemId);
+
+    return result.fold(
+      (networkFailure) => Left(
+        NetworkFailure(networkFailure.message),
+      ),
+      (stockItem) {
+        try {
+          return Right(stockItem.toEntity());
+        } catch (e) {
+          return Left(
+            ServerFailure('Failed to convert stock item: ${e.toString()}'),
+          );
+        }
+      },
+    );
+  }
 }

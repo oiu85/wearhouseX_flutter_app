@@ -4,4 +4,5 @@ import '../entities/stock_item_entity.dart';
 
 abstract class HomeRepository {
   Future<Either<Failure, List<StockItemEntity>>> getDriverStock();
+  Future<Either<Failure, StockItemEntity>> getStockItemById(int stockItemId);
 }

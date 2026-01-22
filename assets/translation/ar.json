@@ -119,5 +119,14 @@
     "noStockItems": "لا توجد عناصر مخزون",
     "availableQuantity": "الكمية المتاحة",
     "pricePerUnit": "السعر لكل وحدة"
+  },
+  "stockDetail": {
+    "title": "تفاصيل المنتج",
+    "availableQuantity": "الكمية المتاحة",
+    "pricePerUnit": "السعر لكل وحدة",
+    "lastUpdated": "آخر تحديث",
+    "sellProduct": "بيع هذا المنتج",
+    "noDescription": "لا يوجد وصف متاح",
+    "updatedAgo": "تم التحديث منذ {time}"
   }
 }

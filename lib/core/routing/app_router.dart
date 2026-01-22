@@ -9,6 +9,7 @@ import '../storage/app_storage_service.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/forget_password_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
+import '../../features/home/presentation/pages/stock_detail_page.dart';
 import 'app_routes.dart';
 import 'navigation_observer.dart';
 
@@ -97,6 +98,15 @@ class AppRouter {
         path: AppRoutes.home,
         name: 'home',
         builder: (context, state) => const HomePage(),
+      ),
+      // Stock detail route
+      GoRoute(
+        path: AppRoutes.stockDetail,
+        name: 'stockDetail',
+        builder: (context, state) {
+          final stockItemId = int.parse(state.pathParameters['id']!);
+          return StockDetailPage(stockItemId: stockItemId);
+        },
       ),
     ],
   );

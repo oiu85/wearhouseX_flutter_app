@@ -14,4 +14,7 @@ class ApiConfig {
 
   // HOME/STOCK ENDPOINTS
   static const String driverMyStock = '/driver/my-stock';
+
+  // SALES ENDPOINTS
+  static const String createSale = '/sales';
 }

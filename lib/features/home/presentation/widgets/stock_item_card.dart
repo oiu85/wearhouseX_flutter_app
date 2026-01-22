@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/localization/app_text.dart';
-import '../../../../core/theme/app_color_extension.dart';
 import '../../domain/entities/stock_item_entity.dart';
 
 /// Stock item card widget
@@ -18,7 +17,6 @@ class StockItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorExtension = theme.extension<AppColorExtension>();
 
     return Card(
       margin: EdgeInsets.only(bottom: 16.h),

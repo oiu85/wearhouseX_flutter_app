@@ -9,6 +9,8 @@ abstract class AppRoutes {
   static const String verifyOtp = '/auth/verify-otp';
   static const String resetPassword = '/auth/reset-password';
   static const String home = '/home';
+  static const String stockDetail = '/stock/:id';
+  static const String createSale = '/sales/create';
   static const String donate = '/donate';
   static const String campaign = '/campaign';
   static const String catalogDetail = '/subcategories_campaign-detail';

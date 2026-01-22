@@ -7,6 +7,7 @@ class StockItemEntity {
   final int productId;
   final int quantity;
   final ProductEntity product;
+  final DateTime? updatedAt;
 
   const StockItemEntity({
     required this.id,
@@ -14,5 +15,6 @@ class StockItemEntity {
     required this.productId,
     required this.quantity,
     required this.product,
+    this.updatedAt,
   });
 }

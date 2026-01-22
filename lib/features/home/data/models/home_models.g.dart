@@ -51,6 +51,7 @@ _StockItemModel _$StockItemModelFromJson(Map<String, dynamic> json) =>
       productId: (json['product_id'] as num).toInt(),
       quantity: (json['quantity'] as num).toInt(),
       product: ProductModel.fromJson(json['product'] as Map<String, dynamic>),
+      updatedAt: json['updated_at'] as String?,
     );
 
 Map<String, dynamic> _$StockItemModelToJson(_StockItemModel instance) =>
@@ -60,4 +61,5 @@ Map<String, dynamic> _$StockItemModelToJson(_StockItemModel instance) =>
       'product_id': instance.productId,
       'quantity': instance.quantity,
       'product': instance.product,
+      'updated_at': instance.updatedAt,
     };
