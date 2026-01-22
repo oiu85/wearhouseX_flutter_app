@@ -4,19 +4,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import '../../../../core/component/others/selection_chip.dart';
-import '../../../../core/component/text_fields/custom_text_field.dart';
-import '../../../../core/localization/app_text.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/status/ui_helper.dart';
-import '../../../../core/status/bloc_status.dart';
 import '../../../../core/component/others/custom_selection_popup.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_event.dart';
 import '../bloc/home_state.dart';
+import '../widgets/home_app_bar.dart';
+import '../widgets/home_greeting_section.dart';
+import '../widgets/home_search_bar.dart';
+import '../widgets/home_category_filter.dart';
 import '../widgets/stock_item_card.dart';
 
-/// Home page displaying driver's stock
+//* Home page displaying driver's stock
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -32,7 +32,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    // Load stock on initial mount
+    //* Load user info and stock on initial mount
+    _homeBloc.add(const LoadUserInfo());
     _homeBloc.add(const LoadStock());
   }
 
@@ -45,7 +46,7 @@ class _HomePageState extends State<HomePage> {
 
   void _onRefresh() {
     _homeBloc.add(const RefreshStock());
-    // Refresh completion is handled in BlocListener
+    //* Refresh completion is handled in BlocListener
   }
 
   void _showSortDialog() {
@@ -88,33 +89,15 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: AppText(
-          LocaleKeys.home_stockList.tr(),
-          translation: false,
-          style: theme.textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: theme.colorScheme.onSurface,
-          ),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: [
-          // Sort button
-          IconButton(
-            icon: Icon(
-              Icons.sort,
-              color: theme.colorScheme.onSurface,
-            ),
-            onPressed: _showSortDialog,
-            tooltip: LocaleKeys.home_sortBy.tr(),
-          ),
-        ],
+      appBar: HomeAppBar(
+        refreshController: _refreshController,
+        onRefresh: _onRefresh,
+        onSortPressed: _showSortDialog,
       ),
       body: BlocListener<HomeBloc, HomeState>(
         bloc: _homeBloc,
         listener: (context, state) {
-          // Complete refresh when state changes to success
+          //* Complete refresh when state changes to success
           if (state.status.isSuccess() && _refreshController.isRefresh) {
             _refreshController.refreshCompleted();
           } else if (state.status.isFail() && _refreshController.isRefresh) {
@@ -124,12 +107,10 @@ class _HomePageState extends State<HomePage> {
         child: BlocBuilder<HomeBloc, HomeState>(
           bloc: _homeBloc,
           builder: (context, state) {
-            // Show loading/error states
+            //* Show loading/error states
             if (state.status.isLoading() || state.status.isInitial()) {
               return Center(
-                child: CircularProgressIndicator(
-                  color: theme.colorScheme.primary,
-                ),
+                child: CircularProgressIndicator(color: theme.colorScheme.primary),
               );
             }
 
@@ -145,73 +126,58 @@ class _HomePageState extends State<HomePage> {
               );
             }
 
-          return Column(
-            children: [
-              // Search Bar
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                child: CustomTextField(
-                  controller: _searchController,
-                  hintText: LocaleKeys.home_searchProducts.tr(),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: theme.colorScheme.onSurface.withOpacity(0.6),
-                  ),
-                  onChanged: (value) {
-                    _homeBloc.add(SearchStock(value));
-                  },
-                ),
+            //* Use CustomScrollView with SliverAppBar for pull-to-refresh in app bar area
+            return SmartRefresher(
+              controller: _refreshController,
+              onRefresh: _onRefresh,
+              enablePullDown: true,
+              enablePullUp: false,
+              physics: const AlwaysScrollableScrollPhysics(),
+              header: WaterDropMaterialHeader(
+                backgroundColor: theme.colorScheme.primary,
+                color: theme.colorScheme.surface,
               ),
+              child: CustomScrollView(
+                slivers: [
+                  //* Greeting Section
+                  if (state.greetingText != null)
+                    SliverToBoxAdapter(
+                      child: HomeGreetingSection(greetingText: state.greetingText),
+                    ),
 
-              // Category Filter Chips
-              if (state.categories.isNotEmpty) ...[
-                SizedBox(
-                  height: 50.h,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    children: [
-                      // All Categories chip
-                      SelectionChip(
-                        label: LocaleKeys.home_allCategories.tr(),
-                        isSelected: state.selectedCategoryId == null,
-                        onTap: () {
-                          _homeBloc.add(const FilterByCategory(null));
+                  //* Search Bar
+                  SliverToBoxAdapter(
+                    child: HomeSearchBar(
+                      controller: _searchController,
+                      onChanged: (value) {
+                        _homeBloc.add(SearchStock(value));
+                      },
+                    ),
+                  ),
+
+                  //* Category Filter Chips
+                  if (state.categories.isNotEmpty)
+                    SliverToBoxAdapter(
+                      child: HomeCategoryFilter(
+                        categories: state.categories,
+                        selectedCategoryId: state.selectedCategoryId,
+                        onCategorySelected: (categoryId) {
+                          _homeBloc.add(FilterByCategory(categoryId));
                         },
                       ),
-                      SizedBox(width: 8.w),
-                      // Category chips
-                      ...state.categories.map((category) {
-                        return Padding(
-                          padding: EdgeInsets.only(right: 8.w),
-                          child: SelectionChip(
-                            label: category.name,
-                            isSelected: state.selectedCategoryId == category.id,
-                            onTap: () {
-                              _homeBloc.add(FilterByCategory(category.id));
-                            },
-                          ),
-                        );
-                      }),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 8.h),
-              ],
+                    ),
 
-              // Stock List
-              Expanded(
-                child: state.filteredStockItems.isEmpty
-                    ? NoDataWidget(
-                        message: LocaleKeys.home_noStockItems.tr(),
-                      )
-                    : SimplePullToRefresh(
-                        controller: _refreshController,
-                        onRefresh: _onRefresh,
-                        child: ListView.builder(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                          itemCount: state.filteredStockItems.length,
-                          itemBuilder: (context, index) {
+                  //* Stock List
+                  if (state.filteredStockItems.isEmpty)
+                    SliverFillRemaining(
+                      child: NoDataWidget(message: LocaleKeys.home_noStockItems.tr()),
+                    )
+                  else
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                      sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
                             final stockItem = state.filteredStockItems[index];
                             return StockItemCard(
                               stockItem: stockItem,
@@ -220,11 +186,13 @@ class _HomePageState extends State<HomePage> {
                               },
                             );
                           },
+                          childCount: state.filteredStockItems.length,
                         ),
                       ),
+                    ),
+                ],
               ),
-            ],
-          );
+            );
           },
         ),
       ),

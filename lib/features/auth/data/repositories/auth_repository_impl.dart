@@ -34,8 +34,11 @@ class AuthRepositoryImpl implements AuthRepository {
       (loginResponse) async {
         // Store token
         await storageService.setAccessToken(loginResponse.token);
-        // Store user name
+        // Store full user information
+        await storageService.setUserId(loginResponse.user.id);
         await storageService.setUserName(loginResponse.user.name);
+        await storageService.setUserEmail(loginResponse.user.email);
+        await storageService.setUserType(loginResponse.user.type);
         // Set guest mode to false
         await storageService.setGuestMode(false);
 
@@ -55,7 +58,7 @@ class AuthRepositoryImpl implements AuthRepository {
       (_) async {
         // Clear token and user data
         await storageService.setAccessToken(null);
-        await storageService.setUserName(null);
+        await storageService.clearUserData();
         await storageService.setGuestMode(true);
 
         return const Right(null);

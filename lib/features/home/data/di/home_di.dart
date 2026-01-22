@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import '../../../../core/network/network_client.dart';
+import '../../../../core/storage/app_storage_service.dart';
 import '../datasources/home_remote_datasource.dart';
 import '../repositories/home_repository_impl.dart';
 import '../../domain/repositories/home_repository.dart';
@@ -25,6 +26,7 @@ void registerHomeDependencies(GetIt getIt) {
   getIt.registerLazySingleton<HomeBloc>(
     () => HomeBloc(
       repository: getIt<HomeRepository>(),
+      storageService: getIt<AppStorageService>(),
     ),
   );
 }

@@ -83,6 +83,9 @@ class $AssetsImagesPngGen {
   /// Directory path: assets/images/png/home
   $AssetsImagesPngHomeGen get home => const $AssetsImagesPngHomeGen();
 
+  /// File path: assets/images/png/logo_werahouse.png
+  AssetGenImage get logoWerahouse => const AssetGenImage('assets/images/png/logo_werahouse.png');
+
   /// File path: assets/images/png/logo_white.png
   AssetGenImage get logoWhite => const AssetGenImage('assets/images/png/logo_white.png');
 
@@ -104,6 +107,7 @@ class $AssetsImagesPngGen {
     authBackgroundLight,
     boostaniLogoDark,
     boostaniLogoLight,
+    logoWerahouse,
     logoWhite,
     noDataDark,
     noDataWhite,

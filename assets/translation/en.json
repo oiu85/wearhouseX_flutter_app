@@ -330,6 +330,10 @@
     "unknownError": "An unknown error occurred."
   },
   "home": {
+    "greeting": "Welcome back, {name}!",
+    "greetingMorning": "Good morning, {name}!",
+    "greetingAfternoon": "Good afternoon, {name}!",
+    "greetingEvening": "Good evening, {name}!",
     "stockList": "My Stock",
     "searchProducts": "Search products...",
     "filterByCategory": "Filter by Category",
@@ -337,7 +341,7 @@
     "sortBy": "Sort By",
     "sortByName": "Name (A-Z)",
     "sortByQuantity": "Quantity (High-Low)",
-    "sortByPrice": "Price (High-Low)",
+    "sortByPrice": "Price (Low-High)",
     "noStockItems": "No stock items found",
     "availableQuantity": "Available Quantity",
     "pricePerUnit": "Price per Unit"

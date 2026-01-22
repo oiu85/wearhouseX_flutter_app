@@ -1,6 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/status/bloc_status.dart';
-import '../../../auth/domain/entities/failure.dart';
+import '../../../../core/storage/app_storage_service.dart';
 import '../../domain/entities/category_entity.dart';
 import '../../domain/entities/stock_item_entity.dart';
 import '../../domain/repositories/home_repository.dart';
@@ -10,15 +11,58 @@ import 'home_state.dart';
 /// Home BLoC
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final HomeRepository repository;
+  final AppStorageService storageService;
 
   HomeBloc({
     required this.repository,
+    required this.storageService,
   }) : super(HomeState.initial()) {
+    on<LoadUserInfo>(_onLoadUserInfo);
     on<LoadStock>(_onLoadStock);
     on<RefreshStock>(_onRefreshStock);
     on<SearchStock>(_onSearchStock);
     on<FilterByCategory>(_onFilterByCategory);
     on<SortStock>(_onSortStock);
+  }
+
+  Future<void> _onLoadUserInfo(
+    LoadUserInfo event,
+    Emitter<HomeState> emit,
+  ) async {
+    final userInfo = await storageService.getUserInfo();
+    final userName = userInfo?['name'] as String?;
+    
+    if (userName != null) {
+      final greetingText = _getGreeting(userName);
+      emit(state.copyWith(
+        userName: userName,
+        greetingText: greetingText,
+      ));
+    } else {
+      // Fallback to default greeting
+      final greetingText = _getGreeting('Driver');
+      emit(state.copyWith(
+        userName: 'Driver',
+        greetingText: greetingText,
+      ));
+    }
+  }
+
+  String _getGreeting(String name) {
+    final hour = DateTime.now().hour;
+    
+    // Using string keys until LocaleKeys are regenerated
+    // After running: flutter pub run easy_localization:generate
+    // These can be replaced with LocaleKeys.home_greetingMorning, etc.
+    if (hour >= 5 && hour < 12) {
+      return 'home.greetingMorning'.tr(namedArgs: {'name': name});
+    } else if (hour >= 12 && hour < 17) {
+      return 'home.greetingAfternoon'.tr(namedArgs: {'name': name});
+    } else if (hour >= 17 && hour < 22) {
+      return 'home.greetingEvening'.tr(namedArgs: {'name': name});
+    } else {
+      return 'home.greeting'.tr(namedArgs: {'name': name});
+    }
   }
 
   Future<void> _onLoadStock(
@@ -169,10 +213,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         sorted.sort((a, b) => a.product.name.compareTo(b.product.name));
         break;
       case SortType.quantity:
+        //* Sort from maximum to minimum (High to Low)
         sorted.sort((a, b) => b.quantity.compareTo(a.quantity));
         break;
       case SortType.price:
-        sorted.sort((a, b) => b.product.price.compareTo(a.product.price));
+        //* Sort from minimum to maximum (Low to High)
+        sorted.sort((a, b) => a.product.price.compareTo(b.product.price));
         break;
     }
 

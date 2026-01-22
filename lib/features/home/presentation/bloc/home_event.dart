@@ -54,3 +54,8 @@ class SortStock extends HomeEvent {
   @override
   List<Object?> get props => [sortType];
 }
+
+/// Load user information from storage
+class LoadUserInfo extends HomeEvent {
+  const LoadUserInfo();
+}

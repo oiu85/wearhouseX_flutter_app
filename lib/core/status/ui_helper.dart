@@ -549,31 +549,34 @@ class NoDataWidget extends StatelessWidget {
         : Assets.images.png.noDataWhite.path;
 
     return Center(
-      child: Padding(
-        padding: EdgeInsets.all(24.w),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset(
-              imagePath,
-              width: imageWidth ?? 500.w,
-              height: imageHeight ?? 500.h,
-              fit: BoxFit.contain,
-            ),
-            if (message != null) ...[
-              SizedBox(height: 24.h),
-              AppText(
-                message!,
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                  color: theme.colorScheme.onSurface,
-                ),
-                textAlign: TextAlign.center,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(24.w),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                imagePath,
+                width: imageWidth ?? 300.w,
+                height: imageHeight ?? 300.h,
+                fit: BoxFit.contain,
               ),
+              if (message != null) ...[
+                SizedBox(height: 24.h),
+                Text(
+                  message!,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

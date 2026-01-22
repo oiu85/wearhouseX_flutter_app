@@ -12,6 +12,9 @@ class StorageKeys {
   static const String accessToken = 'access_token';
   static const String returnPath = 'return_path';
   static const String userName = 'user_name';
+  static const String userId = 'user_id';
+  static const String userEmail = 'user_email';
+  static const String userType = 'user_type';
   static const String metalsPrices = 'metals_prices';
   static const String metalsPricesTimestamp = 'metals_prices_timestamp';
   static const String themeMode = 'theme_mode';
@@ -53,10 +56,36 @@ abstract class AppStorageService {
   
   /// Get user name
   Future<String?> getUserName();
-  
+
   /// Save user name
   Future<void> setUserName(String? name);
-  
+
+  /// Get user id
+  Future<int?> getUserId();
+
+  /// Save user id
+  Future<void> setUserId(int? id);
+
+  /// Get user email
+  Future<String?> getUserEmail();
+
+  /// Save user email
+  Future<void> setUserEmail(String? email);
+
+  /// Get user type
+  Future<String?> getUserType();
+
+  /// Save user type
+  Future<void> setUserType(String? type);
+
+  /// Get all user information as a map
+  /// Returns a map with keys: id, name, email, type
+  /// Returns null if no user data is stored
+  Future<Map<String, dynamic>?> getUserInfo();
+
+  /// Clear all user data
+  Future<void> clearUserData();
+
   /// Clear all stored data
   Future<void> clearAll();
 
@@ -167,7 +196,77 @@ class SharedPreferencesStorageService implements AppStorageService {
       await _prefs.setString(StorageKeys.userName, name);
     }
   }
-  
+
+  @override
+  Future<int?> getUserId() async {
+    final id = _prefs.getInt(StorageKeys.userId);
+    return id;
+  }
+
+  @override
+  Future<void> setUserId(int? id) async {
+    if (id == null) {
+      await _prefs.remove(StorageKeys.userId);
+    } else {
+      await _prefs.setInt(StorageKeys.userId, id);
+    }
+  }
+
+  @override
+  Future<String?> getUserEmail() async {
+    return _prefs.getString(StorageKeys.userEmail);
+  }
+
+  @override
+  Future<void> setUserEmail(String? email) async {
+    if (email == null || email.isEmpty) {
+      await _prefs.remove(StorageKeys.userEmail);
+    } else {
+      await _prefs.setString(StorageKeys.userEmail, email);
+    }
+  }
+
+  @override
+  Future<String?> getUserType() async {
+    return _prefs.getString(StorageKeys.userType);
+  }
+
+  @override
+  Future<void> setUserType(String? type) async {
+    if (type == null || type.isEmpty) {
+      await _prefs.remove(StorageKeys.userType);
+    } else {
+      await _prefs.setString(StorageKeys.userType, type);
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>?> getUserInfo() async {
+    final id = await getUserId();
+    final name = await getUserName();
+    final email = await getUserEmail();
+    final type = await getUserType();
+
+    if (id == null || name == null || email == null || type == null) {
+      return null;
+    }
+
+    return {
+      'id': id,
+      'name': name,
+      'email': email,
+      'type': type,
+    };
+  }
+
+  @override
+  Future<void> clearUserData() async {
+    await _prefs.remove(StorageKeys.userName);
+    await _prefs.remove(StorageKeys.userId);
+    await _prefs.remove(StorageKeys.userEmail);
+    await _prefs.remove(StorageKeys.userType);
+  }
+
   @override
   Future<void> clearAll() async {
     await _prefs.clear();

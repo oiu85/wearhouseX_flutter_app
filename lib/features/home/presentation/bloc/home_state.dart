@@ -14,6 +14,8 @@ class HomeState extends Equatable {
   final int? selectedCategoryId;
   final SortType sortType;
   final String? errorMessage;
+  final String? userName;
+  final String? greetingText;
 
   const HomeState({
     required this.status,
@@ -24,6 +26,8 @@ class HomeState extends Equatable {
     this.selectedCategoryId,
     required this.sortType,
     this.errorMessage,
+    this.userName,
+    this.greetingText,
   });
 
   factory HomeState.initial() => const HomeState(
@@ -35,6 +39,8 @@ class HomeState extends Equatable {
         selectedCategoryId: null,
         sortType: SortType.name,
         errorMessage: null,
+        userName: null,
+        greetingText: null,
       );
 
   HomeState copyWith({
@@ -46,6 +52,8 @@ class HomeState extends Equatable {
     int? selectedCategoryId,
     SortType? sortType,
     String? errorMessage,
+    String? userName,
+    String? greetingText,
   }) {
     return HomeState(
       status: status ?? this.status,
@@ -56,6 +64,8 @@ class HomeState extends Equatable {
       selectedCategoryId: selectedCategoryId ?? this.selectedCategoryId,
       sortType: sortType ?? this.sortType,
       errorMessage: errorMessage ?? this.errorMessage,
+      userName: userName ?? this.userName,
+      greetingText: greetingText ?? this.greetingText,
     );
   }
 
@@ -69,5 +79,7 @@ class HomeState extends Equatable {
         selectedCategoryId,
         sortType,
         errorMessage,
+        userName,
+        greetingText,
       ];
 }

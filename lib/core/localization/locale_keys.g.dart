@@ -98,6 +98,10 @@ abstract class  LocaleKeys {
   static const campaign_paid = 'campaign.paid';
   static const campaign_remaining = 'campaign.remaining';
   static const campaign = 'campaign';
+  static const home_greeting = 'home.greeting';
+  static const home_greetingMorning = 'home.greetingMorning';
+  static const home_greetingAfternoon = 'home.greetingAfternoon';
+  static const home_greetingEvening = 'home.greetingEvening';
   static const home_stockList = 'home.stockList';
   static const home_searchProducts = 'home.searchProducts';
   static const home_filterByCategory = 'home.filterByCategory';

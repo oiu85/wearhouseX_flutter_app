@@ -104,6 +104,10 @@
     "remaining": "متبقي"
   },
   "home": {
+    "greeting": "مرحباً بعودتك، {name}!",
+    "greetingMorning": "صباح الخير، {name}!",
+    "greetingAfternoon": "مساء الخير، {name}!",
+    "greetingEvening": "مساء الخير، {name}!",
     "stockList": "مخزوني",
     "searchProducts": "البحث عن المنتجات...",
     "filterByCategory": "تصفية حسب الفئة",
@@ -111,7 +115,7 @@
     "sortBy": "ترتيب حسب",
     "sortByName": "الاسم (أ-ي)",
     "sortByQuantity": "الكمية (من الأعلى للأقل)",
-    "sortByPrice": "السعر (من الأعلى للأقل)",
+    "sortByPrice": "السعر (من الأقل للأعلى)",
     "noStockItems": "لا توجد عناصر مخزون",
     "availableQuantity": "الكمية المتاحة",
     "pricePerUnit": "السعر لكل وحدة"
