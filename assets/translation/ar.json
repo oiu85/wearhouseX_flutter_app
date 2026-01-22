@@ -1,0 +1,119 @@
+{
+  "login": {
+    "wrongCode": "رمز غير صحيح. يرجى إدخال رمز صالح مكون من 4 أرقام",
+    "validation": {
+      "nameRequired": "الاسم مطلوب",
+      "nameMinLength": "الاسم يجب أن يكون على الأقل حرفين",
+      "nameLettersOnly": "الاسم يجب أن يحتوي على أحرف ومسافات فقط",
+      "countryRequired": "البلد مطلوب",
+      "phoneRequired": "رقم الهاتف مطلوب",
+      "phoneDigitsOnly": "رقم الهاتف يجب أن يحتوي على أرقام فقط",
+      "phoneLengthWith0": "رقم الهاتف يجب أن يكون 10 أرقام عند البدء بصفر",
+      "phoneLengthWithout0": "رقم الهاتف يجب أن يكون 9 أرقام"
+    }
+  },
+  "validation": {
+    "required": "هذا الحقل مطلوب",
+    "emailRequired": "البريد الإلكتروني مطلوب",
+    "emailInvalid": "يرجى إدخال بريد إلكتروني صحيح",
+    "passwordRequired": "كلمة المرور مطلوبة",
+    "passwordMinLength": "كلمة المرور يجب أن تكون {minLength} أحرف على الأقل",
+    "passwordRequireUpperCase": "كلمة المرور يجب أن تحتوي على حرف كبير واحد على الأقل",
+    "passwordRequireLowerCase": "كلمة المرور يجب أن تحتوي على حرف صغير واحد على الأقل",
+    "passwordRequireNumber": "كلمة المرور يجب أن تحتوي على رقم واحد على الأقل",
+    "passwordRequireSpecialChar": "كلمة المرور يجب أن تحتوي على رمز خاص واحد على الأقل",
+    "passwordMismatch": "كلمتا المرور غير متطابقتين",
+    "confirmPasswordRequired": "تأكيد كلمة المرور مطلوب",
+    "confirmPasswordMismatch": "كلمتا المرور غير متطابقتين",
+    "phoneInvalid": "يرجى إدخال رقم هاتف صحيح",
+    "nameMinLength": "الاسم يجب أن يكون على الأقل حرفين",
+    "cardNumberRequired": "رقم البطاقة مطلوب",
+    "cardNumberInvalid": "رقم البطاقة غير صحيح",
+    "cardNumberLength": "رقم البطاقة يجب أن يكون بين 13 و 19 رقمًا",
+    "cardExpiryRequired": "تاريخ الانتهاء مطلوب",
+    "cardExpiryInvalid": "تاريخ الانتهاء غير صحيح (مثال: 12/25)",
+    "cardExpiryInvalidMonth": "الشهر يجب أن يكون بين 01 و 12",
+    "cardExpiryExpired": "البطاقة منتهية الصلاحية",
+    "cardCvvRequired": "رمز التحقق مطلوب",
+    "cardCvvInvalid": "رمز التحقق غير صحيح",
+    "cardCvvLength": "رمز التحقق يجب أن يكون 3 أو 4 أرقام",
+    "cardholderNameRequired": "اسم صاحب البطاقة مطلوب",
+    "cardholderNameMinLength": "اسم صاحب البطاقة يجب أن يكون 3 أحرف على الأقل",
+    "cardholderNameInvalid": "اسم صاحب البطاقة غير صحيح",
+    "donationAmountRequired": "المبلغ مطلوب",
+    "donationAmountInvalid": "يرجى إدخال مبلغ صحيح",
+    "donationAmountMustBePositive": "المبلغ يجب أن يكون أكبر من صفر",
+    "donationAmountExceedsRemaining": "المبلغ يتجاوز المبلغ المتبقي"
+  },
+  "status": {
+    "loading": "جاري التحميل...",
+    "tryAgain": "حاول مرة أخرى",
+    "somethingWentWrong": "حدث خطأ ما"
+  },
+  "auth": {
+    "login": "تسجيل الدخول",
+    "driverLogin": "تسجيل دخول السائق",
+    "logout": "تسجيل الخروج",
+    "register": "التسجيل",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "fullName": "الاسم الكامل",
+    "phone": "رقم الهاتف",
+    "role": "الدور",
+    "student": "طالب",
+    "teacher": "معلم",
+    "admin": "مدير",
+    "driver": "سائق",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "resetPassword": "إعادة تعيين كلمة المرور",
+    "rememberMe": "تذكرني",
+    "signInToContinue": "سجل الدخول للمتابعة",
+    "enterYourEmail": "أدخل بريدك الإلكتروني",
+    "enterYourPassword": "أدخل كلمة المرور",
+    "sendResetLink": "إرسال رابط إعادة التعيين",
+    "forgotPasswordDescription": "أدخل عنوان بريدك الإلكتروني وسنرسل لك رابطًا لإعادة تعيين كلمة المرور",
+    "passwordResetSent": "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.",
+    "backToLogin": "العودة لتسجيل الدخول",
+    "loginSuccess": "تم تسجيل الدخول بنجاح",
+    "loginError": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+    "logoutSuccess": "تم تسجيل الخروج بنجاح",
+    "registerSuccess": "تم التسجيل بنجاح",
+    "passwordResetSuccess": "تم إعادة تعيين كلمة المرور بنجاح",
+    "passwordResetError": "فشل في إعادة تعيين كلمة المرور",
+    "or": "أو"
+  },
+  "bottomNav": {
+    "home": "الرئيسية",
+    "menu": "القائمة"
+  },
+  "share": {
+    "share": "شارك",
+    "copyLink": "نسخ الرابط",
+    "shareFailed": "فشل في المشاركة",
+    "copiedToClipboard": "تم النسخ إلى الحافظة",
+    "copyFailed": "فشل في النسخ"
+  },
+  "fastDonate": {
+    "makeAnonymous": "جعل هذا التبرع مجهولاً",
+    "confirmAndGoToPaid": "انتقل للدفع",
+    "donationSuccess": "تم التبرع بنجاح"
+  },
+  "campaign": {
+    "paid": "مدفوع",
+    "remaining": "متبقي"
+  },
+  "home": {
+    "stockList": "مخزوني",
+    "searchProducts": "البحث عن المنتجات...",
+    "filterByCategory": "تصفية حسب الفئة",
+    "allCategories": "الكل",
+    "sortBy": "ترتيب حسب",
+    "sortByName": "الاسم (أ-ي)",
+    "sortByQuantity": "الكمية (من الأعلى للأقل)",
+    "sortByPrice": "السعر (من الأعلى للأقل)",
+    "noStockItems": "لا توجد عناصر مخزون",
+    "availableQuantity": "الكمية المتاحة",
+    "pricePerUnit": "السعر لكل وحدة"
+  }
+}
