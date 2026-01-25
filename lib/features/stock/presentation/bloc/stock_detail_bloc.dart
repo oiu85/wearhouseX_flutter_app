@@ -1,13 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/status/bloc_status.dart';
 import '../../../auth/domain/entities/failure.dart';
-import '../../domain/repositories/home_repository.dart';
+import '../../domain/repositories/stock_repository.dart';
 import 'stock_detail_event.dart';
 import 'stock_detail_state.dart';
 
 //* Stock detail BLoC
 class StockDetailBloc extends Bloc<StockDetailEvent, StockDetailState> {
-  final HomeRepository repository;
+  final StockRepository repository;
 
   StockDetailBloc({
     required this.repository,

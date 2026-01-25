@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/status/ui_helper.dart';
 import '../../domain/entities/stock_item_entity.dart';
 import 'stock_item_card.dart';
@@ -21,7 +20,7 @@ class HomeStockList extends StatelessWidget {
   Widget build(BuildContext context) {
     if (stockItems.isEmpty) {
       return Center(
-        child: NoDataWidget(message: LocaleKeys.home_noStockItems.tr()),
+        child: NoDataWidget(message: 'home.noStockItems'.tr()),
       );
     }
 

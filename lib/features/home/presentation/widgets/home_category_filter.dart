@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/component/others/selection_chip.dart';
-import '../../../../core/localization/locale_keys.g.dart';
 import '../../domain/entities/category_entity.dart';
 
 //* Category filter chips widget
@@ -34,7 +33,7 @@ class HomeCategoryFilter extends StatelessWidget {
             children: [
               //* All Categories chip
               SelectionChip(
-                label: LocaleKeys.home_allCategories.tr(),
+                label: 'home.allCategories'.tr(),
                 isSelected: selectedCategoryId == null,
                 onTap: () => onCategorySelected(null),
               ),

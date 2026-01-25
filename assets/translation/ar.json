@@ -48,7 +48,8 @@
   "status": {
     "loading": "جاري التحميل...",
     "tryAgain": "حاول مرة أخرى",
-    "somethingWentWrong": "حدث خطأ ما"
+    "somethingWentWrong": "حدث خطأ ما",
+    "refresh": "تحديث"
   },
   "auth": {
     "login": "تسجيل الدخول",
@@ -118,7 +119,10 @@
     "sortByPrice": "السعر (من الأقل للأعلى)",
     "noStockItems": "لا توجد عناصر مخزون",
     "availableQuantity": "الكمية المتاحة",
-    "pricePerUnit": "السعر لكل وحدة"
+    "pricePerUnit": "السعر لكل وحدة",
+    "today": "اليوم",
+    "yesterday": "أمس",
+    "daysAgo": "منذ {days} أيام"
   },
   "stockDetail": {
     "title": "تفاصيل المنتج",
@@ -128,5 +132,38 @@
     "sellProduct": "بيع هذا المنتج",
     "noDescription": "لا يوجد وصف متاح",
     "updatedAgo": "تم التحديث منذ {time}"
+  },
+  "bottomNav": {
+    "home": "الرئيسية",
+    "stock": "المخزون",
+    "menu": "القائمة"
+  },
+  "home": {
+    "greeting": "مرحباً بعودتك، {name}!",
+    "greetingMorning": "صباح الخير، {name}!",
+    "greetingAfternoon": "مساء الخير، {name}!",
+    "greetingEvening": "مساء الخير، {name}!",
+    "totalSales": "إجمالي المبيعات",
+    "totalRevenue": "إجمالي الإيرادات",
+    "todaySales": "مبيعات اليوم",
+    "todayRevenue": "إيرادات اليوم",
+    "stockItems": "عناصر المخزون",
+    "recentSales": "المبيعات الأخيرة",
+    "quickActions": "إجراءات سريعة",
+    "createSale": "إنشاء عملية بيع",
+    "viewStock": "عرض المخزون",
+    "viewAllSales": "عرض جميع المبيعات"
+  },
+  "menu": {
+    "profile": "الملف الشخصي",
+    "settings": "الإعدادات",
+    "logout": "تسجيل الخروج",
+    "language": "اللغة",
+    "changeAppLanguage": "تغيير لغة التطبيق",
+    "theme": "المظهر",
+    "lightDarkMode": "الوضع الفاتح / الداكن",
+    "notifications": "الإشعارات",
+    "manageNotifications": "إدارة الإشعارات",
+    "comingSoon": "قريباً"
   }
 }

@@ -1,93 +1,107 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../domain/entities/category_entity.dart';
-import '../../domain/entities/product_entity.dart';
-import '../../domain/entities/stock_item_entity.dart';
+import '../../domain/entities/driver_stats_entity.dart';
+import '../../domain/entities/sale_entity.dart';
 
 part 'home_models.freezed.dart';
 part 'home_models.g.dart';
 
-/// Category model
+/// Driver stats model
 @freezed
-abstract class CategoryModel with _$CategoryModel {
-  const factory CategoryModel({
-    required int id,
-    required String name,
-    String? description,
-  }) = _CategoryModel;
+abstract class DriverStatsModel with _$DriverStatsModel {
+  const factory DriverStatsModel({
+    @JsonKey(name: 'total_sales', fromJson: _intFromJson) required int totalSales,
+    @JsonKey(name: 'total_revenue', fromJson: _doubleFromJson) required double totalRevenue,
+    @JsonKey(name: 'today_sales', fromJson: _intFromJson) required int todaySales,
+    @JsonKey(name: 'today_revenue', fromJson: _doubleFromJson) required double todayRevenue,
+    @JsonKey(name: 'total_stock_items', fromJson: _intFromJson) required int totalStockItems,
+    @JsonKey(name: 'recent_sales') @Default([]) List<SaleModel> recentSales,
+  }) = _DriverStatsModel;
 
-  factory CategoryModel.fromJson(Map<String, dynamic> json) =>
-      _$CategoryModelFromJson(json);
+  factory DriverStatsModel.fromJson(Map<String, dynamic> json) =>
+      _$DriverStatsModelFromJson(json);
 }
 
-/// Extension to convert CategoryModel to CategoryEntity
-extension CategoryModelExtension on CategoryModel {
-  CategoryEntity toEntity() {
-    return CategoryEntity(
-      id: id,
-      name: name,
-      description: description,
+/// Helper function to convert dynamic to int (handles string or num)
+int _intFromJson(dynamic value) {
+  if (value is int) return value;
+  if (value is num) return value.toInt();
+  if (value is String) return int.tryParse(value) ?? 0;
+  return 0;
+}
+
+/// Helper function to convert dynamic to double (handles string or num)
+double _doubleFromJson(dynamic value) {
+  if (value is double) return value;
+  if (value is num) return value.toDouble();
+  if (value is String) return double.tryParse(value) ?? 0.0;
+  return 0.0;
+}
+
+/// Extension to convert DriverStatsModel to DriverStatsEntity
+extension DriverStatsModelExtension on DriverStatsModel {
+  DriverStatsEntity toEntity() {
+    return DriverStatsEntity(
+      totalSales: totalSales,
+      totalRevenue: totalRevenue,
+      todaySales: todaySales,
+      todayRevenue: todayRevenue,
+      totalStockItems: totalStockItems,
     );
   }
 }
 
-/// Product model
+/// Sale item model
 @freezed
-abstract class ProductModel with _$ProductModel {
-  const factory ProductModel({
-    required int id,
-    required String name,
-    @JsonKey(name: 'price') required String priceString,
-    @JsonKey(name: 'category_id') required int categoryId,
-    String? description,
-    String? image,
-    CategoryModel? category,
-  }) = _ProductModel;
+abstract class SaleItemModel with _$SaleItemModel {
+  const factory SaleItemModel({
+    @JsonKey(name: 'product_name') required String productName,
+    @JsonKey(fromJson: _intFromJson) required int quantity,
+    @JsonKey(fromJson: _doubleFromJson) required double price,
+    @JsonKey(fromJson: _doubleFromJson) required double subtotal,
+  }) = _SaleItemModel;
 
-  factory ProductModel.fromJson(Map<String, dynamic> json) =>
-      _$ProductModelFromJson(json);
+  factory SaleItemModel.fromJson(Map<String, dynamic> json) =>
+      _$SaleItemModelFromJson(json);
 }
 
-/// Extension to convert ProductModel to ProductEntity
-extension ProductModelExtension on ProductModel {
-  ProductEntity toEntity() {
-    return ProductEntity(
-      id: id,
-      name: name,
-      price: double.tryParse(priceString) ?? 0.0,
-      categoryId: categoryId,
-      description: description,
-      image: image,
-      category: category?.toEntity(),
-    );
-  }
-}
-
-/// Stock item model
-@freezed
-abstract class StockItemModel with _$StockItemModel {
-  const factory StockItemModel({
-    required int id,
-    @JsonKey(name: 'driver_id') required int driverId,
-    @JsonKey(name: 'product_id') required int productId,
-    required int quantity,
-    required ProductModel product,
-    @JsonKey(name: 'updated_at') String? updatedAt,
-  }) = _StockItemModel;
-
-  factory StockItemModel.fromJson(Map<String, dynamic> json) =>
-      _$StockItemModelFromJson(json);
-}
-
-/// Extension to convert StockItemModel to StockItemEntity
-extension StockItemModelExtension on StockItemModel {
-  StockItemEntity toEntity() {
-    return StockItemEntity(
-      id: id,
-      driverId: driverId,
-      productId: productId,
+/// Extension to convert SaleItemModel to SaleItemEntity
+extension SaleItemModelExtension on SaleItemModel {
+  SaleItemEntity toEntity() {
+    return SaleItemEntity(
+      productName: productName,
       quantity: quantity,
-      product: product.toEntity(),
-      updatedAt: updatedAt != null ? DateTime.tryParse(updatedAt!) : null,
+      price: price,
+      subtotal: subtotal,
+    );
+  }
+}
+
+/// Sale model
+@freezed
+abstract class SaleModel with _$SaleModel {
+  const factory SaleModel({
+    @JsonKey(name: 'id', fromJson: _intFromJson) required int id,
+    @JsonKey(name: 'invoice_number') required String invoiceNumber,
+    @JsonKey(name: 'customer_name') required String customerName,
+    @JsonKey(name: 'total_amount', fromJson: _doubleFromJson) required double totalAmount,
+    @JsonKey(name: 'created_at') required String createdAt,
+    @Default([]) List<SaleItemModel> items,
+  }) = _SaleModel;
+
+  factory SaleModel.fromJson(Map<String, dynamic> json) =>
+      _$SaleModelFromJson(json);
+}
+
+/// Extension to convert SaleModel to SaleEntity
+extension SaleModelExtension on SaleModel {
+  SaleEntity toEntity() {
+    return SaleEntity(
+      id: id,
+      invoiceNumber: invoiceNumber,
+      customerName: customerName,
+      totalAmount: totalAmount,
+      createdAt: DateTime.tryParse(createdAt) ?? DateTime.now(),
+      items: items.map((item) => item.toEntity()).toList(),
     );
   }
 }

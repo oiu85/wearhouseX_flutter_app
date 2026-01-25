@@ -12,8 +12,11 @@ class ApiConfig {
   static const String me = '/me';
   static const String forgotPassword = '/forgot-password';
 
-  // HOME/STOCK ENDPOINTS
+  // STOCK ENDPOINTS
   static const String driverMyStock = '/driver/my-stock';
+
+  // DRIVER STATS ENDPOINTS
+  static const String driverStats = '/driver/stats';
 
   // SALES ENDPOINTS
   static const String createSale = '/sales';

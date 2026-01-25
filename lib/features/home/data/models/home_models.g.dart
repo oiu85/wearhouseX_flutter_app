@@ -6,60 +6,65 @@ part of 'home_models.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_CategoryModel _$CategoryModelFromJson(Map<String, dynamic> json) =>
-    _CategoryModel(
-      id: (json['id'] as num).toInt(),
-      name: json['name'] as String,
-      description: json['description'] as String?,
+_DriverStatsModel _$DriverStatsModelFromJson(Map<String, dynamic> json) =>
+    _DriverStatsModel(
+      totalSales: _intFromJson(json['total_sales']),
+      totalRevenue: _doubleFromJson(json['total_revenue']),
+      todaySales: _intFromJson(json['today_sales']),
+      todayRevenue: _doubleFromJson(json['today_revenue']),
+      totalStockItems: _intFromJson(json['total_stock_items']),
+      recentSales:
+          (json['recent_sales'] as List<dynamic>?)
+              ?.map((e) => SaleModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
-Map<String, dynamic> _$CategoryModelToJson(_CategoryModel instance) =>
+Map<String, dynamic> _$DriverStatsModelToJson(_DriverStatsModel instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-      'description': instance.description,
+      'total_sales': instance.totalSales,
+      'total_revenue': instance.totalRevenue,
+      'today_sales': instance.todaySales,
+      'today_revenue': instance.todayRevenue,
+      'total_stock_items': instance.totalStockItems,
+      'recent_sales': instance.recentSales,
     };
 
-_ProductModel _$ProductModelFromJson(Map<String, dynamic> json) =>
-    _ProductModel(
-      id: (json['id'] as num).toInt(),
-      name: json['name'] as String,
-      priceString: json['price'] as String,
-      categoryId: (json['category_id'] as num).toInt(),
-      description: json['description'] as String?,
-      image: json['image'] as String?,
-      category: json['category'] == null
-          ? null
-          : CategoryModel.fromJson(json['category'] as Map<String, dynamic>),
+_SaleItemModel _$SaleItemModelFromJson(Map<String, dynamic> json) =>
+    _SaleItemModel(
+      productName: json['product_name'] as String,
+      quantity: _intFromJson(json['quantity']),
+      price: _doubleFromJson(json['price']),
+      subtotal: _doubleFromJson(json['subtotal']),
     );
 
-Map<String, dynamic> _$ProductModelToJson(_ProductModel instance) =>
+Map<String, dynamic> _$SaleItemModelToJson(_SaleItemModel instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-      'price': instance.priceString,
-      'category_id': instance.categoryId,
-      'description': instance.description,
-      'image': instance.image,
-      'category': instance.category,
-    };
-
-_StockItemModel _$StockItemModelFromJson(Map<String, dynamic> json) =>
-    _StockItemModel(
-      id: (json['id'] as num).toInt(),
-      driverId: (json['driver_id'] as num).toInt(),
-      productId: (json['product_id'] as num).toInt(),
-      quantity: (json['quantity'] as num).toInt(),
-      product: ProductModel.fromJson(json['product'] as Map<String, dynamic>),
-      updatedAt: json['updated_at'] as String?,
-    );
-
-Map<String, dynamic> _$StockItemModelToJson(_StockItemModel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'driver_id': instance.driverId,
-      'product_id': instance.productId,
+      'product_name': instance.productName,
       'quantity': instance.quantity,
-      'product': instance.product,
-      'updated_at': instance.updatedAt,
+      'price': instance.price,
+      'subtotal': instance.subtotal,
+    };
+
+_SaleModel _$SaleModelFromJson(Map<String, dynamic> json) => _SaleModel(
+  id: _intFromJson(json['id']),
+  invoiceNumber: json['invoice_number'] as String,
+  customerName: json['customer_name'] as String,
+  totalAmount: _doubleFromJson(json['total_amount']),
+  createdAt: json['created_at'] as String,
+  items:
+      (json['items'] as List<dynamic>?)
+          ?.map((e) => SaleItemModel.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      const [],
+);
+
+Map<String, dynamic> _$SaleModelToJson(_SaleModel instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'invoice_number': instance.invoiceNumber,
+      'customer_name': instance.customerName,
+      'total_amount': instance.totalAmount,
+      'created_at': instance.createdAt,
+      'items': instance.items,
     };

@@ -8,8 +8,8 @@ import '../shared/app_navigator_key.dart';
 import '../storage/app_storage_service.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/forget_password_page.dart';
-import '../../features/home/presentation/pages/home_page.dart';
-import '../../features/home/presentation/pages/stock_detail_page.dart';
+import '../../features/stock/presentation/pages/stock_detail_page.dart';
+import '../../core/presentation/pages/main_navigation_page.dart';
 import 'app_routes.dart';
 import 'navigation_observer.dart';
 
@@ -93,11 +93,17 @@ class AppRouter {
         name: 'forgotPassword',
         builder: (context, state) => const ForgetPasswordPage(),
       ),
-      // Home route
+      // Home route (MainNavigationPage with PageView)
       GoRoute(
         path: AppRoutes.home,
         name: 'home',
-        builder: (context, state) => const HomePage(),
+        builder: (context, state) => const MainNavigationPage(initialIndex: 0),
+      ),
+      // Stock route (for direct navigation if needed)
+      GoRoute(
+        path: AppRoutes.stock,
+        name: 'stock',
+        builder: (context, state) => const MainNavigationPage(initialIndex: 1),
       ),
       // Stock detail route
       GoRoute(

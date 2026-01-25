@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../gen/assets.gen.dart';
 
 //* Custom app bar with pull-to-refresh support
@@ -39,7 +38,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         IconButton(
           icon: Icon(Icons.sort, color: theme.colorScheme.onSurface),
           onPressed: onSortPressed,
-          tooltip: LocaleKeys.home_sortBy.tr(),
+          tooltip: 'home.sortBy'.tr(),
         ),
         //* Refresh button (alternative to pull-to-refresh)
         IconButton(
@@ -50,7 +49,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
               onRefresh();
             }
           },
-          tooltip: 'Refresh',
+          tooltip: 'app.refresh'.tr(),
         ),
       ],
     );

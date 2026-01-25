@@ -83,6 +83,7 @@ abstract class  LocaleKeys {
   static const auth_or = 'auth.or';
   static const auth = 'auth';
   static const bottomNav_home = 'bottomNav.home';
+  static const bottomNav_stock = 'bottomNav.stock';
   static const bottomNav_menu = 'bottomNav.menu';
   static const bottomNav = 'bottomNav';
   static const share_share = 'share.share';
@@ -102,17 +103,28 @@ abstract class  LocaleKeys {
   static const home_greetingMorning = 'home.greetingMorning';
   static const home_greetingAfternoon = 'home.greetingAfternoon';
   static const home_greetingEvening = 'home.greetingEvening';
-  static const home_stockList = 'home.stockList';
-  static const home_searchProducts = 'home.searchProducts';
-  static const home_filterByCategory = 'home.filterByCategory';
-  static const home_allCategories = 'home.allCategories';
-  static const home_sortBy = 'home.sortBy';
-  static const home_sortByName = 'home.sortByName';
-  static const home_sortByQuantity = 'home.sortByQuantity';
-  static const home_sortByPrice = 'home.sortByPrice';
-  static const home_noStockItems = 'home.noStockItems';
-  static const home_availableQuantity = 'home.availableQuantity';
-  static const home_pricePerUnit = 'home.pricePerUnit';
+  static const home_totalSales = 'home.totalSales';
+  static const home_totalRevenue = 'home.totalRevenue';
+  static const home_todaySales = 'home.todaySales';
+  static const home_todayRevenue = 'home.todayRevenue';
+  static const home_stockItems = 'home.stockItems';
+  static const home_recentSales = 'home.recentSales';
+  static const home_quickActions = 'home.quickActions';
+  static const home_createSale = 'home.createSale';
+  static const home_viewStock = 'home.viewStock';
+  static const home_viewAllSales = 'home.viewAllSales';
   static const home = 'home';
+  static const stockDetail_title = 'stockDetail.title';
+  static const stockDetail_availableQuantity = 'stockDetail.availableQuantity';
+  static const stockDetail_pricePerUnit = 'stockDetail.pricePerUnit';
+  static const stockDetail_lastUpdated = 'stockDetail.lastUpdated';
+  static const stockDetail_sellProduct = 'stockDetail.sellProduct';
+  static const stockDetail_noDescription = 'stockDetail.noDescription';
+  static const stockDetail_updatedAgo = 'stockDetail.updatedAgo';
+  static const stockDetail = 'stockDetail';
+  static const menu_profile = 'menu.profile';
+  static const menu_settings = 'menu.settings';
+  static const menu_logout = 'menu.logout';
+  static const menu = 'menu';
 
 }

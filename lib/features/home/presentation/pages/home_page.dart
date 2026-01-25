@@ -1,25 +1,27 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/localization/app_text.dart';
 import '../../../../core/status/ui_helper.dart';
-import '../../../../core/component/others/custom_selection_popup.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_event.dart';
 import '../bloc/home_state.dart';
-import '../widgets/home_app_bar.dart';
 import '../widgets/home_greeting_section.dart';
-import '../widgets/home_search_bar.dart';
-import '../widgets/home_category_filter.dart';
-import '../widgets/stock_item_card.dart';
+import '../widgets/home_stats_section.dart';
+import '../widgets/home_recent_sales_section.dart';
+import '../widgets/home_quick_actions_section.dart';
 
-//* Home page displaying driver's stock
+//* Home dashboard page displaying driver statistics and quick actions
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final bool isNavigating;
+
+  const HomePage({
+    super.key,
+    this.isNavigating = false,
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -27,60 +29,47 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
-  final TextEditingController _searchController = TextEditingController();
   final HomeBloc _homeBloc = GetIt.I<HomeBloc>();
 
   @override
   void initState() {
     super.initState();
-    //* Load user info and stock on initial mount
+    //* Load user info and dashboard data on initial mount
     _homeBloc.add(const LoadUserInfo());
-    _homeBloc.add(const LoadStock());
+    _homeBloc.add(const LoadDashboard());
   }
 
   @override
   void dispose() {
-    _searchController.dispose();
     _refreshController.dispose();
     super.dispose();
   }
 
   void _onRefresh() {
-    _homeBloc.add(const RefreshStock());
-    //* Refresh completion is handled in BlocListener
+    _homeBloc.add(const RefreshDashboard());
   }
 
-  void _showSortDialog() {
-    final state = _homeBloc.state;
-    CustomSelectionPopup.show(
-      context,
-      title: LocaleKeys.home_sortBy.tr(),
-      options: [
-        SelectionOption(
-          label: LocaleKeys.home_sortByName.tr(),
-          isSelected: state.sortType == SortType.name,
-          onTap: () {
-            Navigator.pop(context);
-            _homeBloc.add(const SortStock(SortType.name));
-          },
+  void _onCreateSale() {
+    //* Navigate to create sale page
+    context.push('/sales/create');
+  }
+
+  void _onViewStock() {
+    //* Navigate to stock page (will be handled by MainNavigationPage)
+    //* For now, just navigate via router
+    context.push('/stock');
+  }
+
+  void _onViewAllSales() {
+    //* Navigate to all sales page (to be implemented)
+    //* For now, just show a placeholder
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: AppText(
+          'menu.comingSoon',
+          translation: true,
         ),
-        SelectionOption(
-          label: LocaleKeys.home_sortByQuantity.tr(),
-          isSelected: state.sortType == SortType.quantity,
-          onTap: () {
-            Navigator.pop(context);
-            _homeBloc.add(const SortStock(SortType.quantity));
-          },
-        ),
-        SelectionOption(
-          label: LocaleKeys.home_sortByPrice.tr(),
-          isSelected: state.sortType == SortType.price,
-          onTap: () {
-            Navigator.pop(context);
-            _homeBloc.add(const SortStock(SortType.price));
-          },
-        ),
-      ],
+      ),
     );
   }
 
@@ -90,11 +79,6 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: HomeAppBar(
-        refreshController: _refreshController,
-        onRefresh: _onRefresh,
-        onSortPressed: _showSortDialog,
-      ),
       body: BlocListener<HomeBloc, HomeState>(
         bloc: _homeBloc,
         listener: (context, state) {
@@ -108,92 +92,64 @@ class _HomePageState extends State<HomePage> {
         child: BlocBuilder<HomeBloc, HomeState>(
           bloc: _homeBloc,
           builder: (context, state) {
-            //* Show loading/error states
+            //* Show loading state
             if (state.status.isLoading() || state.status.isInitial()) {
               return Center(
                 child: CircularProgressIndicator(color: theme.colorScheme.primary),
               );
             }
 
+            //* Show error state
             if (state.status.isFail()) {
               return Center(
                 child: UiHelperStatus(
                   state: state.status,
                   message: state.errorMessage,
                   onRetry: () {
-                    _homeBloc.add(const LoadStock());
+                    _homeBloc.add(const LoadDashboard());
                   },
                 ),
               );
             }
 
-            //* Use CustomScrollView with SliverAppBar for pull-to-refresh in app bar area
+            //* Show success state with dashboard
             return SmartRefresher(
               controller: _refreshController,
               onRefresh: _onRefresh,
               enablePullDown: true,
               enablePullUp: false,
-              physics: const AlwaysScrollableScrollPhysics(),
               header: WaterDropMaterialHeader(
                 backgroundColor: theme.colorScheme.primary,
                 color: theme.colorScheme.surface,
               ),
-              child: CustomScrollView(
-                slivers: [
-                  //* Greeting Section
-                  if (state.greetingText != null)
-                    SliverToBoxAdapter(
-                      child: HomeGreetingSection(greetingText: state.greetingText),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //* Greeting Section
+                    if (state.greetingText != null)
+                      HomeGreetingSection(greetingText: state.greetingText),
+
+                    //* Statistics Section
+                    if (state.driverStats != null)
+                      HomeStatsSection(stats: state.driverStats!),
+
+                    //* Recent Sales Section
+                    HomeRecentSalesSection(
+                      recentSales: state.recentSales,
+                      onViewAll: _onViewAllSales,
                     ),
 
-                  //* Search Bar
-                  SliverToBoxAdapter(
-                    child: HomeSearchBar(
-                      controller: _searchController,
-                      onChanged: (value) {
-                        _homeBloc.add(SearchStock(value));
-                      },
-                    ),
-                  ),
-
-                  //* Category Filter Chips
-                  if (state.categories.isNotEmpty)
-                    SliverToBoxAdapter(
-                      child: HomeCategoryFilter(
-                        categories: state.categories,
-                        selectedCategoryId: state.selectedCategoryId,
-                        onCategorySelected: (categoryId) {
-                          _homeBloc.add(FilterByCategory(categoryId));
-                        },
-                      ),
+                    //* Quick Actions Section
+                    HomeQuickActionsSection(
+                      onCreateSale: _onCreateSale,
+                      onViewStock: _onViewStock,
+                      onViewAllSales: _onViewAllSales,
                     ),
 
-                  //* Stock List
-                  if (state.filteredStockItems.isEmpty)
-                    SliverFillRemaining(
-                      child: NoDataWidget(message: LocaleKeys.home_noStockItems.tr()),
-                    )
-                  else
-                    SliverPadding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                      sliver: SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            final stockItem = state.filteredStockItems[index];
-                            return StockItemCard(
-                              stockItem: stockItem,
-                              onTap: () {
-                                context.push(
-                                  '/stock/${stockItem.id}',
-                                );
-                              },
-                            );
-                          },
-                          childCount: state.filteredStockItems.length,
-                        ),
-                      ),
-                    ),
-                ],
+                    SizedBox(height: 100.h), //* Space for bottom nav bar
+                  ],
+                ),
               ),
             );
           },

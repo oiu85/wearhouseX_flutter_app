@@ -344,7 +344,10 @@
     "sortByPrice": "Price (Low-High)",
     "noStockItems": "No stock items found",
     "availableQuantity": "Available Quantity",
-    "pricePerUnit": "Price per Unit"
+    "pricePerUnit": "Price per Unit",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "daysAgo": "{days} days ago"
   },
   "stockDetail": {
     "title": "Product Details",
@@ -354,5 +357,38 @@
     "sellProduct": "Sell this Product",
     "noDescription": "No description available",
     "updatedAgo": "Updated {time} ago"
+  },
+  "bottomNav": {
+    "home": "Home",
+    "stock": "Stock",
+    "menu": "Menu"
+  },
+  "home": {
+    "greeting": "Welcome back, {name}!",
+    "greetingMorning": "Good morning, {name}!",
+    "greetingAfternoon": "Good afternoon, {name}!",
+    "greetingEvening": "Good evening, {name}!",
+    "totalSales": "Total Sales",
+    "totalRevenue": "Total Revenue",
+    "todaySales": "Today's Sales",
+    "todayRevenue": "Today's Revenue",
+    "stockItems": "Stock Items",
+    "recentSales": "Recent Sales",
+    "quickActions": "Quick Actions",
+    "createSale": "Create Sale",
+    "viewStock": "View Stock",
+    "viewAllSales": "View All Sales"
+  },
+  "menu": {
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout",
+    "language": "Language",
+    "changeAppLanguage": "Change app language",
+    "theme": "Theme",
+    "lightDarkMode": "Light / Dark mode",
+    "notifications": "Notifications",
+    "manageNotifications": "Manage notifications",
+    "comingSoon": "Coming Soon"
   }
 }
