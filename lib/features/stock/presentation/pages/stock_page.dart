@@ -1,17 +1,15 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import '../../../../core/shared/app_scaffold.dart';
 import '../../../../core/status/ui_helper.dart';
 import '../../../../core/component/others/custom_selection_popup.dart';
+import '../../../../core/localization/locale_keys.g.dart';
 import '../bloc/stock_bloc.dart';
 import '../bloc/stock_event.dart';
 import '../bloc/stock_state.dart';
-import '../widgets/stock_app_bar.dart';
-import '../widgets/stock_greeting_section.dart';
 import '../widgets/stock_search_bar.dart';
 import '../widgets/stock_category_filter.dart';
 import '../widgets/stock_item_card.dart';
@@ -26,7 +24,6 @@ class StockPage extends StatefulWidget {
 }
 
 class _StockPageState extends State<StockPage> {
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
   final TextEditingController _searchController = TextEditingController();
   final StockBloc _stockBloc = GetIt.I<StockBloc>();
 
@@ -42,23 +39,32 @@ class _StockPageState extends State<StockPage> {
   @override
   void dispose() {
     _searchController.dispose();
-    _refreshController.dispose();
     super.dispose();
   }
 
-  void _onRefresh() {
+  Future<void> _onRefresh() async {
     _stockBloc.add(const RefreshStock());
-    //* Refresh completion is handled in BlocListener
+    // Wait for the refresh to complete by listening to state changes
+    try {
+      await _stockBloc.stream
+          .skip(1)
+          .firstWhere(
+            (state) => state.status.isSuccess() || state.status.isFail(),
+          )
+          .timeout(const Duration(seconds: 30));
+    } catch (e) {
+      // Timeout or error - refresh will complete anyway
+    }
   }
 
   void _showSortDialog() {
     final state = _stockBloc.state;
     CustomSelectionPopup.show(
       context,
-      title: 'home.sortBy'.tr(),
+      title: LocaleKeys.home_sortBy,
       options: [
         SelectionOption(
-          label: 'home.sortByName'.tr(),
+          label: LocaleKeys.home_sortByName,
           isSelected: state.sortType == SortType.name,
           onTap: () {
             Navigator.pop(context);
@@ -66,7 +72,7 @@ class _StockPageState extends State<StockPage> {
           },
         ),
         SelectionOption(
-          label: 'home.sortByQuantity'.tr(),
+          label: LocaleKeys.home_sortByQuantity,
           isSelected: state.sortType == SortType.quantity,
           onTap: () {
             Navigator.pop(context);
@@ -74,7 +80,7 @@ class _StockPageState extends State<StockPage> {
           },
         ),
         SelectionOption(
-          label: 'home.sortByPrice'.tr(),
+          label: LocaleKeys.home_sortByPrice,
           isSelected: state.sortType == SortType.price,
           onTap: () {
             Navigator.pop(context);
@@ -89,36 +95,34 @@ class _StockPageState extends State<StockPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: StockAppBar(
-        refreshController: _refreshController,
-        onRefresh: _onRefresh,
-        onSortPressed: _showSortDialog,
-      ),
-      body: BlocListener<StockBloc, StockState>(
-        bloc: _stockBloc,
-        listener: (context, state) {
-          //* Complete refresh when state changes to success
-          if (state.status.isSuccess() && _refreshController.isRefresh) {
-            _refreshController.refreshCompleted();
-          } else if (state.status.isFail() && _refreshController.isRefresh) {
-            _refreshController.refreshFailed();
-          }
-        },
-        child: BlocBuilder<StockBloc, StockState>(
-          bloc: _stockBloc,
-          builder: (context, state) {
-            //* Show loading/error states
-            if (state.status.isLoading() || state.status.isInitial()) {
-              return Center(
-                child: CircularProgressIndicator(color: theme.colorScheme.primary),
-              );
-            }
-
-            if (state.status.isFail()) {
-              return Center(
-                child: UiHelperStatus(
+    return BlocBuilder<StockBloc, StockState>(
+      bloc: _stockBloc,
+      builder: (context, state) {
+        return AppScaffold(
+          backgroundColor: theme.scaffoldBackgroundColor,
+          body: BlocBuilder<StockBloc, StockState>(
+            bloc: _stockBloc,
+            builder: (context, state) {
+              return state.status.when(
+                init: () => UiHelperStatus(
+                  state: state.status,
+                  message: null,
+                ),
+                loading: () => UiHelperStatus(
+                  state: state.status,
+                  message: null,
+                ),
+                loadingMore: () => RefreshIndicator(
+                  onRefresh: _onRefresh,
+                  color: theme.colorScheme.primary,
+                  child: _buildContent(context, theme, state),
+                ),
+                success: () => RefreshIndicator(
+                  onRefresh: _onRefresh,
+                  color: theme.colorScheme.primary,
+                  child: _buildContent(context, theme, state),
+                ),
+                fail: (error) => UiHelperStatus(
                   state: state.status,
                   message: state.errorMessage,
                   onRetry: () {
@@ -126,88 +130,75 @@ class _StockPageState extends State<StockPage> {
                   },
                 ),
               );
-            }
+            },
+          ),
+        );
+      },
+    );
+  }
 
-            //* Use CustomScrollView with SliverAppBar for pull-to-refresh in app bar area
-            return SmartRefresher(
-              controller: _refreshController,
-              onRefresh: _onRefresh,
-              enablePullDown: true,
-              enablePullUp: false,
-              physics: const AlwaysScrollableScrollPhysics(),
-              header: WaterDropMaterialHeader(
-                backgroundColor: theme.colorScheme.primary,
-                color: theme.colorScheme.surface,
+  Widget _buildContent(BuildContext context, ThemeData theme, StockState state) {
+    return SafeArea(
+      child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          //* Stock Statistics Widget
+          if (state.stockStatistics != null)
+            SliverToBoxAdapter(
+              child: StockStatisticsWidget(
+                statistics: state.stockStatistics!,
               ),
-              child: CustomScrollView(
-                slivers: [
-                  //* Greeting Section
-                  if (state.greetingText != null)
-                    SliverToBoxAdapter(
-                      child: StockGreetingSection(greetingText: state.greetingText),
-                    ),
-
-                  //* Stock Statistics Widget
-                  if (state.stockStatistics != null)
-                    SliverToBoxAdapter(
-                      child: StockStatisticsWidget(
-                        statistics: state.stockStatistics!,
-                      ),
-                    ),
-
-                  //* Search Bar
-                  SliverToBoxAdapter(
-                    child: StockSearchBar(
-                      controller: _searchController,
-                      onChanged: (value) {
-                        _stockBloc.add(SearchStock(value));
+            ),
+      
+          //* Search Bar
+          SliverToBoxAdapter(
+            child: StockSearchBar(
+              controller: _searchController,
+              onChanged: (value) {
+                _stockBloc.add(SearchStock(value));
+              },
+            ),
+          ),
+      
+          //* Category Filter Chips
+          if (state.categories.isNotEmpty)
+            SliverToBoxAdapter(
+              child: StockCategoryFilter(
+                categories: state.categories,
+                selectedCategoryId: state.selectedCategoryId,
+                onCategorySelected: (categoryId) {
+                  _stockBloc.add(FilterByCategory(categoryId));
+                },
+              ),
+            ),
+      
+          //* Stock List
+          if (state.filteredStockItems.isEmpty)
+            SliverFillRemaining(
+              child: NoDataWidget(message: LocaleKeys.home_noStockItems),
+            )
+          else
+            SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final stockItem = state.filteredStockItems[index];
+                    return StockItemCard(
+                      stockItem: stockItem,
+                      onTap: () {
+                        // Navigate using productId (backend API uses productId)
+                        context.push(
+                          '/stock/product/${stockItem.productId}',
+                        );
                       },
-                    ),
-                  ),
-
-                  //* Category Filter Chips
-                  if (state.categories.isNotEmpty)
-                    SliverToBoxAdapter(
-                      child: StockCategoryFilter(
-                        categories: state.categories,
-                        selectedCategoryId: state.selectedCategoryId,
-                        onCategorySelected: (categoryId) {
-                          _stockBloc.add(FilterByCategory(categoryId));
-                        },
-                      ),
-                    ),
-
-                  //* Stock List
-                  if (state.filteredStockItems.isEmpty)
-                    SliverFillRemaining(
-                      child: NoDataWidget(message: 'home.noStockItems'.tr()),
-                    )
-                  else
-                    SliverPadding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                      sliver: SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            final stockItem = state.filteredStockItems[index];
-                            return StockItemCard(
-                              stockItem: stockItem,
-                              onTap: () {
-                                // Navigate using productId (backend API uses productId)
-                                context.push(
-                                  '/stock/product/${stockItem.productId}',
-                                );
-                              },
-                            );
-                          },
-                          childCount: state.filteredStockItems.length,
-                        ),
-                      ),
-                    ),
-                ],
+                    );
+                  },
+                  childCount: state.filteredStockItems.length,
+                ),
               ),
-            );
-          },
-        ),
+            ),
+        ],
       ),
     );
   }

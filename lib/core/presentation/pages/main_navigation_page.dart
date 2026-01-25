@@ -8,6 +8,7 @@ import '../../../features/home/presentation/bloc/home_bloc.dart';
 import '../../../features/home/presentation/bloc/home_event.dart' as home_event;
 import '../../../features/home/presentation/pages/home_page.dart';
 import '../../../features/menu/presentation/pages/menu_page.dart';
+import '../../../features/sales/presentation/pages/create_sale_page.dart';
 import '../../../features/stock/presentation/bloc/stock_bloc.dart';
 import '../../../features/stock/presentation/pages/stock_page.dart';
 
@@ -96,6 +97,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
             children: [
               HomePage(isNavigating: _isNavigating),
               StockPage(),
+              const CreateSalePage(),
               const MenuPage(),
             ],
           ),

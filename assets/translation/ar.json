@@ -265,6 +265,7 @@
   "bottomNav": {
     "home": "الرئيسية",
     "stock": "المخزون",
+    "cart": "السلة",
     "menu": "القائمة"
   },
   "share": {
@@ -321,6 +322,15 @@
     "viewAllSales": "عرض جميع المبيعات",
     "availableProducts": "المنتجات المتاحة",
     "lowStock": "مخزون منخفض"
+  },
+  "stockDetail": {
+    "title": "تفاصيل المنتج",
+    "availableQuantity": "الكمية المتاحة",
+    "pricePerUnit": "السعر لكل وحدة",
+    "lastUpdated": "آخر تحديث",
+    "sellProduct": "بيع هذا المنتج",
+    "noDescription": "لا يوجد وصف متاح",
+    "updatedAgo": "تم التحديث منذ {time}"
   },
   "menu": {
     "profile": "الملف الشخصي",

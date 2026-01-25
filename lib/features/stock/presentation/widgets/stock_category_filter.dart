@@ -1,10 +1,11 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/component/others/selection_chip.dart';
+import '../../../../core/localization/locale_keys.g.dart';
 import '../../domain/entities/category_entity.dart';
+import 'package:easy_localization/easy_localization.dart';
 
-//* Category filter chips widget
+/// Category filter chips widget with modern design
 class StockCategoryFilter extends StatelessWidget {
   final List<CategoryEntity> categories;
   final int? selectedCategoryId;
@@ -33,7 +34,7 @@ class StockCategoryFilter extends StatelessWidget {
             children: [
               //* All Categories chip
               SelectionChip(
-                label: 'home.allCategories'.tr(),
+                label: LocaleKeys.home_allCategories.tr(),
                 isSelected: selectedCategoryId == null,
                 onTap: () => onCategorySelected(null),
               ),

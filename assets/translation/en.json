@@ -319,6 +319,7 @@
   "bottomNav": {
     "home": "Home",
     "stock": "Stock",
+    "cart": "Cart",
     "menu": "Menu"
   },
   "share": {

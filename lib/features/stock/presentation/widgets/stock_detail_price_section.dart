@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/localization/app_text.dart';
+import '../../../../core/localization/locale_keys.g.dart';
 import '../../domain/entities/stock_item_entity.dart';
 
-//* Price per unit section widget
+/// Price per unit section widget with modern card design
 class StockDetailPriceSection extends StatelessWidget {
   final StockItemEntity stockItem;
 
@@ -20,41 +21,61 @@ class StockDetailPriceSection extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: theme.colorScheme.secondaryContainer.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(12.r),
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(16.r),
         border: Border.all(
-          color: theme.colorScheme.secondary.withOpacity(0.3),
-          width: 1,
+          color: theme.colorScheme.secondary.withOpacity(0.2),
+          width: 1.5,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: theme.colorScheme.secondary.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AppText(
-                'stockDetail.pricePerUnit',
-                translation: true,
-                style: theme.textTheme.labelLarge?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.7),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppText(
+                  LocaleKeys.stockDetail_pricePerUnit,
+                  translation: true,
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    color: theme.colorScheme.onSurface.withOpacity(0.7),
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-              SizedBox(height: 8.h),
-              AppText(
-                '\$${stockItem.product.price.toStringAsFixed(2)}',
-                translation: false,
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: theme.colorScheme.secondary,
+                SizedBox(height: 8.h),
+                AppText(
+                  '\$${stockItem.product.price.toStringAsFixed(2)}',
+                  translation: true,
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.secondary,
+                    fontSize: 28.sp,
+                    height: 1.2,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          Icon(
-            Icons.attach_money,
-            size: 40.sp,
-            color: theme.colorScheme.secondary,
+          Container(
+            padding: EdgeInsets.all(14.w),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.secondary.withOpacity(0.15),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.attach_money_rounded,
+              color: theme.colorScheme.secondary,
+              size: 32.sp,
+            ),
           ),
         ],
       ),

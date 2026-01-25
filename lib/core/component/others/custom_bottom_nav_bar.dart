@@ -67,8 +67,31 @@ class CustomBottomNavBar extends StatelessWidget {
           ),
           title: AppText(
             isAutoScale: true,
-            'bottomNav.stock',
-            translation: true,
+            LocaleKeys.bottomNav_stock,
+            style: TextStyle(
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          selectedColor: theme.colorScheme.secondary,
+          unSelectedColor: theme.colorScheme.onSurface,
+        ),
+        
+        //* Cart Item
+        BottomBarItem(
+          icon: Icon(
+            Icons.shopping_cart_outlined,
+            size: 24.sp,
+            color: theme.colorScheme.onSurface,
+          ),
+          selectedIcon: Icon(
+            Icons.shopping_cart,
+            size: 24.sp,
+            color: theme.colorScheme.secondary,
+          ),
+          title: AppText(
+            isAutoScale: true,
+            LocaleKeys.sales_cart,
             style: TextStyle(
               fontSize: 12.sp,
               fontWeight: FontWeight.w500,
