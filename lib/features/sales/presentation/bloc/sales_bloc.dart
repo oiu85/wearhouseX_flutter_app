@@ -1,11 +1,9 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/status/bloc_status.dart';
 import '../../../../core/services/pdf_service.dart';
 import '../../../auth/domain/entities/failure.dart';
+import '../../data/datasources/cart_local_datasource.dart';
 import '../../domain/repositories/sales_repository.dart';
-import '../../domain/entities/sale_item_entity.dart';
 import 'sales_event.dart';
 import 'sales_state.dart';
 
@@ -15,21 +13,57 @@ import 'sales_state.dart';
 
 class CreateSaleBloc extends Bloc<CreateSaleEvent, CreateSaleState> {
   final SalesRepository repository;
+  final CartLocalDataSource cartLocalDataSource;
 
   CreateSaleBloc({
     required this.repository,
+    required this.cartLocalDataSource,
   }) : super(CreateSaleState.initial()) {
+    on<LoadCartFromStorage>(_onLoadCartFromStorage);
     on<AddProductToCart>(_onAddProductToCart);
     on<RemoveProductFromCart>(_onRemoveProductFromCart);
     on<UpdateCartItemQuantity>(_onUpdateCartItemQuantity);
     on<CreateSaleSubmitted>(_onCreateSaleSubmitted);
     on<CreateSaleReset>(_onCreateSaleReset);
+    on<ClearCart>(_onClearCart);
+    
+    // Load cart from storage on initialization
+    add(const LoadCartFromStorage());
   }
 
-  void _onAddProductToCart(
+  Future<void> _onLoadCartFromStorage(
+    LoadCartFromStorage event,
+    Emitter<CreateSaleState> emit,
+  ) async {
+    try {
+      final cartItems = await cartLocalDataSource.getCartItems();
+      emit(state.copyWith(
+        cartItems: cartItems,
+        status: const BlocStatus.success(),
+        errorMessage: null,
+      ));
+    } catch (e) {
+      // If loading fails, start with empty cart
+      emit(state.copyWith(
+        cartItems: [],
+        status: const BlocStatus.success(),
+        errorMessage: null,
+      ));
+    }
+  }
+
+  Future<void> _saveCartToStorage(List<CartItem> items) async {
+    try {
+      await cartLocalDataSource.saveCartItems(items);
+    } catch (e) {
+      // Silently fail - cart persistence is not critical
+    }
+  }
+
+  Future<void> _onAddProductToCart(
     AddProductToCart event,
     Emitter<CreateSaleState> emit,
-  ) {
+  ) async {
     final existingItemIndex = state.cartItems.indexWhere(
       (item) => item.productId == event.productId,
     );
@@ -41,6 +75,7 @@ class CreateSaleBloc extends Bloc<CreateSaleEvent, CreateSaleState> {
       
       if (newQuantity > event.availableQuantity) {
         emit(state.copyWith(
+          status: const BlocStatus.success(),
           errorMessage: 'Quantity exceeds available stock',
         ));
         return;
@@ -51,8 +86,10 @@ class CreateSaleBloc extends Bloc<CreateSaleEvent, CreateSaleState> {
 
       emit(state.copyWith(
         cartItems: updatedItems,
+        status: const BlocStatus.success(),
         errorMessage: null,
       ));
+      await _saveCartToStorage(updatedItems);
     } else {
       // Add new item to cart
       final newItem = CartItem(
@@ -63,31 +100,36 @@ class CreateSaleBloc extends Bloc<CreateSaleEvent, CreateSaleState> {
         availableQuantity: event.availableQuantity,
       );
 
+      final updatedItems = [...state.cartItems, newItem];
       emit(state.copyWith(
-        cartItems: [...state.cartItems, newItem],
+        cartItems: updatedItems,
+        status: const BlocStatus.success(),
         errorMessage: null,
       ));
+      await _saveCartToStorage(updatedItems);
     }
   }
 
-  void _onRemoveProductFromCart(
+  Future<void> _onRemoveProductFromCart(
     RemoveProductFromCart event,
     Emitter<CreateSaleState> emit,
-  ) {
+  ) async {
     final updatedItems = state.cartItems.where(
       (item) => item.productId != event.productId,
     ).toList();
 
     emit(state.copyWith(
       cartItems: updatedItems,
+      status: const BlocStatus.success(),
       errorMessage: null,
     ));
+    await _saveCartToStorage(updatedItems);
   }
 
-  void _onUpdateCartItemQuantity(
+  Future<void> _onUpdateCartItemQuantity(
     UpdateCartItemQuantity event,
     Emitter<CreateSaleState> emit,
-  ) {
+  ) async {
     final itemIndex = state.cartItems.indexWhere(
       (item) => item.productId == event.productId,
     );
@@ -98,12 +140,13 @@ class CreateSaleBloc extends Bloc<CreateSaleEvent, CreateSaleState> {
     
     if (event.quantity <= 0) {
       // Remove item if quantity is 0 or less
-      _onRemoveProductFromCart(RemoveProductFromCart(event.productId), emit);
+      await _onRemoveProductFromCart(RemoveProductFromCart(event.productId), emit);
       return;
     }
 
     if (event.quantity > item.availableQuantity) {
       emit(state.copyWith(
+        status: const BlocStatus.success(),
         errorMessage: 'Quantity exceeds available stock',
       ));
       return;
@@ -114,8 +157,10 @@ class CreateSaleBloc extends Bloc<CreateSaleEvent, CreateSaleState> {
 
     emit(state.copyWith(
       cartItems: updatedItems,
+      status: const BlocStatus.success(),
       errorMessage: null,
     ));
+    await _saveCartToStorage(updatedItems);
   }
 
   Future<void> _onCreateSaleSubmitted(
@@ -163,9 +208,12 @@ class CreateSaleBloc extends Bloc<CreateSaleEvent, CreateSaleState> {
         ));
       },
       (sale) {
+        // Clear cart on successful sale
+        cartLocalDataSource.clearCartItems();
         emit(state.copyWith(
           status: const BlocStatus.success(),
           createdSale: sale,
+          cartItems: [],
           errorMessage: null,
         ));
       },
@@ -177,6 +225,18 @@ class CreateSaleBloc extends Bloc<CreateSaleEvent, CreateSaleState> {
     Emitter<CreateSaleState> emit,
   ) {
     emit(CreateSaleState.initial());
+  }
+
+  Future<void> _onClearCart(
+    ClearCart event,
+    Emitter<CreateSaleState> emit,
+  ) async {
+    await cartLocalDataSource.clearCartItems();
+    emit(state.copyWith(
+      cartItems: [],
+      status: const BlocStatus.success(),
+      errorMessage: null,
+    ));
   }
 }
 
@@ -356,34 +416,44 @@ class SaleDetailBloc extends Bloc<SaleDetailEvent, SaleDetailState> {
 
     final result = await repository.getInvoicePdf(event.saleId);
 
-    result.fold(
-      (failure) {
+    if (result.isLeft()) {
+      final failure = result.fold((l) => l, (r) => throw Exception('Expected Left'));
+      emit(state.copyWith(
+        isDownloadingInvoice: false,
+        errorMessage: failure.message,
+      ));
+      return;
+    }
+
+    // Handle success case with async operations
+    final bytes = result.fold((l) => throw Exception('Expected Right'), (r) => r);
+    
+    try {
+      // Save PDF file
+      final pdfService = PdfService();
+      final fileName = 'invoice_${event.saleId}.pdf';
+      final filePath = await pdfService.savePdf(
+        bytes: bytes,
+        fileName: fileName,
+      );
+
+      if (filePath != null) {
         emit(state.copyWith(
           isDownloadingInvoice: false,
-          errorMessage: failure.message,
+          errorMessage: null,
         ));
-      },
-      (bytes) async {
-        // Save PDF file
-        final pdfService = PdfService();
-        final fileName = 'invoice_${event.saleId}.pdf';
-        final filePath = await pdfService.savePdf(
-          bytes: bytes,
-          fileName: fileName,
-        );
-
-        if (filePath != null) {
-          emit(state.copyWith(
-            isDownloadingInvoice: false,
-          ));
-        } else {
-          emit(state.copyWith(
-            isDownloadingInvoice: false,
-            errorMessage: 'Failed to save PDF file',
-          ));
-        }
-      },
-    );
+      } else {
+        emit(state.copyWith(
+          isDownloadingInvoice: false,
+          errorMessage: 'Failed to save PDF file. Please check storage permissions.',
+        ));
+      }
+    } catch (e) {
+      emit(state.copyWith(
+        isDownloadingInvoice: false,
+        errorMessage: 'Failed to save PDF file: ${e.toString()}',
+      ));
+    }
   }
 
   Future<void> _onShareInvoice(
@@ -394,35 +464,45 @@ class SaleDetailBloc extends Bloc<SaleDetailEvent, SaleDetailState> {
 
     final result = await repository.getInvoicePdf(event.saleId);
 
-    result.fold(
-      (failure) {
+    if (result.isLeft()) {
+      final failure = result.fold((l) => l, (r) => throw Exception('Expected Left'));
+      emit(state.copyWith(
+        isSharingInvoice: false,
+        errorMessage: failure.message,
+      ));
+      return;
+    }
+
+    // Handle success case with async operations
+    final bytes = result.fold((l) => throw Exception('Expected Right'), (r) => r);
+    
+    try {
+      // Share PDF file
+      final pdfService = PdfService();
+      final fileName = 'invoice_${event.saleId}.pdf';
+      final success = await pdfService.downloadAndSharePdf(
+        bytes: bytes,
+        fileName: fileName,
+        subject: 'Invoice ${event.saleId}',
+      );
+
+      if (success) {
         emit(state.copyWith(
           isSharingInvoice: false,
-          errorMessage: failure.message,
+          errorMessage: null,
         ));
-      },
-      (bytes) async {
-        // Share PDF file
-        final pdfService = PdfService();
-        final fileName = 'invoice_${event.saleId}.pdf';
-        final success = await pdfService.downloadAndSharePdf(
-          bytes: bytes,
-          fileName: fileName,
-          subject: 'Invoice ${event.saleId}',
-        );
-
-        if (success) {
-          emit(state.copyWith(
-            isSharingInvoice: false,
-          ));
-        } else {
-          emit(state.copyWith(
-            isSharingInvoice: false,
-            errorMessage: 'Failed to share PDF file',
-          ));
-        }
-      },
-    );
+      } else {
+        emit(state.copyWith(
+          isSharingInvoice: false,
+          errorMessage: 'Failed to share PDF file. Please check storage permissions.',
+        ));
+      }
+    } catch (e) {
+      emit(state.copyWith(
+        isSharingInvoice: false,
+        errorMessage: 'Failed to share PDF file: ${e.toString()}',
+      ));
+    }
   }
 }
 

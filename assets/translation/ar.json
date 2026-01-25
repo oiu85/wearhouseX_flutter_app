@@ -332,6 +332,12 @@
     "noDescription": "لا يوجد وصف متاح",
     "updatedAgo": "تم التحديث منذ {time}"
   },
+  "checkout": {
+    "title": "الدفع",
+    "customerName": "اسم العميل",
+    "submitSale": "إتمام البيع",
+    "confirmSale": "تأكيد البيع"
+  },
   "menu": {
     "profile": "الملف الشخصي",
     "settings": "الإعدادات",
@@ -351,6 +357,10 @@
     "customerNameRequired": "اسم العميل مطلوب",
     "selectProducts": "اختر المنتجات",
     "cart": "السلة",
+    "addToCart": "إضافة إلى السلة",
+    "checkout": "الدفع",
+    "emptyCart": "السلة فارغة",
+    "addedToCart": "تمت الإضافة إلى السلة",
     "orderSummary": "ملخص الطلب",
     "totalItems": "إجمالي العناصر",
     "totalAmount": "المبلغ الإجمالي",

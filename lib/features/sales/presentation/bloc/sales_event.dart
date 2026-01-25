@@ -76,6 +76,14 @@ class UpdateCartItemQuantity extends CreateSaleEvent {
   List<Object?> get props => [productId, quantity];
 }
 
+class LoadCartFromStorage extends CreateSaleEvent {
+  const LoadCartFromStorage();
+}
+
+class ClearCart extends CreateSaleEvent {
+  const ClearCart();
+}
+
 // ============================================
 // SALES LIST EVENTS
 // ============================================

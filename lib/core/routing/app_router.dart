@@ -10,7 +10,6 @@ import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/forget_password_page.dart';
 import '../../features/auth/presentation/pages/reset_password_page.dart';
 import '../../features/stock/presentation/pages/stock_detail_page.dart';
-import '../../features/sales/presentation/pages/create_sale_page.dart';
 import '../../features/sales/presentation/pages/sales_history_page.dart';
 import '../../features/sales/presentation/pages/sale_detail_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
@@ -135,19 +134,6 @@ class AppRouter {
         builder: (context, state) {
           final productId = int.parse(state.pathParameters['productId']!);
           return StockDetailPage(productId: productId);
-        },
-      ),
-      // Sales routes
-      GoRoute(
-        path: AppRoutes.createSale,
-        name: 'createSale',
-        builder: (context, state) {
-          final extra = state.extra as Map<String, dynamic>?;
-          return CreateSalePage(
-            preSelectedProductId: extra?['productId'] as int?,
-            preSelectedStockItemId: extra?['stockItemId'] as int?,
-            preSelectedAvailableQuantity: extra?['availableQuantity'] as int?,
-          );
         },
       ),
       GoRoute(

@@ -123,7 +123,9 @@ class _SalesHistoryPageState extends State<SalesHistoryPage> {
                         return SaleItemCard(
                           sale: sale,
                           onTap: () {
-                            context.push('${AppRoutes.saleDetail}/${sale.id}');
+                            context.push(
+                              AppRoutes.saleDetail.replaceAll(':id', sale.id.toString()),
+                            );
                           },
                         );
                       },

@@ -185,6 +185,30 @@ class NetworkClient {
     }
   }
 
+  //* Performs a GET request with binary response (for PDF downloads)
+  Future<Either<NetworkFailure, List<int>>> getBytes(String url) async {
+    final urlValidation = _validateUrl(url);
+    if (urlValidation != null) {
+      return Left(urlValidation);
+    }
+
+    try {
+      final response = await _dio.get<List<int>>(
+        url,
+        options: Options(
+          responseType: ResponseType.bytes,
+        ),
+      );
+      return Right(response.data ?? []);
+    } on DioException catch (e) {
+      return Left(_handleDioError(e));
+    } catch (e) {
+      return Left(NetworkFailure(
+        message: 'Unexpected error: ${e.toString()}',
+      ));
+    }
+  }
+
   NetworkFailure? _validateUrl(String url) {
     if (url.isEmpty) {
       return const NetworkFailure(message: 'URL cannot be empty');

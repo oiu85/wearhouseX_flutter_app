@@ -1,6 +1,8 @@
 import 'package:get_it/get_it.dart';
 import '../../../../core/network/network_client.dart';
+import '../../../../core/storage/app_storage_service.dart';
 import '../../domain/repositories/sales_repository.dart';
+import '../datasources/cart_local_datasource.dart';
 import '../datasources/sales_remote_datasource.dart';
 import '../repositories/sales_repository_impl.dart';
 import '../../presentation/bloc/sales_bloc.dart';
@@ -11,6 +13,12 @@ void registerSalesDependencies(GetIt getIt) {
   getIt.registerLazySingleton<SalesRemoteDataSource>(
     () => SalesRemoteDataSourceImpl(
       getIt<NetworkClient>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<CartLocalDataSource>(
+    () => CartLocalDataSourceImpl(
+      getIt<AppStorageService>(),
     ),
   );
 
@@ -25,6 +33,7 @@ void registerSalesDependencies(GetIt getIt) {
   getIt.registerLazySingleton<CreateSaleBloc>(
     () => CreateSaleBloc(
       repository: getIt<SalesRepository>(),
+      cartLocalDataSource: getIt<CartLocalDataSource>(),
     ),
   );
 

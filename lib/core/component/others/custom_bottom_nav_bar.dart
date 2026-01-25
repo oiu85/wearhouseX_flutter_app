@@ -8,11 +8,13 @@ import 'package:easy_localization/easy_localization.dart';
 class CustomBottomNavBar extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int> onTap;
+  final int cartItemCount;
 
   const CustomBottomNavBar({
     super.key,
     required this.selectedIndex,
     required this.onTap,
+    this.cartItemCount = 0,
   });
 
   @override
@@ -79,15 +81,79 @@ class CustomBottomNavBar extends StatelessWidget {
         
         //* Cart Item
         BottomBarItem(
-          icon: Icon(
-            Icons.shopping_cart_outlined,
-            size: 24.sp,
-            color: theme.colorScheme.onSurface,
+          icon: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Icon(
+                Icons.shopping_cart_outlined,
+                size: 24.sp,
+                color: theme.colorScheme.onSurface,
+              ),
+              if (cartItemCount > 0)
+                Positioned(
+                  right: -6,
+                  top: -6,
+                  child: Container(
+                    padding: EdgeInsets.all(4.w),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.error,
+                      shape: BoxShape.circle,
+                    ),
+                    constraints: BoxConstraints(
+                      minWidth: 16.w,
+                      minHeight: 16.h,
+                    ),
+                    child: Center(
+                      child: AppText(
+                        cartItemCount > 99 ? '99+' : '$cartItemCount',
+                        translation: false,
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: theme.colorScheme.onError,
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           ),
-          selectedIcon: Icon(
-            Icons.shopping_cart,
-            size: 24.sp,
-            color: theme.colorScheme.secondary,
+          selectedIcon: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Icon(
+                Icons.shopping_cart,
+                size: 24.sp,
+                color: theme.colorScheme.secondary,
+              ),
+              if (cartItemCount > 0)
+                Positioned(
+                  right: -6,
+                  top: -6,
+                  child: Container(
+                    padding: EdgeInsets.all(4.w),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.error,
+                      shape: BoxShape.circle,
+                    ),
+                    constraints: BoxConstraints(
+                      minWidth: 16.w,
+                      minHeight: 16.h,
+                    ),
+                    child: Center(
+                      child: AppText(
+                        cartItemCount > 99 ? '99+' : '$cartItemCount',
+                        translation: false,
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: theme.colorScheme.onError,
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           ),
           title: AppText(
             isAutoScale: true,

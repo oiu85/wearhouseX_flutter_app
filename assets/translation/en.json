@@ -395,6 +395,12 @@
     "noDescription": "No description available",
     "updatedAgo": "Updated {time} ago"
   },
+  "checkout": {
+    "title": "Checkout",
+    "customerName": "Customer Name",
+    "submitSale": "Submit Sale",
+    "confirmSale": "Confirm Sale"
+  },
   "menu": {
     "profile": "Profile",
     "settings": "Settings",
@@ -414,6 +420,10 @@
     "customerNameRequired": "Customer name is required",
     "selectProducts": "Select Products",
     "cart": "Cart",
+    "addToCart": "Add to Cart",
+    "checkout": "Checkout",
+    "emptyCart": "Your cart is empty",
+    "addedToCart": "added to cart",
     "orderSummary": "Order Summary",
     "totalItems": "Total Items",
     "totalAmount": "Total Amount",

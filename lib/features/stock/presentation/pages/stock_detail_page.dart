@@ -3,11 +3,14 @@ import 'package:flutter_app_wearhouse/core/localization/locale_keys.g.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../core/shared/app_scaffold.dart';
 import '../../../../core/component/buttons/custom_filled_button.dart';
 import '../../../../core/localization/app_text.dart';
+import '../../../../core/shared/app_snackbar.dart';
 import '../../../../core/status/ui_helper.dart';
+import '../../../sales/presentation/bloc/sales_bloc.dart';
+import '../../../sales/presentation/bloc/sales_event.dart';
+import '../../../sales/presentation/bloc/sales_state.dart';
 import '../bloc/stock_detail_bloc.dart';
 import '../bloc/stock_detail_event.dart';
 import '../bloc/stock_detail_state.dart';
@@ -15,6 +18,7 @@ import '../widgets/stock_detail_image.dart';
 import '../widgets/stock_detail_info_section.dart';
 import '../widgets/stock_detail_quantity_section.dart';
 import '../widgets/stock_detail_price_section.dart';
+import '../widgets/stock_detail_quantity_selector.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 //* Stock detail page displaying comprehensive product information
@@ -34,6 +38,8 @@ class StockDetailPage extends StatefulWidget {
 
 class _StockDetailPageState extends State<StockDetailPage> {
   final StockDetailBloc _stockDetailBloc = GetIt.I<StockDetailBloc>();
+  final CreateSaleBloc _createSaleBloc = GetIt.I<CreateSaleBloc>();
+  int _selectedQuantity = 1;
 
   @override
   void initState() {
@@ -51,21 +57,55 @@ class _StockDetailPageState extends State<StockDetailPage> {
     super.dispose();
   }
 
-  void _onSellProduct() {
-    //* Navigate to sales creation page
-    //* For now, just show a placeholder - sales page will be implemented separately
-    final state = _stockDetailBloc.state;
-    if (state.stockItem != null) {
-      //* Navigate to sales page with product pre-selected
-      context.push(
-        '/sales/create',
-        extra: {
-          'productId': state.stockItem!.productId,
-          'stockItemId': state.stockItem!.id,
-          'availableQuantity': state.stockItem!.quantity,
-        },
+  void _onQuantityChanged(int quantity) {
+    setState(() {
+      _selectedQuantity = quantity;
+    });
+  }
+
+  void _onAddToCart(StockDetailState state) {
+    if (state.stockItem == null) return;
+
+    final stockItem = state.stockItem!;
+    
+    if (_selectedQuantity > stockItem.quantity) {
+      AppSnackbar.showError(
+        context,
+        LocaleKeys.stockDetail_availableQuantity.tr(),
+        translation: false,
+      );
+      return;
+    }
+
+    _createSaleBloc.add(
+      AddProductToCart(
+        productId: stockItem.productId,
+        productName: stockItem.product.name,
+        price: stockItem.product.price,
+        availableQuantity: stockItem.quantity,
+      ),
+    );
+
+    // Add selected quantity times
+    for (int i = 1; i < _selectedQuantity; i++) {
+      _createSaleBloc.add(
+        UpdateCartItemQuantity(
+          productId: stockItem.productId,
+          quantity: i + 1,
+        ),
       );
     }
+
+    AppSnackbar.showSuccess(
+      context,
+      '${stockItem.product.name} ${LocaleKeys.sales_addedToCart.tr()}',
+      translation: false,
+    );
+
+    // Reset quantity to 1
+    setState(() {
+      _selectedQuantity = 1;
+    });
   }
 
   @override
@@ -149,42 +189,118 @@ class _StockDetailPageState extends State<StockDetailPage> {
                 StockDetailPriceSection(
                   stockItem: state.stockItem!,
                 ),
+
+                //* Quantity Selector
+                if (state.stockItem!.quantity > 0)
+                  StockDetailQuantitySelector(
+                    quantity: _selectedQuantity,
+                    maxQuantity: state.stockItem!.quantity,
+                    onQuantityChanged: _onQuantityChanged,
+                  ),
+
                 SizedBox(height: 100.h), //* Space for bottom button
               ],
             ),
           ),
         ),
 
-        //* Sell Product Button (Fixed at bottom)
-        Container(
-          padding: EdgeInsets.all(16.w),
-          decoration: BoxDecoration(
-            color: theme.scaffoldBackgroundColor,
-            boxShadow: [
-              BoxShadow(
-                color: theme.colorScheme.shadow.withOpacity(0.1),
-                blurRadius: 10,
-                offset: const Offset(0, -2),
+        //* Add to Cart Button (Fixed at bottom)
+        if (state.stockItem!.quantity > 0)
+          BlocBuilder<CreateSaleBloc, CreateSaleState>(
+            bloc: _createSaleBloc,
+            builder: (context, cartState) {
+              final cartItemCount = cartState.cartItems.length;
+              return Container(
+                padding: EdgeInsets.all(16.w),
+                decoration: BoxDecoration(
+                  color: theme.scaffoldBackgroundColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: theme.colorScheme.shadow.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, -2),
+                    ),
+                  ],
+                ),
+                child: SafeArea(
+                  child: Row(
+                    children: [
+                      if (cartItemCount > 0)
+                        Container(
+                          margin: EdgeInsets.only(right: 12.w),
+                          padding: EdgeInsets.all(12.w),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.secondaryContainer,
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Icon(
+                                Icons.shopping_cart_rounded,
+                                color: theme.colorScheme.secondary,
+                                size: 24.sp,
+                              ),
+                              if (cartItemCount > 0)
+                                Positioned(
+                                  right: -4,
+                                  top: -4,
+                                  child: Container(
+                                    padding: EdgeInsets.all(4.w),
+                                    decoration: BoxDecoration(
+                                      color: theme.colorScheme.error,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    constraints: BoxConstraints(
+                                      minWidth: 16.w,
+                                      minHeight: 16.h,
+                                    ),
+                                    child: Center(
+                                      child: AppText(
+                                        cartItemCount > 99 ? '99+' : '$cartItemCount',
+                                        translation: false,
+                                        style: theme.textTheme.labelSmall?.copyWith(
+                                          color: theme.colorScheme.onError,
+                                          fontSize: 10.sp,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      Expanded(
+                        child: CustomFilledButton(
+                          text: LocaleKeys.sales_addToCart.tr(),
+                          onPressed: () => _onAddToCart(state),
+                          width: double.infinity,
+                          backgroundColor: theme.colorScheme.primary,
+                          textColor: theme.colorScheme.onPrimary,
+                          icon: Icons.add_shopping_cart_rounded,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          )
+        else
+          Container(
+            padding: EdgeInsets.all(16.w),
+            child: SafeArea(
+              child: CustomFilledButton(
+                text: LocaleKeys.stockDetail_sellProduct.tr(),
+                onPressed: null,
+                width: double.infinity,
+                backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                textColor: theme.colorScheme.onSurface.withOpacity(0.5),
+                icon: Icons.shopping_cart_rounded,
               ),
-            ],
-          ),
-          child: SafeArea(
-            child: CustomFilledButton(
-              text : LocaleKeys.stockDetail_sellProduct.tr(),
-              onPressed: state.stockItem!.quantity > 0
-                  ? _onSellProduct
-                  : null,
-              width: double.infinity,
-              backgroundColor: state.stockItem!.quantity > 0
-                  ? theme.colorScheme.primary
-                  : theme.colorScheme.surfaceContainerHighest,
-              textColor: state.stockItem!.quantity > 0
-                  ? theme.colorScheme.onPrimary
-                  : theme.colorScheme.onSurface.withOpacity(0.5),
-              icon: Icons.shopping_cart_rounded,
             ),
           ),
-        ),
       ],
     );
   }

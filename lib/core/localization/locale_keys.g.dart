@@ -315,6 +315,11 @@ abstract class  LocaleKeys {
   static const stockDetail_noDescription = 'stockDetail.noDescription';
   static const stockDetail_updatedAgo = 'stockDetail.updatedAgo';
   static const stockDetail = 'stockDetail';
+  static const checkout_title = 'checkout.title';
+  static const checkout_customerName = 'checkout.customerName';
+  static const checkout_submitSale = 'checkout.submitSale';
+  static const checkout_confirmSale = 'checkout.confirmSale';
+  static const checkout = 'checkout';
   static const menu_profile = 'menu.profile';
   static const menu_settings = 'menu.settings';
   static const menu_logout = 'menu.logout';
@@ -332,6 +337,10 @@ abstract class  LocaleKeys {
   static const sales_customerNameRequired = 'sales.customerNameRequired';
   static const sales_selectProducts = 'sales.selectProducts';
   static const sales_cart = 'sales.cart';
+  static const sales_addToCart = 'sales.addToCart';
+  static const sales_checkout = 'sales.checkout';
+  static const sales_emptyCart = 'sales.emptyCart';
+  static const sales_addedToCart = 'sales.addedToCart';
   static const sales_orderSummary = 'sales.orderSummary';
   static const sales_totalItems = 'sales.totalItems';
   static const sales_totalAmount = 'sales.totalAmount';

@@ -1,12 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_wearhouse/core/localization/locale_keys.g.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/component/buttons/custom_filled_button.dart';
 import '../../../../core/localization/app_text.dart';
+import '../../../../core/shared/app_snackbar.dart';
 import '../../../../core/status/ui_helper.dart';
 import '../bloc/sales_bloc.dart';
 import '../bloc/sales_event.dart';
@@ -45,19 +46,53 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
     final theme = Theme.of(context);
     final dateFormat = DateFormat('MMM dd, yyyy HH:mm');
 
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: AppText(
-          'sales.saleDetails',
-          translation: true,
+    return BlocListener<SaleDetailBloc, SaleDetailState>(
+      bloc: _saleDetailBloc,
+      listenWhen: (previous, current) {
+        // Listen when download/share state changes or error occurs
+        return previous.isDownloadingInvoice != current.isDownloadingInvoice ||
+            previous.isSharingInvoice != current.isSharingInvoice ||
+            (current.errorMessage != null &&
+                (current.errorMessage!.contains('download') ||
+                    current.errorMessage!.contains('share') ||
+                    current.errorMessage!.contains('PDF') ||
+                    current.errorMessage!.contains('Failed')));
+      },
+      listener: (context, state) {
+        // Handle download/share errors
+        if (state.errorMessage != null &&
+            (state.errorMessage!.contains('download') ||
+                state.errorMessage!.contains('share') ||
+                state.errorMessage!.contains('PDF') ||
+                state.errorMessage!.contains('Failed'))) {
+          AppSnackbar.showError(
+            context,
+            state.errorMessage!,
+            translation: false,
+          );
+        }
+        // Handle download success
+        if (!state.isDownloadingInvoice && state.sale != null) {
+          // Check if we just finished downloading (previous state was downloading)
+          // Success feedback is handled by the file system
+        }
+        // Handle share success
+        if (!state.isSharingInvoice && state.sale != null) {
+          // Share dialog is shown by the service
+        }
+      },
+      child: Scaffold(
+        backgroundColor: theme.scaffoldBackgroundColor,
+        appBar: AppBar(
+          title: AppText(
+            LocaleKeys.sales_saleDetails
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
         ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: BlocBuilder<SaleDetailBloc, SaleDetailState>(
-        bloc: _saleDetailBloc,
-        builder: (context, state) {
+        body: BlocBuilder<SaleDetailBloc, SaleDetailState>(
+          bloc: _saleDetailBloc,
+          builder: (context, state) {
           if (state.status.isLoading() || state.status.isInitial()) {
             return Center(
               child: CircularProgressIndicator(color: theme.colorScheme.primary),
@@ -276,6 +311,7 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
             ],
           );
         },
+      ),
       ),
     );
   }

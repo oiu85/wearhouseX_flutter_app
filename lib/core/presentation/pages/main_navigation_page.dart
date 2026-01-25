@@ -2,13 +2,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import '../../../features/sales/presentation/bloc/sales_state.dart';
 import '../../component/others/custom_bottom_nav_bar.dart';
 import '../../di/app_dependencies.dart';
 import '../../../features/home/presentation/bloc/home_bloc.dart';
 import '../../../features/home/presentation/bloc/home_event.dart' as home_event;
 import '../../../features/home/presentation/pages/home_page.dart';
 import '../../../features/menu/presentation/pages/menu_page.dart';
-import '../../../features/sales/presentation/pages/create_sale_page.dart';
+import '../../../features/sales/presentation/pages/cart_page.dart';
+import '../../../features/sales/presentation/bloc/sales_bloc.dart';
 import '../../../features/stock/presentation/bloc/stock_bloc.dart';
 import '../../../features/stock/presentation/pages/stock_page.dart';
 
@@ -29,6 +31,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
   late int _currentIndex;
   late HomeBloc _homeBloc;
   late StockBloc _stockBloc;
+  late CreateSaleBloc _createSaleBloc;
   bool _isNavigating = false;
 
   @override
@@ -40,6 +43,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
     // Initialize BLoCs to share data across tabs
     _homeBloc = getIt<HomeBloc>();
     _stockBloc = getIt<StockBloc>();
+    _createSaleBloc = getIt<CreateSaleBloc>();
     
     // Load initial data
     _homeBloc.add(const home_event.LoadUserInfo());
@@ -55,7 +59,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
   void _onPageChanged(int index) {
     setState(() {
       _currentIndex = index;
-      // Mark navigation as complete after a short delay
+      //* Mark navigation as complete after a short delay
       Future.delayed(const Duration(milliseconds: 400), () {
         if (mounted) {
           setState(() {
@@ -82,28 +86,37 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Depend on locale to rebuild when language changes
+    // * Depend on locale to rebuild when language changes
     final _ = context.locale;
 
     return BlocProvider.value(
       value: _homeBloc,
       child: BlocProvider.value(
         value: _stockBloc,
-        child: Scaffold(
-          body: PageView(
-            controller: _pageController,
-            onPageChanged: _onPageChanged,
-            physics: const NeverScrollableScrollPhysics(), // Disable swipe - navigate only via bottom nav bar
-            children: [
-              HomePage(isNavigating: _isNavigating),
-              StockPage(),
-              const CreateSalePage(),
-              const MenuPage(),
-            ],
-          ),
-          bottomNavigationBar: CustomBottomNavBar(
-            selectedIndex: _currentIndex,
-            onTap: _onNavBarTap,
+        child: BlocProvider.value(
+          value: _createSaleBloc,
+          child: Scaffold(
+            body: PageView(
+              controller: _pageController,
+              onPageChanged: _onPageChanged,
+              physics: const NeverScrollableScrollPhysics(), //*  Disable swipe - navigate only via bottom nav bar
+              children: [
+                HomePage(isNavigating: _isNavigating),
+                StockPage(),
+                const CartPage(),
+                const MenuPage(),
+              ],
+            ),
+            bottomNavigationBar: BlocBuilder<CreateSaleBloc, CreateSaleState>(
+              bloc: _createSaleBloc,
+              builder: (context, cartState) {
+                return CustomBottomNavBar(
+                  selectedIndex: _currentIndex,
+                  onTap: _onNavBarTap,
+                  cartItemCount: cartState.cartItems.length,
+                );
+              },
+            ),
           ),
         ),
       ),

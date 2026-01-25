@@ -177,12 +177,22 @@ class SalesRemoteDataSourceImpl implements SalesRemoteDataSource {
 
   @override
   Future<Either<NetworkFailure, List<int>>> getInvoicePdf(int saleId) async {
-    // TODO: Implement PDF download when NetworkClient supports responseType
-    // For now, return an error indicating this needs to be implemented
-    return Left(
-      NetworkFailure(
-        message: 'PDF download not yet implemented. Please use the invoice endpoint directly.',
-      ),
+    final result = await networkClient.getBytes(
+      '${ApiConfig.getInvoicePdf}/$saleId/invoice',
+    );
+
+    return result.fold(
+      (failure) => Left(failure),
+      (bytes) {
+        if (bytes.isEmpty) {
+          return Left(
+            NetworkFailure(
+              message: 'Received empty PDF file',
+            ),
+          );
+        }
+        return Right(bytes);
+      },
     );
   }
 }

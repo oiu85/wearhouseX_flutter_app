@@ -18,6 +18,7 @@ class StorageKeys {
   static const String metalsPrices = 'metals_prices';
   static const String metalsPricesTimestamp = 'metals_prices_timestamp';
   static const String themeMode = 'theme_mode';
+  static const String cartItems = 'cart_items';
 }
 
 abstract class AppStorageService {
@@ -110,6 +111,15 @@ abstract class AppStorageService {
 
   /// Save theme mode
   Future<void> saveThemeMode(ThemeMode mode);
+
+  /// Save cart items as JSON string
+  Future<void> saveCartItems(String cartItemsJson);
+
+  /// Get cart items as JSON string
+  Future<String?> getCartItems();
+
+  /// Clear cart items from storage
+  Future<void> clearCartItems();
 }
 
 /// SharedPreferences implementation of AppStorageService
@@ -374,6 +384,25 @@ class SharedPreferencesStorageService implements AppStorageService {
         break;
     }
     await _prefs.setString(StorageKeys.themeMode, modeString);
+  }
+
+  @override
+  Future<void> saveCartItems(String cartItemsJson) async {
+    if (cartItemsJson.isEmpty) {
+      await _prefs.remove(StorageKeys.cartItems);
+    } else {
+      await _prefs.setString(StorageKeys.cartItems, cartItemsJson);
+    }
+  }
+
+  @override
+  Future<String?> getCartItems() async {
+    return _prefs.getString(StorageKeys.cartItems);
+  }
+
+  @override
+  Future<void> clearCartItems() async {
+    await _prefs.remove(StorageKeys.cartItems);
   }
 }
 

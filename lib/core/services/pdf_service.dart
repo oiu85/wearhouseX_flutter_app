@@ -1,8 +1,7 @@
 import 'dart:io';
-import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:cross_file/cross_file.dart';
 
 /// Service for handling PDF operations
 class PdfService {
@@ -12,13 +11,7 @@ class PdfService {
     required String fileName,
   }) async {
     try {
-      // Request storage permission
-      final status = await Permission.storage.request();
-      if (!status.isGranted) {
-        return null;
-      }
-
-      // Get application documents directory
+      // Get application documents directory (no permission needed for app's private directory)
       final directory = await getApplicationDocumentsDirectory();
       final filePath = '${directory.path}/$fileName';
 
