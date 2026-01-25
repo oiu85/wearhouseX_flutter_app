@@ -100,4 +100,26 @@ class AuthRepositoryImpl implements AuthRepository {
       (_) => const Right(null),
     );
   }
+
+  @override
+  Future<Either<Failure, void>> resetPassword({
+    required String email,
+    required String token,
+    required String password,
+    required String passwordConfirmation,
+  }) async {
+    final result = await remoteDataSource.resetPassword(
+      email: email,
+      token: token,
+      password: password,
+      passwordConfirmation: passwordConfirmation,
+    );
+
+    return result.fold(
+      (networkFailure) => Left(
+        NetworkFailure(networkFailure.message),
+      ),
+      (_) => const Right(null),
+    );
+  }
 }

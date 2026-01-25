@@ -2,11 +2,13 @@ import 'package:equatable/equatable.dart';
 import '../../../../core/status/bloc_status.dart';
 import '../../domain/entities/driver_stats_entity.dart';
 import '../../domain/entities/sale_entity.dart';
+import '../../domain/entities/dashboard_entity.dart';
 
 /// Home state
 class HomeState extends Equatable {
   final BlocStatus status;
   final DriverStatsEntity? driverStats;
+  final DashboardEntity? dashboard;
   final List<SaleEntity> recentSales;
   final String? errorMessage;
   final String? userName;
@@ -15,6 +17,7 @@ class HomeState extends Equatable {
   const HomeState({
     required this.status,
     this.driverStats,
+    this.dashboard,
     required this.recentSales,
     this.errorMessage,
     this.userName,
@@ -24,6 +27,7 @@ class HomeState extends Equatable {
   factory HomeState.initial() => const HomeState(
         status: BlocStatus.initial(),
         driverStats: null,
+        dashboard: null,
         recentSales: [],
         errorMessage: null,
         userName: null,
@@ -33,6 +37,7 @@ class HomeState extends Equatable {
   HomeState copyWith({
     BlocStatus? status,
     DriverStatsEntity? driverStats,
+    DashboardEntity? dashboard,
     List<SaleEntity>? recentSales,
     String? errorMessage,
     String? userName,
@@ -41,6 +46,7 @@ class HomeState extends Equatable {
     return HomeState(
       status: status ?? this.status,
       driverStats: driverStats ?? this.driverStats,
+      dashboard: dashboard ?? this.dashboard,
       recentSales: recentSales ?? this.recentSales,
       errorMessage: errorMessage ?? this.errorMessage,
       userName: userName ?? this.userName,
@@ -52,6 +58,7 @@ class HomeState extends Equatable {
   List<Object?> get props => [
         status,
         driverStats,
+        dashboard,
         recentSales,
         errorMessage,
         userName,

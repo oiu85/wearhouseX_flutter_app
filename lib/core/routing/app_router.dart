@@ -8,7 +8,13 @@ import '../shared/app_navigator_key.dart';
 import '../storage/app_storage_service.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/forget_password_page.dart';
+import '../../features/auth/presentation/pages/reset_password_page.dart';
 import '../../features/stock/presentation/pages/stock_detail_page.dart';
+import '../../features/sales/presentation/pages/create_sale_page.dart';
+import '../../features/sales/presentation/pages/sales_history_page.dart';
+import '../../features/sales/presentation/pages/sale_detail_page.dart';
+import '../../features/profile/presentation/pages/profile_page.dart';
+import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../core/presentation/pages/main_navigation_page.dart';
 import 'app_routes.dart';
 import 'navigation_observer.dart';
@@ -93,6 +99,14 @@ class AppRouter {
         name: 'forgotPassword',
         builder: (context, state) => const ForgetPasswordPage(),
       ),
+      GoRoute(
+        path: AppRoutes.resetPassword,
+        name: 'resetPassword',
+        builder: (context, state) {
+          final email = state.uri.queryParameters['email'];
+          return ResetPasswordPage(email: email);
+        },
+      ),
       // Home route (MainNavigationPage with PageView)
       GoRoute(
         path: AppRoutes.home,
@@ -105,7 +119,7 @@ class AppRouter {
         name: 'stock',
         builder: (context, state) => const MainNavigationPage(initialIndex: 1),
       ),
-      // Stock detail route
+      // Stock detail route (by stockItemId - legacy)
       GoRoute(
         path: AppRoutes.stockDetail,
         name: 'stockDetail',
@@ -113,6 +127,53 @@ class AppRouter {
           final stockItemId = int.parse(state.pathParameters['id']!);
           return StockDetailPage(stockItemId: stockItemId);
         },
+      ),
+      // Stock detail route (by productId - new)
+      GoRoute(
+        path: AppRoutes.stockDetailByProduct,
+        name: 'stockDetailByProduct',
+        builder: (context, state) {
+          final productId = int.parse(state.pathParameters['productId']!);
+          return StockDetailPage(productId: productId);
+        },
+      ),
+      // Sales routes
+      GoRoute(
+        path: AppRoutes.createSale,
+        name: 'createSale',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return CreateSalePage(
+            preSelectedProductId: extra?['productId'] as int?,
+            preSelectedStockItemId: extra?['stockItemId'] as int?,
+            preSelectedAvailableQuantity: extra?['availableQuantity'] as int?,
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.salesHistory,
+        name: 'salesHistory',
+        builder: (context, state) => const SalesHistoryPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.saleDetail,
+        name: 'saleDetail',
+        builder: (context, state) {
+          final saleId = int.parse(state.pathParameters['id']!);
+          return SaleDetailPage(saleId: saleId);
+        },
+      ),
+      // Profile route
+      GoRoute(
+        path: AppRoutes.profile,
+        name: 'profile',
+        builder: (context, state) => const ProfilePage(),
+      ),
+      // Settings route
+      GoRoute(
+        path: AppRoutes.settings,
+        name: 'settings',
+        builder: (context, state) => const SettingsPage(),
       ),
     ],
   );

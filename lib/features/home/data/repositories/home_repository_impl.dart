@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import '../../../auth/domain/entities/failure.dart';
 import '../../domain/entities/driver_stats_entity.dart';
 import '../../domain/entities/sale_entity.dart';
+import '../../domain/entities/dashboard_entity.dart';
 import '../../domain/repositories/home_repository.dart';
 import '../datasources/home_remote_datasource.dart';
 import '../models/home_models.dart';
@@ -53,6 +54,26 @@ class HomeRepositoryImpl implements HomeRepository {
         } catch (e) {
           return Left(
             ServerFailure('Failed to convert recent sales: ${e.toString()}'),
+          );
+        }
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, DashboardEntity>> getDashboard() async {
+    final result = await remoteDataSource.getDashboard();
+
+    return result.fold(
+      (networkFailure) => Left(
+        NetworkFailure(networkFailure.message),
+      ),
+      (dashboardModel) {
+        try {
+          return Right(dashboardModel.toEntity());
+        } catch (e) {
+          return Left(
+            ServerFailure('Failed to convert dashboard: ${e.toString()}'),
           );
         }
       },

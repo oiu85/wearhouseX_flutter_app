@@ -18,6 +18,16 @@ class LoadStockDetail extends StockDetailEvent {
   List<Object?> get props => [stockItemId];
 }
 
+//* Load stock detail by product ID
+class LoadStockDetailByProductId extends StockDetailEvent {
+  final int productId;
+
+  const LoadStockDetailByProductId(this.productId);
+
+  @override
+  List<Object?> get props => [productId];
+}
+
 //* Reset stock detail state
 class ResetStockDetail extends StockDetailEvent {
   const ResetStockDetail();

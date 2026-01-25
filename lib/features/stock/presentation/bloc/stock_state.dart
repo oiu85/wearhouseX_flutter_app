@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import '../../../../core/status/bloc_status.dart';
 import '../../domain/entities/category_entity.dart';
 import '../../domain/entities/stock_item_entity.dart';
+import '../../domain/entities/stock_statistics_entity.dart';
 import 'stock_event.dart';
 
 /// Stock state
@@ -16,6 +17,7 @@ class StockState extends Equatable {
   final String? errorMessage;
   final String? userName;
   final String? greetingText;
+  final StockStatisticsEntity? stockStatistics;
 
   const StockState({
     required this.status,
@@ -28,6 +30,7 @@ class StockState extends Equatable {
     this.errorMessage,
     this.userName,
     this.greetingText,
+    this.stockStatistics,
   });
 
   factory StockState.initial() => const StockState(
@@ -41,6 +44,7 @@ class StockState extends Equatable {
         errorMessage: null,
         userName: null,
         greetingText: null,
+        stockStatistics: null,
       );
 
   StockState copyWith({
@@ -54,6 +58,7 @@ class StockState extends Equatable {
     String? errorMessage,
     String? userName,
     String? greetingText,
+    StockStatisticsEntity? stockStatistics,
   }) {
     return StockState(
       status: status ?? this.status,
@@ -66,6 +71,7 @@ class StockState extends Equatable {
       errorMessage: errorMessage ?? this.errorMessage,
       userName: userName ?? this.userName,
       greetingText: greetingText ?? this.greetingText,
+      stockStatistics: stockStatistics ?? this.stockStatistics,
     );
   }
 
@@ -81,5 +87,6 @@ class StockState extends Equatable {
         errorMessage,
         userName,
         greetingText,
+        stockStatistics,
       ];
 }

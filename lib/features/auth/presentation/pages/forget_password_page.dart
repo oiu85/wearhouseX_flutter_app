@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -84,8 +85,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                   // Email Field
                   CustomTextField(
                     controller: _emailController,
-                    labelText: LocaleKeys.auth_email,
-                    hintText: LocaleKeys.auth_enterYourEmail,
+                    labelText: LocaleKeys.auth_email.tr(),
+                    hintText: LocaleKeys.auth_enterYourEmail.tr(),
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) => _emailValidator(value),
                   ),
@@ -121,20 +122,37 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                           // Success message
                           if (state.status.isSuccess() &&
                               state.successMessage != null)
-                            Container(
-                              padding: EdgeInsets.all(12.w),
-                              decoration: BoxDecoration(
-                                color: theme.colorScheme.primaryContainer,
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
-                              child: AppText(
-                                state.successMessage!,
-                                translation: false,
-                                textAlign: TextAlign.center,
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: theme.colorScheme.onPrimaryContainer,
+                            Column(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(12.w),
+                                  decoration: BoxDecoration(
+                                    color: theme.colorScheme.primaryContainer,
+                                    borderRadius: BorderRadius.circular(8.r),
+                                  ),
+                                  child: AppText(
+                                    state.successMessage!,
+                                    translation: false,
+                                    textAlign: TextAlign.center,
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      color: theme.colorScheme.onPrimaryContainer,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                SizedBox(height: 16.h),
+                                // Navigate to reset password page
+                                CustomFilledButton(
+                                  text: LocaleKeys.auth_goToResetPassword.tr(),
+                                  onPressed: () {
+                                    context.push(
+                                      '${AppRoutes.resetPassword}?email=${_emailController.text}',
+                                    );
+                                  },
+                                  backgroundColor: theme.colorScheme.primary,
+                                  textColor: theme.colorScheme.onPrimary,
+                                  height: 50.h,
+                                ),
+                              ],
                             ),
                           // UI Helper for loading and error states
                           UiHelperStatus(

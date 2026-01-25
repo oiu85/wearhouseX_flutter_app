@@ -59,3 +59,13 @@ class SortStock extends StockEvent {
 class LoadUserInfo extends StockEvent {
   const LoadUserInfo();
 }
+
+/// Load stock statistics
+class LoadStockStatistics extends StockEvent {
+  final int? lowStockThreshold;
+
+  const LoadStockStatistics({this.lowStockThreshold});
+
+  @override
+  List<Object?> get props => [lowStockThreshold];
+}

@@ -11,7 +11,10 @@ abstract class AppRoutes {
   static const String home = '/home';
   static const String stock = '/stock';
   static const String stockDetail = '/stock/:id';
+  static const String stockDetailByProduct = '/stock/product/:productId';
   static const String createSale = '/sales/create';
+  static const String salesHistory = '/sales/history';
+  static const String saleDetail = '/sales/:id';
   static const String donate = '/donate';
   static const String campaign = '/campaign';
   static const String catalogDetail = '/subcategories_campaign-detail';
@@ -22,6 +25,7 @@ abstract class AppRoutes {
   static const String blogDetail = '/blog/:id';
   static const String payment = '/payment';
   static const String profile = '/profile';
+  static const String settings = '/settings';
   static const String myDonations = '/my-donations';
   static const String mySubscriptions = '/my-subscriptions';
   static const String contactUs = '/contact-us';

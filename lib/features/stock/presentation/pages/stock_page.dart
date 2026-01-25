@@ -15,6 +15,7 @@ import '../widgets/stock_greeting_section.dart';
 import '../widgets/stock_search_bar.dart';
 import '../widgets/stock_category_filter.dart';
 import '../widgets/stock_item_card.dart';
+import '../widgets/stock_statistics_widget.dart';
 
 //* Stock page displaying driver's stock
 class StockPage extends StatefulWidget {
@@ -32,9 +33,10 @@ class _StockPageState extends State<StockPage> {
   @override
   void initState() {
     super.initState();
-    //* Load user info and stock on initial mount
+    //* Load user info, stock, and statistics on initial mount
     _stockBloc.add(const LoadUserInfo());
     _stockBloc.add(const LoadStock());
+    _stockBloc.add(const LoadStockStatistics());
   }
 
   @override
@@ -145,6 +147,14 @@ class _StockPageState extends State<StockPage> {
                       child: StockGreetingSection(greetingText: state.greetingText),
                     ),
 
+                  //* Stock Statistics Widget
+                  if (state.stockStatistics != null)
+                    SliverToBoxAdapter(
+                      child: StockStatisticsWidget(
+                        statistics: state.stockStatistics!,
+                      ),
+                    ),
+
                   //* Search Bar
                   SliverToBoxAdapter(
                     child: StockSearchBar(
@@ -182,8 +192,9 @@ class _StockPageState extends State<StockPage> {
                             return StockItemCard(
                               stockItem: stockItem,
                               onTap: () {
+                                // Navigate using productId (backend API uses productId)
                                 context.push(
-                                  '/stock/${stockItem.id}',
+                                  '/stock/product/${stockItem.productId}',
                                 );
                               },
                             );

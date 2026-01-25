@@ -21,6 +21,14 @@ abstract class AuthRemoteDataSource {
   Future<Either<NetworkFailure, void>> forgotPassword({
     required String email,
   });
+
+  /// Reset password with token
+  Future<Either<NetworkFailure, void>> resetPassword({
+    required String email,
+    required String token,
+    required String password,
+    required String passwordConfirmation,
+  });
 }
 
 /// Implementation of AuthRemoteDataSource
@@ -99,6 +107,29 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       ApiConfig.forgotPassword,
       data: {
         'email': email,
+      },
+    );
+
+    return result.fold(
+      (failure) => Left(failure),
+      (_) => const Right(null),
+    );
+  }
+
+  @override
+  Future<Either<NetworkFailure, void>> resetPassword({
+    required String email,
+    required String token,
+    required String password,
+    required String passwordConfirmation,
+  }) async {
+    final result = await networkClient.post(
+      ApiConfig.resetPassword,
+      data: {
+        'email': email,
+        'token': token,
+        'password': password,
+        'password_confirmation': passwordConfirmation,
       },
     );
 

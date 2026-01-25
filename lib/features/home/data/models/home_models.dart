@@ -1,6 +1,13 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/driver_stats_entity.dart';
 import '../../domain/entities/sale_entity.dart';
+import '../../domain/entities/dashboard_entity.dart';
+import '../../domain/entities/stock_item_entity.dart';
+import '../../domain/entities/product_entity.dart';
+import '../../domain/entities/category_entity.dart';
+import '../../../stock/domain/entities/stock_item_entity.dart' as stock_entity;
+import '../../../stock/domain/entities/product_entity.dart' as stock_product;
+import '../../../stock/domain/entities/category_entity.dart' as stock_category;
 
 part 'home_models.freezed.dart';
 part 'home_models.g.dart';
@@ -102,6 +109,90 @@ extension SaleModelExtension on SaleModel {
       totalAmount: totalAmount,
       createdAt: DateTime.tryParse(createdAt) ?? DateTime.now(),
       items: items.map((item) => item.toEntity()).toList(),
+    );
+  }
+}
+
+/// Dashboard model
+@freezed
+abstract class DashboardModel with _$DashboardModel {
+  const factory DashboardModel({
+    @JsonKey(name: 'quick_stats') required QuickStatsModel quickStats,
+    @JsonKey(name: 'recent_sales') @Default([]) List<SaleModel> recentSales,
+    @JsonKey(name: 'low_stock_products') @Default([]) List<LowStockProductModel> lowStockProducts,
+  }) = _DashboardModel;
+
+  factory DashboardModel.fromJson(Map<String, dynamic> json) =>
+      _$DashboardModelFromJson(json);
+}
+
+/// Quick stats model
+@freezed
+abstract class QuickStatsModel with _$QuickStatsModel {
+  const factory QuickStatsModel({
+    @JsonKey(name: 'today_sales', fromJson: _intFromJson) required int todaySales,
+    @JsonKey(name: 'today_revenue', fromJson: _doubleFromJson) required double todayRevenue,
+    @JsonKey(name: 'available_products', fromJson: _intFromJson) required int availableProducts,
+    @JsonKey(name: 'low_stock_alerts', fromJson: _intFromJson) required int lowStockAlerts,
+  }) = _QuickStatsModel;
+
+  factory QuickStatsModel.fromJson(Map<String, dynamic> json) =>
+      _$QuickStatsModelFromJson(json);
+}
+
+/// Low stock product model (simplified for dashboard)
+@freezed
+abstract class LowStockProductModel with _$LowStockProductModel {
+  const factory LowStockProductModel({
+    @JsonKey(name: 'product_id', fromJson: _intFromJson) required int productId,
+    @JsonKey(name: 'product_name') required String productName,
+    @JsonKey(name: 'product_image') String? productImage,
+    String? category,
+    @JsonKey(fromJson: _intFromJson) required int quantity,
+    @JsonKey(fromJson: _doubleFromJson) required double price,
+    @JsonKey(name: 'stock_value', fromJson: _doubleFromJson) required double stockValue,
+  }) = _LowStockProductModel;
+
+  factory LowStockProductModel.fromJson(Map<String, dynamic> json) =>
+      _$LowStockProductModelFromJson(json);
+}
+
+/// Extension to convert DashboardModel to DashboardEntity
+extension DashboardModelExtension on DashboardModel {
+  DashboardEntity toEntity() {
+    return DashboardEntity(
+      quickStats: QuickStatsEntity(
+        todaySales: quickStats.todaySales,
+        todayRevenue: quickStats.todayRevenue,
+        availableProducts: quickStats.availableProducts,
+        lowStockAlerts: quickStats.lowStockAlerts,
+      ),
+      recentSales: recentSales.map((sale) => sale.toEntity()).toList(),
+      lowStockProducts: lowStockProducts.map((product) {
+        // Convert LowStockProductModel to StockItemEntity
+        // Note: This is a simplified conversion for dashboard display
+        return stock_entity.StockItemEntity(
+          id: 0, // Not available in dashboard response
+          driverId: 0, // Not available
+          productId: product.productId,
+          quantity: product.quantity,
+          product: stock_product.ProductEntity(
+            id: product.productId,
+            name: product.productName,
+            price: product.price,
+            categoryId: 0, // Not available
+            description: null,
+            image: product.productImage,
+            category: product.category != null
+                ? stock_category.CategoryEntity(
+                    id: 0,
+                    name: product.category!,
+                  )
+                : null,
+          ),
+          updatedAt: null,
+        );
+      }).toList(),
     );
   }
 }

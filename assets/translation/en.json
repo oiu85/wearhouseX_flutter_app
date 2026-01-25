@@ -57,6 +57,15 @@
     "registerSuccess": "Registration successful",
     "passwordResetSuccess": "Password reset successful",
     "passwordResetError": "Failed to reset password",
+    "resetPasswordToken": "Reset Token",
+    "enterResetToken": "Enter reset token",
+    "resetTokenRequired": "Reset token is required",
+    "newPassword": "New Password",
+    "enterNewPassword": "Enter new password",
+    "confirmNewPassword": "Confirm New Password",
+    "confirmNewPasswordHint": "Confirm new password",
+    "resetPasswordDescription": "Enter your email, reset token, and new password",
+    "goToResetPassword": "Go to Reset Password",
     "or": "OR"
   },
   "login": {
@@ -240,6 +249,10 @@
   },
   "profile": {
     "title": "Profile",
+    "name": "Name",
+    "email": "Email",
+    "logout": "Logout",
+    "logoutConfirm": "Are you sure you want to logout?",
     "editProfile": "Edit Profile",
     "changePassword": "Change Password",
     "currentPassword": "Current Password",
@@ -290,18 +303,22 @@
     "dark": "Dark",
     "system": "System",
     "notifications": "Notifications",
-    "privacy": "Privacy",
     "about": "About",
     "version": "Version",
+    "currency": "Currency",
+    "terms": "Terms & Conditions",
+    "privacy": "Privacy Policy",
     "logout": "Logout"
   },
   "status": {
     "loading": "Loading...",
     "tryAgain": "Try again",
-    "somethingWentWrong": "Something went wrong"
+    "somethingWentWrong": "Something went wrong",
+    "refresh": "Refresh"
   },
   "bottomNav": {
     "home": "Home",
+    "stock": "Stock",
     "menu": "Menu"
   },
   "share": {
@@ -347,27 +364,14 @@
     "pricePerUnit": "Price per Unit",
     "today": "Today",
     "yesterday": "Yesterday",
-    "daysAgo": "{days} days ago"
-  },
-  "stockDetail": {
-    "title": "Product Details",
-    "availableQuantity": "Available Quantity",
-    "pricePerUnit": "Price per Unit",
-    "lastUpdated": "Last Updated",
-    "sellProduct": "Sell this Product",
-    "noDescription": "No description available",
-    "updatedAgo": "Updated {time} ago"
-  },
-  "bottomNav": {
-    "home": "Home",
-    "stock": "Stock",
-    "menu": "Menu"
-  },
-  "home": {
-    "greeting": "Welcome back, {name}!",
-    "greetingMorning": "Good morning, {name}!",
-    "greetingAfternoon": "Good afternoon, {name}!",
-    "greetingEvening": "Good evening, {name}!",
+    "daysAgo": "{days} days ago",
+    "searchPlaceholder": "Search products...",
+    "statistics": "Statistics",
+    "totalProducts": "Total Products",
+    "totalQuantity": "Total Quantity",
+    "stockValue": "Stock Value",
+    "lowStockAlerts": "Low Stock Alerts",
+    "pullToRefresh": "Pull to refresh",
     "totalSales": "Total Sales",
     "totalRevenue": "Total Revenue",
     "todaySales": "Today's Sales",
@@ -377,7 +381,18 @@
     "quickActions": "Quick Actions",
     "createSale": "Create Sale",
     "viewStock": "View Stock",
-    "viewAllSales": "View All Sales"
+    "viewAllSales": "View All Sales",
+    "availableProducts": "Available Products",
+    "lowStock": "Low Stock"
+  },
+  "stockDetail": {
+    "title": "Product Details",
+    "availableQuantity": "Available Quantity",
+    "pricePerUnit": "Price per Unit",
+    "lastUpdated": "Last Updated",
+    "sellProduct": "Sell this Product",
+    "noDescription": "No description available",
+    "updatedAgo": "Updated {time} ago"
   },
   "menu": {
     "profile": "Profile",
@@ -390,5 +405,42 @@
     "notifications": "Notifications",
     "manageNotifications": "Manage notifications",
     "comingSoon": "Coming Soon"
+  },
+  "sales": {
+    "createSale": "Create Sale",
+    "customerName": "Customer Name",
+    "enterCustomerName": "Enter customer name",
+    "customerNameRequired": "Customer name is required",
+    "selectProducts": "Select Products",
+    "cart": "Cart",
+    "orderSummary": "Order Summary",
+    "totalItems": "Total Items",
+    "totalAmount": "Total Amount",
+    "completeSale": "Complete Sale",
+    "saleConfirmed": "Sale Confirmed",
+    "invoiceNumber": "Invoice Number",
+    "salesHistory": "Sales History",
+    "saleDetails": "Sale Details",
+    "downloadInvoice": "Download Invoice",
+    "shareInvoice": "Share Invoice",
+    "noSales": "No sales found",
+    "noItemsInCart": "Your cart is empty",
+    "addMoreProducts": "Add More Products",
+    "date": "Date",
+    "items": "Items"
+  },
+  "dashboard": {
+    "todaySales": "Today's Sales",
+    "todayRevenue": "Today's Revenue",
+    "availableProducts": "Available Products",
+    "lowStockAlerts": "Low Stock Alerts",
+    "viewAll": "View All"
+  },
+  "stock": {
+    "statistics": "Statistics",
+    "totalProducts": "Total Products",
+    "totalQuantity": "Total Quantity",
+    "stockValue": "Stock Value",
+    "lowStockAlerts": "Low Stock Alerts"
   }
 }

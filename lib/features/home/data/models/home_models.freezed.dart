@@ -851,4 +851,856 @@ as List<SaleItemModel>,
 
 }
 
+
+/// @nodoc
+mixin _$DashboardModel {
+
+@JsonKey(name: 'quick_stats') QuickStatsModel get quickStats;@JsonKey(name: 'recent_sales') List<SaleModel> get recentSales;@JsonKey(name: 'low_stock_products') List<LowStockProductModel> get lowStockProducts;
+/// Create a copy of DashboardModel
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DashboardModelCopyWith<DashboardModel> get copyWith => _$DashboardModelCopyWithImpl<DashboardModel>(this as DashboardModel, _$identity);
+
+  /// Serializes this DashboardModel to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DashboardModel&&(identical(other.quickStats, quickStats) || other.quickStats == quickStats)&&const DeepCollectionEquality().equals(other.recentSales, recentSales)&&const DeepCollectionEquality().equals(other.lowStockProducts, lowStockProducts));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,quickStats,const DeepCollectionEquality().hash(recentSales),const DeepCollectionEquality().hash(lowStockProducts));
+
+@override
+String toString() {
+  return 'DashboardModel(quickStats: $quickStats, recentSales: $recentSales, lowStockProducts: $lowStockProducts)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $DashboardModelCopyWith<$Res>  {
+  factory $DashboardModelCopyWith(DashboardModel value, $Res Function(DashboardModel) _then) = _$DashboardModelCopyWithImpl;
+@useResult
+$Res call({
+@JsonKey(name: 'quick_stats') QuickStatsModel quickStats,@JsonKey(name: 'recent_sales') List<SaleModel> recentSales,@JsonKey(name: 'low_stock_products') List<LowStockProductModel> lowStockProducts
+});
+
+
+$QuickStatsModelCopyWith<$Res> get quickStats;
+
+}
+/// @nodoc
+class _$DashboardModelCopyWithImpl<$Res>
+    implements $DashboardModelCopyWith<$Res> {
+  _$DashboardModelCopyWithImpl(this._self, this._then);
+
+  final DashboardModel _self;
+  final $Res Function(DashboardModel) _then;
+
+/// Create a copy of DashboardModel
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? quickStats = null,Object? recentSales = null,Object? lowStockProducts = null,}) {
+  return _then(_self.copyWith(
+quickStats: null == quickStats ? _self.quickStats : quickStats // ignore: cast_nullable_to_non_nullable
+as QuickStatsModel,recentSales: null == recentSales ? _self.recentSales : recentSales // ignore: cast_nullable_to_non_nullable
+as List<SaleModel>,lowStockProducts: null == lowStockProducts ? _self.lowStockProducts : lowStockProducts // ignore: cast_nullable_to_non_nullable
+as List<LowStockProductModel>,
+  ));
+}
+/// Create a copy of DashboardModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$QuickStatsModelCopyWith<$Res> get quickStats {
+  
+  return $QuickStatsModelCopyWith<$Res>(_self.quickStats, (value) {
+    return _then(_self.copyWith(quickStats: value));
+  });
+}
+}
+
+
+/// Adds pattern-matching-related methods to [DashboardModel].
+extension DashboardModelPatterns on DashboardModel {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _DashboardModel value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _DashboardModel() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _DashboardModel value)  $default,){
+final _that = this;
+switch (_that) {
+case _DashboardModel():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _DashboardModel value)?  $default,){
+final _that = this;
+switch (_that) {
+case _DashboardModel() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'quick_stats')  QuickStatsModel quickStats, @JsonKey(name: 'recent_sales')  List<SaleModel> recentSales, @JsonKey(name: 'low_stock_products')  List<LowStockProductModel> lowStockProducts)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _DashboardModel() when $default != null:
+return $default(_that.quickStats,_that.recentSales,_that.lowStockProducts);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'quick_stats')  QuickStatsModel quickStats, @JsonKey(name: 'recent_sales')  List<SaleModel> recentSales, @JsonKey(name: 'low_stock_products')  List<LowStockProductModel> lowStockProducts)  $default,) {final _that = this;
+switch (_that) {
+case _DashboardModel():
+return $default(_that.quickStats,_that.recentSales,_that.lowStockProducts);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'quick_stats')  QuickStatsModel quickStats, @JsonKey(name: 'recent_sales')  List<SaleModel> recentSales, @JsonKey(name: 'low_stock_products')  List<LowStockProductModel> lowStockProducts)?  $default,) {final _that = this;
+switch (_that) {
+case _DashboardModel() when $default != null:
+return $default(_that.quickStats,_that.recentSales,_that.lowStockProducts);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _DashboardModel implements DashboardModel {
+  const _DashboardModel({@JsonKey(name: 'quick_stats') required this.quickStats, @JsonKey(name: 'recent_sales') final  List<SaleModel> recentSales = const [], @JsonKey(name: 'low_stock_products') final  List<LowStockProductModel> lowStockProducts = const []}): _recentSales = recentSales,_lowStockProducts = lowStockProducts;
+  factory _DashboardModel.fromJson(Map<String, dynamic> json) => _$DashboardModelFromJson(json);
+
+@override@JsonKey(name: 'quick_stats') final  QuickStatsModel quickStats;
+ final  List<SaleModel> _recentSales;
+@override@JsonKey(name: 'recent_sales') List<SaleModel> get recentSales {
+  if (_recentSales is EqualUnmodifiableListView) return _recentSales;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_recentSales);
+}
+
+ final  List<LowStockProductModel> _lowStockProducts;
+@override@JsonKey(name: 'low_stock_products') List<LowStockProductModel> get lowStockProducts {
+  if (_lowStockProducts is EqualUnmodifiableListView) return _lowStockProducts;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_lowStockProducts);
+}
+
+
+/// Create a copy of DashboardModel
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$DashboardModelCopyWith<_DashboardModel> get copyWith => __$DashboardModelCopyWithImpl<_DashboardModel>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$DashboardModelToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DashboardModel&&(identical(other.quickStats, quickStats) || other.quickStats == quickStats)&&const DeepCollectionEquality().equals(other._recentSales, _recentSales)&&const DeepCollectionEquality().equals(other._lowStockProducts, _lowStockProducts));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,quickStats,const DeepCollectionEquality().hash(_recentSales),const DeepCollectionEquality().hash(_lowStockProducts));
+
+@override
+String toString() {
+  return 'DashboardModel(quickStats: $quickStats, recentSales: $recentSales, lowStockProducts: $lowStockProducts)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$DashboardModelCopyWith<$Res> implements $DashboardModelCopyWith<$Res> {
+  factory _$DashboardModelCopyWith(_DashboardModel value, $Res Function(_DashboardModel) _then) = __$DashboardModelCopyWithImpl;
+@override @useResult
+$Res call({
+@JsonKey(name: 'quick_stats') QuickStatsModel quickStats,@JsonKey(name: 'recent_sales') List<SaleModel> recentSales,@JsonKey(name: 'low_stock_products') List<LowStockProductModel> lowStockProducts
+});
+
+
+@override $QuickStatsModelCopyWith<$Res> get quickStats;
+
+}
+/// @nodoc
+class __$DashboardModelCopyWithImpl<$Res>
+    implements _$DashboardModelCopyWith<$Res> {
+  __$DashboardModelCopyWithImpl(this._self, this._then);
+
+  final _DashboardModel _self;
+  final $Res Function(_DashboardModel) _then;
+
+/// Create a copy of DashboardModel
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? quickStats = null,Object? recentSales = null,Object? lowStockProducts = null,}) {
+  return _then(_DashboardModel(
+quickStats: null == quickStats ? _self.quickStats : quickStats // ignore: cast_nullable_to_non_nullable
+as QuickStatsModel,recentSales: null == recentSales ? _self._recentSales : recentSales // ignore: cast_nullable_to_non_nullable
+as List<SaleModel>,lowStockProducts: null == lowStockProducts ? _self._lowStockProducts : lowStockProducts // ignore: cast_nullable_to_non_nullable
+as List<LowStockProductModel>,
+  ));
+}
+
+/// Create a copy of DashboardModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$QuickStatsModelCopyWith<$Res> get quickStats {
+  
+  return $QuickStatsModelCopyWith<$Res>(_self.quickStats, (value) {
+    return _then(_self.copyWith(quickStats: value));
+  });
+}
+}
+
+
+/// @nodoc
+mixin _$QuickStatsModel {
+
+@JsonKey(name: 'today_sales', fromJson: _intFromJson) int get todaySales;@JsonKey(name: 'today_revenue', fromJson: _doubleFromJson) double get todayRevenue;@JsonKey(name: 'available_products', fromJson: _intFromJson) int get availableProducts;@JsonKey(name: 'low_stock_alerts', fromJson: _intFromJson) int get lowStockAlerts;
+/// Create a copy of QuickStatsModel
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$QuickStatsModelCopyWith<QuickStatsModel> get copyWith => _$QuickStatsModelCopyWithImpl<QuickStatsModel>(this as QuickStatsModel, _$identity);
+
+  /// Serializes this QuickStatsModel to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is QuickStatsModel&&(identical(other.todaySales, todaySales) || other.todaySales == todaySales)&&(identical(other.todayRevenue, todayRevenue) || other.todayRevenue == todayRevenue)&&(identical(other.availableProducts, availableProducts) || other.availableProducts == availableProducts)&&(identical(other.lowStockAlerts, lowStockAlerts) || other.lowStockAlerts == lowStockAlerts));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,todaySales,todayRevenue,availableProducts,lowStockAlerts);
+
+@override
+String toString() {
+  return 'QuickStatsModel(todaySales: $todaySales, todayRevenue: $todayRevenue, availableProducts: $availableProducts, lowStockAlerts: $lowStockAlerts)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $QuickStatsModelCopyWith<$Res>  {
+  factory $QuickStatsModelCopyWith(QuickStatsModel value, $Res Function(QuickStatsModel) _then) = _$QuickStatsModelCopyWithImpl;
+@useResult
+$Res call({
+@JsonKey(name: 'today_sales', fromJson: _intFromJson) int todaySales,@JsonKey(name: 'today_revenue', fromJson: _doubleFromJson) double todayRevenue,@JsonKey(name: 'available_products', fromJson: _intFromJson) int availableProducts,@JsonKey(name: 'low_stock_alerts', fromJson: _intFromJson) int lowStockAlerts
+});
+
+
+
+
+}
+/// @nodoc
+class _$QuickStatsModelCopyWithImpl<$Res>
+    implements $QuickStatsModelCopyWith<$Res> {
+  _$QuickStatsModelCopyWithImpl(this._self, this._then);
+
+  final QuickStatsModel _self;
+  final $Res Function(QuickStatsModel) _then;
+
+/// Create a copy of QuickStatsModel
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? todaySales = null,Object? todayRevenue = null,Object? availableProducts = null,Object? lowStockAlerts = null,}) {
+  return _then(_self.copyWith(
+todaySales: null == todaySales ? _self.todaySales : todaySales // ignore: cast_nullable_to_non_nullable
+as int,todayRevenue: null == todayRevenue ? _self.todayRevenue : todayRevenue // ignore: cast_nullable_to_non_nullable
+as double,availableProducts: null == availableProducts ? _self.availableProducts : availableProducts // ignore: cast_nullable_to_non_nullable
+as int,lowStockAlerts: null == lowStockAlerts ? _self.lowStockAlerts : lowStockAlerts // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [QuickStatsModel].
+extension QuickStatsModelPatterns on QuickStatsModel {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _QuickStatsModel value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _QuickStatsModel() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _QuickStatsModel value)  $default,){
+final _that = this;
+switch (_that) {
+case _QuickStatsModel():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _QuickStatsModel value)?  $default,){
+final _that = this;
+switch (_that) {
+case _QuickStatsModel() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'today_sales', fromJson: _intFromJson)  int todaySales, @JsonKey(name: 'today_revenue', fromJson: _doubleFromJson)  double todayRevenue, @JsonKey(name: 'available_products', fromJson: _intFromJson)  int availableProducts, @JsonKey(name: 'low_stock_alerts', fromJson: _intFromJson)  int lowStockAlerts)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _QuickStatsModel() when $default != null:
+return $default(_that.todaySales,_that.todayRevenue,_that.availableProducts,_that.lowStockAlerts);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'today_sales', fromJson: _intFromJson)  int todaySales, @JsonKey(name: 'today_revenue', fromJson: _doubleFromJson)  double todayRevenue, @JsonKey(name: 'available_products', fromJson: _intFromJson)  int availableProducts, @JsonKey(name: 'low_stock_alerts', fromJson: _intFromJson)  int lowStockAlerts)  $default,) {final _that = this;
+switch (_that) {
+case _QuickStatsModel():
+return $default(_that.todaySales,_that.todayRevenue,_that.availableProducts,_that.lowStockAlerts);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'today_sales', fromJson: _intFromJson)  int todaySales, @JsonKey(name: 'today_revenue', fromJson: _doubleFromJson)  double todayRevenue, @JsonKey(name: 'available_products', fromJson: _intFromJson)  int availableProducts, @JsonKey(name: 'low_stock_alerts', fromJson: _intFromJson)  int lowStockAlerts)?  $default,) {final _that = this;
+switch (_that) {
+case _QuickStatsModel() when $default != null:
+return $default(_that.todaySales,_that.todayRevenue,_that.availableProducts,_that.lowStockAlerts);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _QuickStatsModel implements QuickStatsModel {
+  const _QuickStatsModel({@JsonKey(name: 'today_sales', fromJson: _intFromJson) required this.todaySales, @JsonKey(name: 'today_revenue', fromJson: _doubleFromJson) required this.todayRevenue, @JsonKey(name: 'available_products', fromJson: _intFromJson) required this.availableProducts, @JsonKey(name: 'low_stock_alerts', fromJson: _intFromJson) required this.lowStockAlerts});
+  factory _QuickStatsModel.fromJson(Map<String, dynamic> json) => _$QuickStatsModelFromJson(json);
+
+@override@JsonKey(name: 'today_sales', fromJson: _intFromJson) final  int todaySales;
+@override@JsonKey(name: 'today_revenue', fromJson: _doubleFromJson) final  double todayRevenue;
+@override@JsonKey(name: 'available_products', fromJson: _intFromJson) final  int availableProducts;
+@override@JsonKey(name: 'low_stock_alerts', fromJson: _intFromJson) final  int lowStockAlerts;
+
+/// Create a copy of QuickStatsModel
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$QuickStatsModelCopyWith<_QuickStatsModel> get copyWith => __$QuickStatsModelCopyWithImpl<_QuickStatsModel>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$QuickStatsModelToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _QuickStatsModel&&(identical(other.todaySales, todaySales) || other.todaySales == todaySales)&&(identical(other.todayRevenue, todayRevenue) || other.todayRevenue == todayRevenue)&&(identical(other.availableProducts, availableProducts) || other.availableProducts == availableProducts)&&(identical(other.lowStockAlerts, lowStockAlerts) || other.lowStockAlerts == lowStockAlerts));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,todaySales,todayRevenue,availableProducts,lowStockAlerts);
+
+@override
+String toString() {
+  return 'QuickStatsModel(todaySales: $todaySales, todayRevenue: $todayRevenue, availableProducts: $availableProducts, lowStockAlerts: $lowStockAlerts)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$QuickStatsModelCopyWith<$Res> implements $QuickStatsModelCopyWith<$Res> {
+  factory _$QuickStatsModelCopyWith(_QuickStatsModel value, $Res Function(_QuickStatsModel) _then) = __$QuickStatsModelCopyWithImpl;
+@override @useResult
+$Res call({
+@JsonKey(name: 'today_sales', fromJson: _intFromJson) int todaySales,@JsonKey(name: 'today_revenue', fromJson: _doubleFromJson) double todayRevenue,@JsonKey(name: 'available_products', fromJson: _intFromJson) int availableProducts,@JsonKey(name: 'low_stock_alerts', fromJson: _intFromJson) int lowStockAlerts
+});
+
+
+
+
+}
+/// @nodoc
+class __$QuickStatsModelCopyWithImpl<$Res>
+    implements _$QuickStatsModelCopyWith<$Res> {
+  __$QuickStatsModelCopyWithImpl(this._self, this._then);
+
+  final _QuickStatsModel _self;
+  final $Res Function(_QuickStatsModel) _then;
+
+/// Create a copy of QuickStatsModel
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? todaySales = null,Object? todayRevenue = null,Object? availableProducts = null,Object? lowStockAlerts = null,}) {
+  return _then(_QuickStatsModel(
+todaySales: null == todaySales ? _self.todaySales : todaySales // ignore: cast_nullable_to_non_nullable
+as int,todayRevenue: null == todayRevenue ? _self.todayRevenue : todayRevenue // ignore: cast_nullable_to_non_nullable
+as double,availableProducts: null == availableProducts ? _self.availableProducts : availableProducts // ignore: cast_nullable_to_non_nullable
+as int,lowStockAlerts: null == lowStockAlerts ? _self.lowStockAlerts : lowStockAlerts // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
+mixin _$LowStockProductModel {
+
+@JsonKey(name: 'product_id', fromJson: _intFromJson) int get productId;@JsonKey(name: 'product_name') String get productName;@JsonKey(name: 'product_image') String? get productImage; String? get category;@JsonKey(fromJson: _intFromJson) int get quantity;@JsonKey(fromJson: _doubleFromJson) double get price;@JsonKey(name: 'stock_value', fromJson: _doubleFromJson) double get stockValue;
+/// Create a copy of LowStockProductModel
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$LowStockProductModelCopyWith<LowStockProductModel> get copyWith => _$LowStockProductModelCopyWithImpl<LowStockProductModel>(this as LowStockProductModel, _$identity);
+
+  /// Serializes this LowStockProductModel to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LowStockProductModel&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.productName, productName) || other.productName == productName)&&(identical(other.productImage, productImage) || other.productImage == productImage)&&(identical(other.category, category) || other.category == category)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.price, price) || other.price == price)&&(identical(other.stockValue, stockValue) || other.stockValue == stockValue));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,productId,productName,productImage,category,quantity,price,stockValue);
+
+@override
+String toString() {
+  return 'LowStockProductModel(productId: $productId, productName: $productName, productImage: $productImage, category: $category, quantity: $quantity, price: $price, stockValue: $stockValue)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $LowStockProductModelCopyWith<$Res>  {
+  factory $LowStockProductModelCopyWith(LowStockProductModel value, $Res Function(LowStockProductModel) _then) = _$LowStockProductModelCopyWithImpl;
+@useResult
+$Res call({
+@JsonKey(name: 'product_id', fromJson: _intFromJson) int productId,@JsonKey(name: 'product_name') String productName,@JsonKey(name: 'product_image') String? productImage, String? category,@JsonKey(fromJson: _intFromJson) int quantity,@JsonKey(fromJson: _doubleFromJson) double price,@JsonKey(name: 'stock_value', fromJson: _doubleFromJson) double stockValue
+});
+
+
+
+
+}
+/// @nodoc
+class _$LowStockProductModelCopyWithImpl<$Res>
+    implements $LowStockProductModelCopyWith<$Res> {
+  _$LowStockProductModelCopyWithImpl(this._self, this._then);
+
+  final LowStockProductModel _self;
+  final $Res Function(LowStockProductModel) _then;
+
+/// Create a copy of LowStockProductModel
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? productId = null,Object? productName = null,Object? productImage = freezed,Object? category = freezed,Object? quantity = null,Object? price = null,Object? stockValue = null,}) {
+  return _then(_self.copyWith(
+productId: null == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
+as int,productName: null == productName ? _self.productName : productName // ignore: cast_nullable_to_non_nullable
+as String,productImage: freezed == productImage ? _self.productImage : productImage // ignore: cast_nullable_to_non_nullable
+as String?,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
+as String?,quantity: null == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
+as int,price: null == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
+as double,stockValue: null == stockValue ? _self.stockValue : stockValue // ignore: cast_nullable_to_non_nullable
+as double,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [LowStockProductModel].
+extension LowStockProductModelPatterns on LowStockProductModel {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _LowStockProductModel value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _LowStockProductModel() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _LowStockProductModel value)  $default,){
+final _that = this;
+switch (_that) {
+case _LowStockProductModel():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _LowStockProductModel value)?  $default,){
+final _that = this;
+switch (_that) {
+case _LowStockProductModel() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'product_id', fromJson: _intFromJson)  int productId, @JsonKey(name: 'product_name')  String productName, @JsonKey(name: 'product_image')  String? productImage,  String? category, @JsonKey(fromJson: _intFromJson)  int quantity, @JsonKey(fromJson: _doubleFromJson)  double price, @JsonKey(name: 'stock_value', fromJson: _doubleFromJson)  double stockValue)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _LowStockProductModel() when $default != null:
+return $default(_that.productId,_that.productName,_that.productImage,_that.category,_that.quantity,_that.price,_that.stockValue);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'product_id', fromJson: _intFromJson)  int productId, @JsonKey(name: 'product_name')  String productName, @JsonKey(name: 'product_image')  String? productImage,  String? category, @JsonKey(fromJson: _intFromJson)  int quantity, @JsonKey(fromJson: _doubleFromJson)  double price, @JsonKey(name: 'stock_value', fromJson: _doubleFromJson)  double stockValue)  $default,) {final _that = this;
+switch (_that) {
+case _LowStockProductModel():
+return $default(_that.productId,_that.productName,_that.productImage,_that.category,_that.quantity,_that.price,_that.stockValue);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'product_id', fromJson: _intFromJson)  int productId, @JsonKey(name: 'product_name')  String productName, @JsonKey(name: 'product_image')  String? productImage,  String? category, @JsonKey(fromJson: _intFromJson)  int quantity, @JsonKey(fromJson: _doubleFromJson)  double price, @JsonKey(name: 'stock_value', fromJson: _doubleFromJson)  double stockValue)?  $default,) {final _that = this;
+switch (_that) {
+case _LowStockProductModel() when $default != null:
+return $default(_that.productId,_that.productName,_that.productImage,_that.category,_that.quantity,_that.price,_that.stockValue);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _LowStockProductModel implements LowStockProductModel {
+  const _LowStockProductModel({@JsonKey(name: 'product_id', fromJson: _intFromJson) required this.productId, @JsonKey(name: 'product_name') required this.productName, @JsonKey(name: 'product_image') this.productImage, this.category, @JsonKey(fromJson: _intFromJson) required this.quantity, @JsonKey(fromJson: _doubleFromJson) required this.price, @JsonKey(name: 'stock_value', fromJson: _doubleFromJson) required this.stockValue});
+  factory _LowStockProductModel.fromJson(Map<String, dynamic> json) => _$LowStockProductModelFromJson(json);
+
+@override@JsonKey(name: 'product_id', fromJson: _intFromJson) final  int productId;
+@override@JsonKey(name: 'product_name') final  String productName;
+@override@JsonKey(name: 'product_image') final  String? productImage;
+@override final  String? category;
+@override@JsonKey(fromJson: _intFromJson) final  int quantity;
+@override@JsonKey(fromJson: _doubleFromJson) final  double price;
+@override@JsonKey(name: 'stock_value', fromJson: _doubleFromJson) final  double stockValue;
+
+/// Create a copy of LowStockProductModel
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$LowStockProductModelCopyWith<_LowStockProductModel> get copyWith => __$LowStockProductModelCopyWithImpl<_LowStockProductModel>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$LowStockProductModelToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LowStockProductModel&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.productName, productName) || other.productName == productName)&&(identical(other.productImage, productImage) || other.productImage == productImage)&&(identical(other.category, category) || other.category == category)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.price, price) || other.price == price)&&(identical(other.stockValue, stockValue) || other.stockValue == stockValue));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,productId,productName,productImage,category,quantity,price,stockValue);
+
+@override
+String toString() {
+  return 'LowStockProductModel(productId: $productId, productName: $productName, productImage: $productImage, category: $category, quantity: $quantity, price: $price, stockValue: $stockValue)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$LowStockProductModelCopyWith<$Res> implements $LowStockProductModelCopyWith<$Res> {
+  factory _$LowStockProductModelCopyWith(_LowStockProductModel value, $Res Function(_LowStockProductModel) _then) = __$LowStockProductModelCopyWithImpl;
+@override @useResult
+$Res call({
+@JsonKey(name: 'product_id', fromJson: _intFromJson) int productId,@JsonKey(name: 'product_name') String productName,@JsonKey(name: 'product_image') String? productImage, String? category,@JsonKey(fromJson: _intFromJson) int quantity,@JsonKey(fromJson: _doubleFromJson) double price,@JsonKey(name: 'stock_value', fromJson: _doubleFromJson) double stockValue
+});
+
+
+
+
+}
+/// @nodoc
+class __$LowStockProductModelCopyWithImpl<$Res>
+    implements _$LowStockProductModelCopyWith<$Res> {
+  __$LowStockProductModelCopyWithImpl(this._self, this._then);
+
+  final _LowStockProductModel _self;
+  final $Res Function(_LowStockProductModel) _then;
+
+/// Create a copy of LowStockProductModel
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? productId = null,Object? productName = null,Object? productImage = freezed,Object? category = freezed,Object? quantity = null,Object? price = null,Object? stockValue = null,}) {
+  return _then(_LowStockProductModel(
+productId: null == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
+as int,productName: null == productName ? _self.productName : productName // ignore: cast_nullable_to_non_nullable
+as String,productImage: freezed == productImage ? _self.productImage : productImage // ignore: cast_nullable_to_non_nullable
+as String?,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
+as String?,quantity: null == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
+as int,price: null == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
+as double,stockValue: null == stockValue ? _self.stockValue : stockValue // ignore: cast_nullable_to_non_nullable
+as double,
+  ));
+}
+
+
+}
+
 // dart format on

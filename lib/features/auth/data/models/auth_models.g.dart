@@ -46,3 +46,35 @@ _ForgotPasswordRequestModel _$ForgotPasswordRequestModelFromJson(
 Map<String, dynamic> _$ForgotPasswordRequestModelToJson(
   _ForgotPasswordRequestModel instance,
 ) => <String, dynamic>{'email': instance.email};
+
+_ResetPasswordRequestModel _$ResetPasswordRequestModelFromJson(
+  Map<String, dynamic> json,
+) => _ResetPasswordRequestModel(
+  email: json['email'] as String,
+  token: json['token'] as String,
+  password: json['password'] as String,
+  passwordConfirmation: json['password_confirmation'] as String,
+);
+
+Map<String, dynamic> _$ResetPasswordRequestModelToJson(
+  _ResetPasswordRequestModel instance,
+) => <String, dynamic>{
+  'email': instance.email,
+  'token': instance.token,
+  'password': instance.password,
+  'password_confirmation': instance.passwordConfirmation,
+};
+
+_ResetPasswordResponseModel _$ResetPasswordResponseModelFromJson(
+  Map<String, dynamic> json,
+) => _ResetPasswordResponseModel(
+  success: json['success'] as bool,
+  message: json['message'] as String?,
+);
+
+Map<String, dynamic> _$ResetPasswordResponseModelToJson(
+  _ResetPasswordResponseModel instance,
+) => <String, dynamic>{
+  'success': instance.success,
+  'message': instance.message,
+};

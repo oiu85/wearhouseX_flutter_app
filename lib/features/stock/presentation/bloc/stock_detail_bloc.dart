@@ -13,6 +13,7 @@ class StockDetailBloc extends Bloc<StockDetailEvent, StockDetailState> {
     required this.repository,
   }) : super(StockDetailState.initial()) {
     on<LoadStockDetail>(_onLoadStockDetail);
+    on<LoadStockDetailByProductId>(_onLoadStockDetailByProductId);
     on<ResetStockDetail>(_onResetStockDetail);
   }
 
@@ -23,6 +24,41 @@ class StockDetailBloc extends Bloc<StockDetailEvent, StockDetailState> {
     emit(state.copyWith(status: const BlocStatus.loading()));
 
     final result = await repository.getStockItemById(event.stockItemId);
+
+    result.fold(
+      (failure) {
+        String errorMessage = failure.message;
+
+        if (failure is NetworkFailure) {
+          if (failure.message.contains('not found')) {
+            errorMessage = 'Stock item not found.';
+          } else if (failure.message.contains('connection')) {
+            errorMessage = 'Connection error. Please check your internet.';
+          }
+        }
+
+        emit(state.copyWith(
+          status: BlocStatus.fail(error: errorMessage),
+          errorMessage: errorMessage,
+        ));
+      },
+      (stockItem) {
+        emit(state.copyWith(
+          status: const BlocStatus.success(),
+          stockItem: stockItem,
+          errorMessage: null,
+        ));
+      },
+    );
+  }
+
+  Future<void> _onLoadStockDetailByProductId(
+    LoadStockDetailByProductId event,
+    Emitter<StockDetailState> emit,
+  ) async {
+    emit(state.copyWith(status: const BlocStatus.loading()));
+
+    final result = await repository.getStockDetailByProductId(event.productId);
 
     result.fold(
       (failure) {

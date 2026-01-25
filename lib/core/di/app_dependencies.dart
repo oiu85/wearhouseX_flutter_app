@@ -1,12 +1,15 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../features/home/data/di/home_di.dart';
+import '../../features/settings/data/di/settings_di.dart';
 import '../routing/navigation_observer.dart';
 import '../storage/app_storage_service.dart';
 import '../network/network_client.dart';
 import '../auth/guest_mode_guard.dart';
 import '../../features/auth/di/auth_di.dart';
 import '../../features/stock/data/di/stock_di.dart';
+import '../../features/sales/data/di/sales_di.dart';
+import '../../features/profile/data/di/profile_di.dart';
 
 final getIt = GetIt.instance;
 
@@ -47,6 +50,15 @@ Future<GetIt> configureDependencies() async {
 
         // Register Home feature dependencies
         registerHomeDependencies(getIt);
+
+        // Register Sales feature dependencies
+        registerSalesDependencies(getIt);
+
+        // Register Profile feature dependencies
+        registerProfileDependencies(getIt);
+
+        // Register Settings feature dependencies
+        registerSettingsDependencies(getIt);
   
   return getIt;
 }

@@ -92,17 +92,29 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late ThemeMode _themeMode;
+  late AppStorageService _storageService;
 
   @override
   void initState() {
     super.initState();
     _themeMode = widget.initialThemeMode;
+    _storageService = getIt<AppStorageService>();
+    _loadThemeMode();
     // Listen to system theme changes
     WidgetsBinding.instance.platformDispatcher.onPlatformBrightnessChanged = () {
       if (_themeMode == ThemeMode.system) {
         setState(() {});
       }
     };
+  }
+
+  Future<void> _loadThemeMode() async {
+    final savedThemeMode = await _storageService.getThemeMode();
+    if (savedThemeMode != null && savedThemeMode != _themeMode) {
+      setState(() {
+        _themeMode = savedThemeMode;
+      });
+    }
   }
 
   @override

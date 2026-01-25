@@ -130,3 +130,71 @@ class ForgotPasswordBloc extends Bloc<ForgotPasswordEvent, ForgotPasswordState> 
     emit(ForgotPasswordState.initial());
   }
 }
+
+// ============================================
+// RESET PASSWORD BLOC
+// ============================================
+
+class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
+  final AuthRepository repository;
+
+  ResetPasswordBloc({
+    required this.repository,
+  }) : super(ResetPasswordState.initial()) {
+    on<ResetPasswordSubmitted>(_onResetPasswordSubmitted);
+    on<ResetPasswordReset>(_onResetPasswordReset);
+  }
+
+  Future<void> _onResetPasswordSubmitted(
+    ResetPasswordSubmitted event,
+    Emitter<ResetPasswordState> emit,
+  ) async {
+    emit(state.copyWith(status: const BlocStatus.loading()));
+
+    final result = await repository.resetPassword(
+      email: event.email.trim(),
+      token: event.token.trim(),
+      password: event.password,
+      passwordConfirmation: event.passwordConfirmation,
+    );
+
+    result.fold(
+      (failure) {
+        String errorMessage = failure.message;
+
+        if (failure is NetworkFailure) {
+          if (failure.message.contains('connection') ||
+              failure.message.contains('timeout')) {
+            errorMessage = 'Connection error. Please check your internet.';
+          } else if (failure.message.contains('token') ||
+              failure.message.contains('expired')) {
+            errorMessage = 'Invalid or expired reset token.';
+          } else if (failure.message.contains('password') ||
+              failure.message.contains('validation')) {
+            errorMessage = 'Password validation failed. Please check your input.';
+          }
+        }
+
+        emit(state.copyWith(
+          status: BlocStatus.fail(error: errorMessage),
+          errorMessage: errorMessage,
+          successMessage: null,
+        ));
+      },
+      (_) {
+        emit(state.copyWith(
+          status: const BlocStatus.success(),
+          successMessage: 'Password has been reset successfully.',
+          errorMessage: null,
+        ));
+      },
+    );
+  }
+
+  void _onResetPasswordReset(
+    ResetPasswordReset event,
+    Emitter<ResetPasswordState> emit,
+  ) {
+    emit(ResetPasswordState.initial());
+  }
+}

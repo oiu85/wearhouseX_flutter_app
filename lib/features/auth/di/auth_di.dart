@@ -35,4 +35,10 @@ void registerAuthDependencies(GetIt getIt) {
       repository: getIt<AuthRepository>(),
     ),
   );
+
+  getIt.registerLazySingleton<ResetPasswordBloc>(
+    () => ResetPasswordBloc(
+      repository: getIt<AuthRepository>(),
+    ),
+  );
 }

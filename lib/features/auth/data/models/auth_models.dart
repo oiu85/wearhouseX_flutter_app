@@ -64,3 +64,29 @@ abstract class ForgotPasswordRequestModel with _$ForgotPasswordRequestModel {
   factory ForgotPasswordRequestModel.fromJson(Map<String, dynamic> json) =>
       _$ForgotPasswordRequestModelFromJson(json);
 }
+
+/// Reset password request model
+@freezed
+abstract class ResetPasswordRequestModel with _$ResetPasswordRequestModel {
+  const factory ResetPasswordRequestModel({
+    required String email,
+    required String token,
+    required String password,
+    @JsonKey(name: 'password_confirmation') required String passwordConfirmation,
+  }) = _ResetPasswordRequestModel;
+
+  factory ResetPasswordRequestModel.fromJson(Map<String, dynamic> json) =>
+      _$ResetPasswordRequestModelFromJson(json);
+}
+
+/// Reset password response model
+@freezed
+abstract class ResetPasswordResponseModel with _$ResetPasswordResponseModel {
+  const factory ResetPasswordResponseModel({
+    required bool success,
+    String? message,
+  }) = _ResetPasswordResponseModel;
+
+  factory ResetPasswordResponseModel.fromJson(Map<String, dynamic> json) =>
+      _$ResetPasswordResponseModelFromJson(json);
+}

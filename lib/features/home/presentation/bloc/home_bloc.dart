@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/status/bloc_status.dart';
 import '../../../../core/storage/app_storage_service.dart';
+import '../../domain/entities/driver_stats_entity.dart';
 import '../../domain/repositories/home_repository.dart';
 import 'home_event.dart';
 import 'home_state.dart';
@@ -62,33 +63,94 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     emit(state.copyWith(status: const BlocStatus.loading()));
 
+    // Try to get dashboard data first (new API)
+    final dashboardResult = await repository.getDashboard();
+
+    dashboardResult.fold(
+      (failure) {
+        // Fallback to old API if dashboard fails
+        // Use unawaited to prevent blocking, but ensure we await in _loadLegacyDashboard
+        _loadLegacyDashboard(emit);
+      },
+      (dashboard) {
+        if (!emit.isDone) {
+          emit(state.copyWith(
+            status: const BlocStatus.success(),
+            dashboard: dashboard,
+            recentSales: dashboard.recentSales,
+            driverStats: DriverStatsEntity(
+              totalSales: 0, // Not in dashboard
+              totalRevenue: 0.0, // Not in dashboard
+              todaySales: dashboard.quickStats.todaySales,
+              todayRevenue: dashboard.quickStats.todayRevenue,
+              totalStockItems: dashboard.quickStats.availableProducts,
+            ),
+            errorMessage: null,
+          ));
+        }
+      },
+    );
+  }
+
+  void _loadLegacyDashboard(Emitter<HomeState> emit) {
+    // Start async operations but don't block the event handler
+    _loadLegacyDashboardAsync(emit);
+  }
+
+  Future<void> _loadLegacyDashboardAsync(Emitter<HomeState> emit) async {
+    // Check if emit is still valid before proceeding
+    if (emit.isDone) return;
+
     final statsResult = await repository.getDriverStats();
-    final salesResult = await repository.getRecentSales(limit: 10);
+    
+    // Check again after async operation
+    if (emit.isDone) return;
 
     statsResult.fold(
       (failure) {
-        emit(state.copyWith(
-          status: BlocStatus.fail(error: failure.message),
-          errorMessage: failure.message,
-        ));
+        if (!emit.isDone) {
+          emit(state.copyWith(
+            status: BlocStatus.fail(error: failure.message),
+            errorMessage: failure.message,
+          ));
+        }
       },
       (stats) {
-        salesResult.fold(
-          (failure) {
-            emit(state.copyWith(
-              status: BlocStatus.fail(error: failure.message),
-              errorMessage: failure.message,
-            ));
-          },
-          (sales) {
-            emit(state.copyWith(
-              status: const BlocStatus.success(),
-              driverStats: stats,
-              recentSales: sales,
-              errorMessage: null,
-            ));
-          },
-        );
+        // Load sales in parallel or sequentially
+        _loadSalesForLegacyDashboard(emit, stats);
+      },
+    );
+  }
+
+  Future<void> _loadSalesForLegacyDashboard(
+    Emitter<HomeState> emit,
+    DriverStatsEntity stats,
+  ) async {
+    if (emit.isDone) return;
+
+    final salesResult = await repository.getRecentSales(limit: 10);
+
+    // Check again after async operation
+    if (emit.isDone) return;
+
+    salesResult.fold(
+      (failure) {
+        if (!emit.isDone) {
+          emit(state.copyWith(
+            status: BlocStatus.fail(error: failure.message),
+            errorMessage: failure.message,
+          ));
+        }
+      },
+      (sales) {
+        if (!emit.isDone) {
+          emit(state.copyWith(
+            status: const BlocStatus.success(),
+            driverStats: stats,
+            recentSales: sales,
+            errorMessage: null,
+          ));
+        }
       },
     );
   }
@@ -97,33 +159,30 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     RefreshDashboard event,
     Emitter<HomeState> emit,
   ) async {
-    final statsResult = await repository.getDriverStats();
-    final salesResult = await repository.getRecentSales(limit: 10);
+    // Try to get dashboard data first (new API)
+    final dashboardResult = await repository.getDashboard();
 
-    statsResult.fold(
+    dashboardResult.fold(
       (failure) {
-        emit(state.copyWith(
-          status: BlocStatus.fail(error: failure.message),
-          errorMessage: failure.message,
-        ));
+        // Fallback to old API if dashboard fails
+        _loadLegacyDashboard(emit);
       },
-      (stats) {
-        salesResult.fold(
-          (failure) {
-            emit(state.copyWith(
-              status: BlocStatus.fail(error: failure.message),
-              errorMessage: failure.message,
-            ));
-          },
-          (sales) {
-            emit(state.copyWith(
-              status: const BlocStatus.success(),
-              driverStats: stats,
-              recentSales: sales,
-              errorMessage: null,
-            ));
-          },
-        );
+      (dashboard) {
+        if (!emit.isDone) {
+          emit(state.copyWith(
+            status: const BlocStatus.success(),
+            dashboard: dashboard,
+            recentSales: dashboard.recentSales,
+            driverStats: DriverStatsEntity(
+              totalSales: 0, // Not in dashboard
+              totalRevenue: 0.0, // Not in dashboard
+              todaySales: dashboard.quickStats.todaySales,
+              todayRevenue: dashboard.quickStats.todayRevenue,
+              totalStockItems: dashboard.quickStats.availableProducts,
+            ),
+            errorMessage: null,
+          ));
+        }
       },
     );
   }

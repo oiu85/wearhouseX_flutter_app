@@ -102,22 +102,39 @@ class _LoginPageState extends State<LoginPage> {
                     validator: (value) => _passwordValidator(value),
                   ),
                   SizedBox(height: 12.h),
-                  //* Forgot Password Link
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () {
-                        context.push(AppRoutes.forgotPassword);
-                      },
-                      child: AppText(
-                        LocaleKeys.auth_forgotPassword,
+                  //* Remember Me Toggle
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: false, // TODO: Implement remember me storage
+                        onChanged: (value) {
+                          // TODO: Store remember me preference
+                        },
+                        activeColor: theme.colorScheme.primary,
+                      ),
+                      AppText(
+                        LocaleKeys.auth_rememberMe,
                         translation: true,
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.primary,
-                          fontWeight: FontWeight.w600,
+                          color: theme.colorScheme.onSurface,
                         ),
                       ),
-                    ),
+                      const Spacer(),
+                      //* Forgot Password Link
+                      TextButton(
+                        onPressed: () {
+                          context.push(AppRoutes.forgotPassword);
+                        },
+                        child: AppText(
+                          LocaleKeys.auth_forgotPassword,
+                          translation: true,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.primary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: 32.h),
                   //* Login Button

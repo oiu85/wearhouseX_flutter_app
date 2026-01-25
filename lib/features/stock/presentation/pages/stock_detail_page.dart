@@ -18,12 +18,14 @@ import '../widgets/stock_detail_timestamp.dart';
 
 //* Stock detail page displaying comprehensive product information
 class StockDetailPage extends StatefulWidget {
-  final int stockItemId;
+  final int? stockItemId;
+  final int? productId;
 
   const StockDetailPage({
     super.key,
-    required this.stockItemId,
-  });
+    this.stockItemId,
+    this.productId,
+  }) : assert(stockItemId != null || productId != null, 'Either stockItemId or productId must be provided');
 
   @override
   State<StockDetailPage> createState() => _StockDetailPageState();
@@ -35,7 +37,11 @@ class _StockDetailPageState extends State<StockDetailPage> {
   @override
   void initState() {
     super.initState();
-    _stockDetailBloc.add(LoadStockDetail(widget.stockItemId));
+    if (widget.productId != null) {
+      _stockDetailBloc.add(LoadStockDetailByProductId(widget.productId!));
+    } else if (widget.stockItemId != null) {
+      _stockDetailBloc.add(LoadStockDetail(widget.stockItemId!));
+    }
   }
 
   @override
@@ -92,7 +98,11 @@ class _StockDetailPageState extends State<StockDetailPage> {
                 state: state.status,
                 message: state.errorMessage,
                 onRetry: () {
-                  _stockDetailBloc.add(LoadStockDetail(widget.stockItemId));
+                  if (widget.productId != null) {
+                    _stockDetailBloc.add(LoadStockDetailByProductId(widget.productId!));
+                  } else if (widget.stockItemId != null) {
+                    _stockDetailBloc.add(LoadStockDetail(widget.stockItemId!));
+                  }
                 },
               ),
             );

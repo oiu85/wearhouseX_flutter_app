@@ -75,3 +75,40 @@ class ForgotPasswordState extends Equatable {
   @override
   List<Object?> get props => [status, successMessage, errorMessage];
 }
+
+// ============================================
+// RESET PASSWORD STATE
+// ============================================
+
+class ResetPasswordState extends Equatable {
+  final BlocStatus status;
+  final String? successMessage;
+  final String? errorMessage;
+
+  const ResetPasswordState({
+    required this.status,
+    this.successMessage,
+    this.errorMessage,
+  });
+
+  factory ResetPasswordState.initial() => const ResetPasswordState(
+        status: BlocStatus.initial(),
+        successMessage: null,
+        errorMessage: null,
+      );
+
+  ResetPasswordState copyWith({
+    BlocStatus? status,
+    String? successMessage,
+    String? errorMessage,
+  }) {
+    return ResetPasswordState(
+      status: status ?? this.status,
+      successMessage: successMessage ?? this.successMessage,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
+
+  @override
+  List<Object?> get props => [status, successMessage, errorMessage];
+}

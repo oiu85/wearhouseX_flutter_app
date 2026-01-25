@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/localization/app_text.dart';
+import '../../../../core/routing/app_routes.dart';
 
 //* Settings section widget
 class MenuSettingsSection extends StatelessWidget {
@@ -32,15 +34,8 @@ class MenuSettingsSection extends StatelessWidget {
             title: 'menu.language',
             subtitle: 'menu.changeAppLanguage',
             onTap: () {
-              //* Language settings - to be implemented
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: AppText(
-                    'menu.comingSoon',
-                    translation: true,
-                  ),
-                ),
-              );
+              //* Navigate to settings page
+              context.push(AppRoutes.settings);
             },
           ),
           Divider(height: 1, color: theme.colorScheme.outline.withOpacity(0.2)),
@@ -51,15 +46,8 @@ class MenuSettingsSection extends StatelessWidget {
             title: 'menu.theme',
             subtitle: 'menu.lightDarkMode',
             onTap: () {
-              //* Theme settings - to be implemented
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: AppText(
-                    'menu.comingSoon',
-                    translation: true,
-                  ),
-                ),
-              );
+              //* Navigate to settings page
+              context.push(AppRoutes.settings);
             },
           ),
           Divider(height: 1, color: theme.colorScheme.outline.withOpacity(0.2)),

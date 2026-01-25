@@ -4,6 +4,7 @@ import '../../../../core/status/bloc_status.dart';
 import '../../../../core/storage/app_storage_service.dart';
 import '../../domain/entities/category_entity.dart';
 import '../../domain/entities/stock_item_entity.dart';
+import '../../domain/entities/stock_statistics_entity.dart';
 import '../../domain/repositories/stock_repository.dart';
 import 'stock_event.dart';
 import 'stock_state.dart';
@@ -23,6 +24,7 @@ class StockBloc extends Bloc<StockEvent, StockState> {
     on<SearchStock>(_onSearchStock);
     on<FilterByCategory>(_onFilterByCategory);
     on<SortStock>(_onSortStock);
+    on<LoadStockStatistics>(_onLoadStockStatistics);
   }
 
   Future<void> _onLoadUserInfo(
@@ -68,7 +70,28 @@ class StockBloc extends Bloc<StockEvent, StockState> {
   ) async {
     emit(state.copyWith(status: const BlocStatus.loading()));
 
-    final result = await repository.getDriverStock();
+    // Convert sort type to API format
+    String? sortParam;
+    String? orderParam = 'asc';
+    switch (state.sortType) {
+      case SortType.name:
+        sortParam = 'name';
+        break;
+      case SortType.quantity:
+        sortParam = 'quantity';
+        orderParam = 'desc';
+        break;
+      case SortType.price:
+        sortParam = 'price';
+        break;
+    }
+
+    final result = await repository.getDriverStock(
+      search: state.searchQuery.isNotEmpty ? state.searchQuery : null,
+      categoryId: state.selectedCategoryId,
+      sort: sortParam,
+      order: orderParam,
+    );
 
     result.fold(
       (failure) {
@@ -97,7 +120,28 @@ class StockBloc extends Bloc<StockEvent, StockState> {
     RefreshStock event,
     Emitter<StockState> emit,
   ) async {
-    final result = await repository.getDriverStock();
+    // Convert sort type to API format
+    String? sortParam;
+    String? orderParam = 'asc';
+    switch (state.sortType) {
+      case SortType.name:
+        sortParam = 'name';
+        break;
+      case SortType.quantity:
+        sortParam = 'quantity';
+        orderParam = 'desc';
+        break;
+      case SortType.price:
+        sortParam = 'price';
+        break;
+    }
+
+    final result = await repository.getDriverStock(
+      search: state.searchQuery.isNotEmpty ? state.searchQuery : null,
+      categoryId: state.selectedCategoryId,
+      sort: sortParam,
+      order: orderParam,
+    );
 
     result.fold(
       (failure) {
@@ -117,6 +161,27 @@ class StockBloc extends Bloc<StockEvent, StockState> {
           filteredStockItems: sortedItems,
           categories: categories,
           errorMessage: null,
+        ));
+      },
+    );
+  }
+
+  Future<void> _onLoadStockStatistics(
+    LoadStockStatistics event,
+    Emitter<StockState> emit,
+  ) async {
+    final result = await repository.getStockStatistics(
+      lowStockThreshold: event.lowStockThreshold,
+    );
+
+    result.fold(
+      (failure) {
+        // Don't fail the whole state, just log the error
+        // Statistics are optional
+      },
+      (statistics) {
+        emit(state.copyWith(
+          stockStatistics: statistics,
         ));
       },
     );
