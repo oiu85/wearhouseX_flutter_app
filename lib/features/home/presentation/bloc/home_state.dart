@@ -13,6 +13,9 @@ class HomeState extends Equatable {
   final String? errorMessage;
   final String? userName;
   final String? greetingText;
+  final String? navigationRoute;
+  final String searchQuery;
+  final int notificationCount;
 
   const HomeState({
     required this.status,
@@ -22,6 +25,9 @@ class HomeState extends Equatable {
     this.errorMessage,
     this.userName,
     this.greetingText,
+    this.navigationRoute,
+    this.searchQuery = '',
+    this.notificationCount = 0,
   });
 
   factory HomeState.initial() => const HomeState(
@@ -32,6 +38,9 @@ class HomeState extends Equatable {
         errorMessage: null,
         userName: null,
         greetingText: null,
+        navigationRoute: null,
+        searchQuery: '',
+        notificationCount: 0,
       );
 
   HomeState copyWith({
@@ -42,6 +51,9 @@ class HomeState extends Equatable {
     String? errorMessage,
     String? userName,
     String? greetingText,
+    String? navigationRoute,
+    String? searchQuery,
+    int? notificationCount,
   }) {
     return HomeState(
       status: status ?? this.status,
@@ -51,6 +63,9 @@ class HomeState extends Equatable {
       errorMessage: errorMessage ?? this.errorMessage,
       userName: userName ?? this.userName,
       greetingText: greetingText ?? this.greetingText,
+      navigationRoute: navigationRoute,
+      searchQuery: searchQuery ?? this.searchQuery,
+      notificationCount: notificationCount ?? this.notificationCount,
     );
   }
 
@@ -63,5 +78,8 @@ class HomeState extends Equatable {
         errorMessage,
         userName,
         greetingText,
+        navigationRoute,
+        searchQuery,
+        notificationCount,
       ];
 }

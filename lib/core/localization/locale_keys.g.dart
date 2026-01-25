@@ -306,14 +306,6 @@ abstract class  LocaleKeys {
   static const home_availableProducts = 'home.availableProducts';
   static const home_lowStock = 'home.lowStock';
   static const home = 'home';
-  static const stockDetail_title = 'stockDetail.title';
-  static const stockDetail_availableQuantity = 'stockDetail.availableQuantity';
-  static const stockDetail_pricePerUnit = 'stockDetail.pricePerUnit';
-  static const stockDetail_lastUpdated = 'stockDetail.lastUpdated';
-  static const stockDetail_sellProduct = 'stockDetail.sellProduct';
-  static const stockDetail_noDescription = 'stockDetail.noDescription';
-  static const stockDetail_updatedAgo = 'stockDetail.updatedAgo';
-  static const stockDetail = 'stockDetail';
   static const menu_profile = 'menu.profile';
   static const menu_settings = 'menu.settings';
   static const menu_logout = 'menu.logout';

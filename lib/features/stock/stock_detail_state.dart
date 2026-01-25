@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import '../../../../core/status/bloc_status.dart';
-import '../../domain/entities/stock_item_entity.dart';
+import '../../core/status/bloc_status.dart';
+import '../home/domain/entities/stock_item_entity.dart';
 
 //* Stock detail state
 class StockDetailState extends Equatable {

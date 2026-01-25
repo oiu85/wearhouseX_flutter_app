@@ -264,6 +264,7 @@
   },
   "bottomNav": {
     "home": "الرئيسية",
+    "stock": "المخزون",
     "menu": "القائمة"
   },
   "share": {
@@ -281,52 +282,6 @@
   "campaign": {
     "paid": "مدفوع",
     "remaining": "متبقي"
-  },
-  "home": {
-    "greeting": "مرحباً بعودتك، {name}!",
-    "greetingMorning": "صباح الخير، {name}!",
-    "greetingAfternoon": "مساء الخير، {name}!",
-    "greetingEvening": "مساء الخير، {name}!",
-    "stockList": "مخزوني",
-    "searchProducts": "البحث عن المنتجات...",
-    "filterByCategory": "تصفية حسب الفئة",
-    "allCategories": "الكل",
-    "sortBy": "ترتيب حسب",
-    "sortByName": "الاسم (أ-ي)",
-    "sortByQuantity": "الكمية (من الأعلى للأقل)",
-    "sortByPrice": "السعر (من الأقل للأعلى)",
-    "noStockItems": "لا توجد عناصر مخزون",
-    "availableQuantity": "الكمية المتاحة",
-    "pricePerUnit": "السعر لكل وحدة",
-    "today": "اليوم",
-    "yesterday": "أمس",
-    "daysAgo": "منذ {days} أيام",
-    "searchPlaceholder": "البحث عن المنتجات...",
-    "filterByCategory": "تصفية حسب الفئة",
-    "sortBy": "ترتيب حسب",
-    "sortByName": "الاسم (أ-ي)",
-    "sortByQuantity": "الكمية (من الأعلى للأقل)",
-    "sortByPrice": "السعر (من الأقل للأعلى)",
-    "statistics": "الإحصائيات",
-    "totalProducts": "إجمالي المنتجات",
-    "totalQuantity": "إجمالي الكمية",
-    "stockValue": "قيمة المخزون",
-    "lowStockAlerts": "تنبيهات المخزون المنخفض",
-    "pullToRefresh": "اسحب للتحديث"
-  },
-  "stockDetail": {
-    "title": "تفاصيل المنتج",
-    "availableQuantity": "الكمية المتاحة",
-    "pricePerUnit": "السعر لكل وحدة",
-    "lastUpdated": "آخر تحديث",
-    "sellProduct": "بيع هذا المنتج",
-    "noDescription": "لا يوجد وصف متاح",
-    "updatedAgo": "تم التحديث منذ {time}"
-  },
-  "bottomNav": {
-    "home": "الرئيسية",
-    "stock": "المخزون",
-    "menu": "القائمة"
   },
   "home": {
     "greeting": "مرحباً بعودتك، {name}!",

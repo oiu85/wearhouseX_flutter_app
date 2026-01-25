@@ -1,10 +1,12 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../core/component/others/section_header.dart';
 import '../../../../core/localization/app_text.dart';
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/utils/date_formatter.dart';
 import '../../domain/entities/sale_entity.dart';
 
-//* Recent sales list section widget
+/// Recent sales list section widget with modern design
 class HomeRecentSalesSection extends StatelessWidget {
   final List<SaleEntity> recentSales;
   final VoidCallback? onViewAll;
@@ -17,8 +19,6 @@ class HomeRecentSalesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     if (recentSales.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -28,39 +28,20 @@ class HomeRecentSalesSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              AppText(
-                'home.recentSales',
-                translation: true,
-                style: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: theme.colorScheme.onSurface,
-                ),
-              ),
-              if (onViewAll != null)
-                TextButton(
-                  onPressed: onViewAll,
-                  child: AppText(
-                    'home.viewAllSales',
-                    translation: true,
-                    style: theme.textTheme.labelMedium?.copyWith(
-                      color: theme.colorScheme.primary,
-                    ),
-                  ),
-                ),
-            ],
+          SectionHeader(
+            title: LocaleKeys.home_recentSales,
+            actionText: onViewAll != null ? LocaleKeys.home_viewAllSales : null,
+            onActionTap: onViewAll,
           ),
-          SizedBox(height: 12.h),
+          SizedBox(height: 16.h),
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: recentSales.length > 5 ? 5 : recentSales.length,
-            separatorBuilder: (context, index) => SizedBox(height: 8.h),
+            separatorBuilder: (context, index) => SizedBox(height: 12.h),
             itemBuilder: (context, index) {
               final sale = recentSales[index];
-              return _buildSaleCard(context, theme, sale);
+              return _buildSaleCard(context, sale);
             },
           ),
         ],
@@ -68,91 +49,102 @@ class HomeRecentSalesSection extends StatelessWidget {
     );
   }
 
-  Widget _buildSaleCard(BuildContext context, ThemeData theme, SaleEntity sale) {
-    return Card(
-      elevation: 1,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.r),
+  Widget _buildSaleCard(BuildContext context, SaleEntity sale) {
+    final theme = Theme.of(context);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: theme.colorScheme.shadow.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
-      child: Padding(
-        padding: EdgeInsets.all(12.w),
-        child: Row(
-          children: [
-            Container(
-              padding: EdgeInsets.all(8.w),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.primaryContainer,
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-              child: Icon(
-                Icons.receipt,
-                color: theme.colorScheme.primary,
-                size: 20.sp,
-              ),
-            ),
-            SizedBox(width: 12.w),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppText(
-                    sale.invoiceNumber,
-                    translation: false,
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.onSurface,
-                    ),
-                  ),
-                  SizedBox(height: 4.h),
-                  AppText(
-                    sale.customerName,
-                    translation: false,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.7),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16.r),
+          onTap: () {},
+          child: Padding(
+            padding: EdgeInsets.all(16.w),
+            child: Row(
               children: [
-                AppText(
-                  '\$${sale.totalAmount.toStringAsFixed(2)}',
-                  translation: false,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.secondary,
+                Container(
+                  padding: EdgeInsets.all(12.w),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primaryContainer.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: Icon(
+                    Icons.receipt_long_rounded,
+                    color: theme.colorScheme.primary,
+                    size: 24.sp,
                   ),
                 ),
-                SizedBox(height: 4.h),
-                AppText(
-                  _formatDate(sale.createdAt),
-                  translation: false,
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.5),
+                SizedBox(width: 16.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppText(
+                        sale.invoiceNumber,
+                        translation: false,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.onSurface,
+                          fontSize: 15.sp,
+                        ),
+                      ),
+                      SizedBox(height: 4.h),
+                      AppText(
+                        sale.customerName,
+                        translation: false,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurface.withOpacity(0.6),
+                          fontSize: 13.sp,
+                        ),
+                      ),
+                      SizedBox(height: 6.h),
+                      AppText(
+                        DateFormatter.formatRelativeDate(sale.createdAt),
+                        translation: false,
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: theme.colorScheme.onSurface.withOpacity(0.5),
+                          fontSize: 11.sp,
+                        ),
+                      ),
+                    ],
                   ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    AppText(
+                      '\$${sale.totalAmount.toStringAsFixed(2)}',
+                      translation: false,
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.secondary,
+                        fontSize: 18.sp,
+                      ),
+                    ),
+                    SizedBox(height: 4.h),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      color: theme.colorScheme.onSurface.withOpacity(0.3),
+                      size: 20.sp,
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
-  }
-
-  String _formatDate(DateTime date) {
-    final now = DateTime.now();
-    final difference = now.difference(date);
-
-    if (difference.inDays == 0) {
-      return 'home.today'.tr();
-    } else if (difference.inDays == 1) {
-      return 'home.yesterday'.tr();
-    } else if (difference.inDays < 7) {
-      return 'home.daysAgo'.tr(namedArgs: {'days': '${difference.inDays}'});
-    } else {
-      return '${date.day}/${date.month}/${date.year}';
-    }
   }
 }

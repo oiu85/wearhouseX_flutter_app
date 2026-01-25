@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/status/bloc_status.dart';
 import '../../../../core/storage/app_storage_service.dart';
 import '../../domain/entities/driver_stats_entity.dart';
@@ -19,6 +20,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<LoadUserInfo>(_onLoadUserInfo);
     on<LoadDashboard>(_onLoadDashboard);
     on<RefreshDashboard>(_onRefreshDashboard);
+    on<NavigateToCreateSale>(_onNavigateToCreateSale);
+    on<NavigateToStock>(_onNavigateToStock);
+    on<NavigateToSalesHistory>(_onNavigateToSalesHistory);
+    on<NavigateToStockDetail>(_onNavigateToStockDetail);
+    on<NavigateToNotifications>(_onNavigateToNotifications);
+    on<SearchQueryChanged>(_onSearchQueryChanged);
+    on<ClearNavigationRoute>(_onClearNavigationRoute);
   }
 
   Future<void> _onLoadUserInfo(
@@ -47,13 +55,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final hour = DateTime.now().hour;
     
     if (hour >= 5 && hour < 12) {
-      return 'home.greetingMorning'.tr(namedArgs: {'name': name});
+      return LocaleKeys.home_greetingMorning.tr(namedArgs: {'name': name});
     } else if (hour >= 12 && hour < 17) {
-      return 'home.greetingAfternoon'.tr(namedArgs: {'name': name});
+      return LocaleKeys.home_greetingAfternoon.tr(namedArgs: {'name': name});
     } else if (hour >= 17 && hour < 22) {
-      return 'home.greetingEvening'.tr(namedArgs: {'name': name});
+      return LocaleKeys.home_greetingEvening.tr(namedArgs: {'name': name});
     } else {
-      return 'home.greeting'.tr(namedArgs: {'name': name});
+      return LocaleKeys.home_greeting.tr(namedArgs: {'name': name});
     }
   }
 
@@ -159,13 +167,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     RefreshDashboard event,
     Emitter<HomeState> emit,
   ) async {
+    // Emit loading state for refresh
+    emit(state.copyWith(status: const BlocStatus.loading()));
+
     // Try to get dashboard data first (new API)
     final dashboardResult = await repository.getDashboard();
 
     dashboardResult.fold(
       (failure) {
         // Fallback to old API if dashboard fails
-        _loadLegacyDashboard(emit);
+        _loadLegacyDashboardForRefresh(emit);
       },
       (dashboard) {
         if (!emit.isDone) {
@@ -185,5 +196,125 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         }
       },
     );
+  }
+
+  void _loadLegacyDashboardForRefresh(Emitter<HomeState> emit) {
+    // Start async operations but don't block the event handler
+    _loadLegacyDashboardForRefreshAsync(emit);
+  }
+
+  Future<void> _loadLegacyDashboardForRefreshAsync(Emitter<HomeState> emit) async {
+    // Check if emit is still valid before proceeding
+    if (emit.isDone) return;
+
+    final statsResult = await repository.getDriverStats();
+    
+    // Check again after async operation
+    if (emit.isDone) return;
+
+    statsResult.fold(
+      (failure) {
+        if (!emit.isDone) {
+          emit(state.copyWith(
+            status: BlocStatus.fail(error: failure.message),
+            errorMessage: failure.message,
+          ));
+        }
+      },
+      (stats) {
+        // Load sales in parallel or sequentially
+        _loadSalesForLegacyDashboardRefresh(emit, stats);
+      },
+    );
+  }
+
+  Future<void> _loadSalesForLegacyDashboardRefresh(
+    Emitter<HomeState> emit,
+    DriverStatsEntity stats,
+  ) async {
+    if (emit.isDone) return;
+
+    final salesResult = await repository.getRecentSales(limit: 10);
+
+    // Check again after async operation
+    if (emit.isDone) return;
+
+    salesResult.fold(
+      (failure) {
+        if (!emit.isDone) {
+          emit(state.copyWith(
+            status: BlocStatus.fail(error: failure.message),
+            errorMessage: failure.message,
+          ));
+        }
+      },
+      (sales) {
+        if (!emit.isDone) {
+          emit(state.copyWith(
+            status: const BlocStatus.success(),
+            driverStats: stats,
+            recentSales: sales,
+            errorMessage: null,
+          ));
+        }
+      },
+    );
+  }
+
+  void _onNavigateToCreateSale(
+    NavigateToCreateSale event,
+    Emitter<HomeState> emit,
+  ) {
+    emit(state.copyWith(navigationRoute: '/sales/create'));
+  }
+
+  void _onNavigateToStock(
+    NavigateToStock event,
+    Emitter<HomeState> emit,
+  ) {
+    emit(state.copyWith(navigationRoute: '/stock'));
+  }
+
+  void _onNavigateToSalesHistory(
+    NavigateToSalesHistory event,
+    Emitter<HomeState> emit,
+  ) {
+    emit(state.copyWith(navigationRoute: '/sales/history'));
+  }
+
+  void _onNavigateToStockDetail(
+    NavigateToStockDetail event,
+    Emitter<HomeState> emit,
+  ) {
+    emit(state.copyWith(navigationRoute: '/stock/product/${event.productId}'));
+  }
+
+  void _onNavigateToNotifications(
+    NavigateToNotifications event,
+    Emitter<HomeState> emit,
+  ) {
+    // TODO: Navigate to notifications page when implemented
+    // For now, emit a route that will show coming soon message
+    emit(state.copyWith(navigationRoute: '/notifications'));
+  }
+
+  void _onSearchQueryChanged(
+    SearchQueryChanged event,
+    Emitter<HomeState> emit,
+  ) {
+    emit(state.copyWith(searchQuery: event.query));
+    // TODO: Implement search functionality
+    // For now, if query is not empty, could navigate to stock with search
+    if (event.query.isNotEmpty) {
+      // Could emit navigation to stock with search query
+      // emit(state.copyWith(navigationRoute: '/stock?search=${event.query}'));
+    }
+  }
+
+  void _onClearNavigationRoute(
+    ClearNavigationRoute event,
+    Emitter<HomeState> emit,
+  ) {
+    emit(state.copyWith(navigationRoute: null));
   }
 }

@@ -1,27 +1,26 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
+import '../../../../core/component/others/section_header.dart';
 import '../../../../core/localization/app_text.dart';
 import '../../../../core/localization/locale_keys.g.dart';
-import '../../../../core/routing/app_routes.dart';
 import '../../../stock/domain/entities/stock_item_entity.dart';
 
-/// Low stock alerts section widget
+/// Low stock alerts section widget with modern alert design
 class HomeLowStockSection extends StatelessWidget {
   final List<StockItemEntity> lowStockProducts;
   final VoidCallback? onViewAll;
+  final ValueChanged<int>? onProductTap;
 
   const HomeLowStockSection({
     super.key,
     required this.lowStockProducts,
     this.onViewAll,
+    this.onProductTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     if (lowStockProducts.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -31,39 +30,20 @@ class HomeLowStockSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              AppText(
-                'dashboard.lowStockAlerts',
-                translation: true,
-                style: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: theme.colorScheme.error,
-                ),
-              ),
-              if (onViewAll != null)
-                TextButton(
-                  onPressed: onViewAll,
-                  child: AppText(
-                    'dashboard.viewAll',
-                    translation: true,
-                    style: theme.textTheme.labelMedium?.copyWith(
-                      color: theme.colorScheme.primary,
-                    ),
-                  ),
-                ),
-            ],
+          SectionHeader(
+            title: LocaleKeys.dashboard_lowStockAlerts,
+            actionText: onViewAll != null ? LocaleKeys.dashboard_viewAll : null,
+            onActionTap: onViewAll,
           ),
-          SizedBox(height: 12.h),
+          SizedBox(height: 16.h),
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: lowStockProducts.length > 5 ? 5 : lowStockProducts.length,
-            separatorBuilder: (context, index) => SizedBox(height: 8.h),
+            separatorBuilder: (context, index) => SizedBox(height: 12.h),
             itemBuilder: (context, index) {
               final stockItem = lowStockProducts[index];
-              return _buildLowStockCard(context, theme, stockItem);
+              return _buildLowStockCard(context, stockItem);
             },
           ),
         ],
@@ -73,72 +53,93 @@ class HomeLowStockSection extends StatelessWidget {
 
   Widget _buildLowStockCard(
     BuildContext context,
-    ThemeData theme,
     StockItemEntity stockItem,
   ) {
-    return Card(
-      elevation: 1,
-      color: theme.colorScheme.errorContainer.withOpacity(0.3),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.r),
-        side: BorderSide(
-          color: theme.colorScheme.error.withOpacity(0.5),
-          width: 1,
+    final theme = Theme.of(context);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.errorContainer.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(
+          color: theme.colorScheme.error.withOpacity(0.2),
+          width: 1.5,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: theme.colorScheme.error.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
-      child: InkWell(
-        onTap: () {
-          context.push('/stock/product/${stockItem.productId}');
-        },
-        borderRadius: BorderRadius.circular(8.r),
-        child: Padding(
-          padding: EdgeInsets.all(12.w),
-          child: Row(
-            children: [
-              Container(
-                padding: EdgeInsets.all(8.w),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.errorContainer,
-                  borderRadius: BorderRadius.circular(8.r),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => onProductTap?.call(stockItem.productId),
+          borderRadius: BorderRadius.circular(16.r),
+          child: Padding(
+            padding: EdgeInsets.all(16.w),
+            child: Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(12.w),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.errorContainer,
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: Icon(
+                    Icons.warning_amber_rounded,
+                    color: theme.colorScheme.error,
+                    size: 24.sp,
+                  ),
                 ),
-                child: Icon(
-                  Icons.warning_amber_rounded,
-                  color: theme.colorScheme.error,
-                  size: 20.sp,
-                ),
-              ),
-              SizedBox(width: 12.w),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AppText(
-                      stockItem.product.name,
-                      translation: false,
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.onSurface,
+                SizedBox(width: 16.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppText(
+                        stockItem.product.name,
+                        translation: false,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.onSurface,
+                          fontSize: 15.sp,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: 4.h),
-                    AppText(
-                      '${stockItem.quantity} ${LocaleKeys.home_availableQuantity.tr().toLowerCase()}',
-                      translation: false,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.error,
-                        fontWeight: FontWeight.w600,
+                      SizedBox(height: 6.h),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8.w,
+                          vertical: 4.h,
+                        ),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.error.withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(6.r),
+                        ),
+                        child: AppText(
+                          '${stockItem.quantity} ${LocaleKeys.home_availableQuantity.tr().toLowerCase()}',
+                          translation: false,
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: theme.colorScheme.error,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 11.sp,
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Icon(
-                Icons.chevron_right,
-                color: theme.colorScheme.onSurface.withOpacity(0.5),
-              ),
-            ],
+                Icon(
+                  Icons.chevron_right_rounded,
+                  color: theme.colorScheme.error.withOpacity(0.5),
+                  size: 24.sp,
+                ),
+              ],
+            ),
           ),
         ),
       ),

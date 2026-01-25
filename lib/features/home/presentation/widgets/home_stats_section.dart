@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/localization/app_text.dart';
+import '../../../../core/localization/locale_keys.g.dart';
 import '../../domain/entities/driver_stats_entity.dart';
 
-//* Statistics cards section widget
+/// Statistics cards section widget with modern design
 class HomeStatsSection extends StatelessWidget {
   final DriverStatsEntity stats;
 
@@ -33,33 +34,33 @@ class HomeStatsSection extends StatelessWidget {
               _buildStatCard(
                 context,
                 theme,
-                'home.totalSales',
+                LocaleKeys.home_totalSales,
                 '${stats.totalSales}',
-                Icons.shopping_cart,
+                Icons.shopping_cart_rounded,
                 theme.colorScheme.primary,
               ),
               _buildStatCard(
                 context,
                 theme,
-                'home.totalRevenue',
+                LocaleKeys.home_totalRevenue,
                 '\$${stats.totalRevenue.toStringAsFixed(2)}',
-                Icons.attach_money,
+                Icons.attach_money_rounded,
                 theme.colorScheme.secondary,
               ),
               _buildStatCard(
                 context,
                 theme,
-                'home.todaySales',
+                LocaleKeys.home_todaySales,
                 '${stats.todaySales}',
-                Icons.today,
+                Icons.today_rounded,
                 theme.colorScheme.tertiary,
               ),
               _buildStatCard(
                 context,
                 theme,
-                'home.todayRevenue',
+                LocaleKeys.home_todayRevenue,
                 '\$${stats.todayRevenue.toStringAsFixed(2)}',
-                Icons.trending_up,
+                Icons.trending_up_rounded,
                 theme.colorScheme.tertiary,
               ),
             ],
@@ -69,9 +70,9 @@ class HomeStatsSection extends StatelessWidget {
           _buildStatCard(
             context,
             theme,
-            'home.stockItems',
+            LocaleKeys.home_stockItems,
             '${stats.totalStockItems}',
-            Icons.inventory_2,
+            Icons.inventory_2_rounded,
             theme.colorScheme.primaryContainer,
             fullWidth: true,
           ),
@@ -89,45 +90,66 @@ class HomeStatsSection extends StatelessWidget {
     Color color, {
     bool fullWidth = false,
   }) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.r),
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
-      child: Container(
-        padding: EdgeInsets.all(16.w),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12.r),
-          color: color.withOpacity(0.1),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16.r),
+          onTap: () {},
+          child: Padding(
+            padding: EdgeInsets.all(16.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(icon, color: color, size: 24.sp),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(8.w),
+                      decoration: BoxDecoration(
+                        color: color.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                      child: Icon(icon, color: color, size: 24.sp),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 8.h),
+                AppText(
+                  titleKey,
+                  translation: true,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: theme.colorScheme.onSurface.withOpacity(0.6),
+                    fontSize: 11.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                AppText(
+                  value,
+                  translation: false,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: color,
+                    fontSize: 20.sp,
+                    height: 1.2,
+                  ),
+                ),
               ],
             ),
-            SizedBox(height: 8.h),
-            AppText(
-              titleKey,
-              translation: true,
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.7),
-              ),
-            ),
-            SizedBox(height: 4.h),
-            AppText(
-              value,
-              translation: false,
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: color,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

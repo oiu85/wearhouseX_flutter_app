@@ -41,4 +41,27 @@ class BlocStatus {
   bool isFail() => status == Status.fail;
 
   bool isSuccess() => status == Status.success;
+
+  /// Pattern matching method similar to sealed class `.when()`
+  /// Handles all status cases: init, loading, loadingMore, success, fail
+  T when<T>({
+    required T Function() init,
+    required T Function() loading,
+    required T Function() loadingMore,
+    required T Function() success,
+    required T Function(String error) fail,
+  }) {
+    switch (status) {
+      case Status.initial:
+        return init();
+      case Status.loading:
+        return loading();
+      case Status.loadingMore:
+        return loadingMore();
+      case Status.success:
+        return success();
+      case Status.fail:
+        return fail(error ?? 'Unknown error');
+    }
+  }
 }

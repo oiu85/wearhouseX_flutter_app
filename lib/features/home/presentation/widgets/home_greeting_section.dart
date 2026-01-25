@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../core/localization/app_text.dart';
 
-//* Greeting section widget
+/// Greeting section widget with modern typography
 class HomeGreetingSection extends StatelessWidget {
   final String? greetingText;
 
@@ -19,12 +20,16 @@ class HomeGreetingSection extends StatelessWidget {
     }
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 16.h),
-      child: Text(
+      padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 20.h),
+      child: AppText(
         greetingText!,
+        translation: false,
         style: theme.textTheme.headlineSmall?.copyWith(
           fontWeight: FontWeight.bold,
           color: theme.colorScheme.onSurface,
+          fontSize: 24.sp,
+          height: 1.3,
+          letterSpacing: -0.5,
         ),
       ),
     );
