@@ -17,6 +17,7 @@ class CustomFilledButton extends StatelessWidget {
   final IconData? icon;
   final Color? iconColor;
   final EdgeInsetsGeometry? padding;
+  final bool isLoading;
 
   const CustomFilledButton({
     super.key,
@@ -32,19 +33,24 @@ class CustomFilledButton extends StatelessWidget {
     this.padding,
     this.icon,
     this.iconColor,
+    this.isLoading = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final effectiveOnPressed = isLoading ? null : onPressed;
+    final buttonColor = (isLoading || effectiveOnPressed == null)
+        ? (backgroundColor ?? const Color(0xFF0D9D57)).withOpacity(0.6)
+        : (backgroundColor ?? const Color(0xFF0D9D57));
     
     return InkWell(
-      onTap: onPressed,
+      onTap: effectiveOnPressed,
       child: Container(
         width: width ?? 342.w,
         height: height ?? 40.h,
         decoration: ShapeDecoration(
-          color: backgroundColor ?? const Color(0xFF0D9D57),
+          color: buttonColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
               borderRadius ?? 20.r,
@@ -57,23 +63,38 @@ class CustomFilledButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            AppText(
-              text,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.labelLarge?.copyWith(
-                color: textColor ?? Colors.white,
-                fontSize: fontSize ?? 16.sp,
-                fontWeight: fontWeight ?? FontWeight.w700,
-                height: 1.40,
+            if (isLoading) ...[
+              SizedBox(
+                width: 20.w,
+                height: 20.w,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    textColor ?? Colors.white,
+                  ),
+                ),
               ),
-            ),
-            if (icon != null) ...[
               SizedBox(width: 10.w),
-              Icon(
-                icon,
-                size: 20.w,
-                color: iconColor ?? Colors.white,
+            ],
+            if (!isLoading) ...[
+              AppText(
+                text,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: textColor ?? Colors.white,
+                  fontSize: fontSize ?? 16.sp,
+                  fontWeight: fontWeight ?? FontWeight.w700,
+                  height: 1.40,
+                ),
               ),
+              if (icon != null) ...[
+                SizedBox(width: 10.w),
+                Icon(
+                  icon,
+                  size: 20.w,
+                  color: iconColor ?? Colors.white,
+                ),
+              ],
             ],
           ],
         ),

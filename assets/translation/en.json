@@ -434,6 +434,7 @@
     "saleDetails": "Sale Details",
     "downloadInvoice": "Download Invoice",
     "shareInvoice": "Share Invoice",
+    "downloadSuccess": "Invoice downloaded successfully",
     "noSales": "No sales found",
     "noItemsInCart": "Your cart is empty",
     "addMoreProducts": "Add More Products",

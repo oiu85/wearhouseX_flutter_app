@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/routing/app_routes.dart';
 import '../../../../core/status/bloc_status.dart';
 import '../../../../core/storage/app_storage_service.dart';
 import '../../domain/entities/driver_stats_entity.dart';
@@ -24,6 +25,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<NavigateToStock>(_onNavigateToStock);
     on<NavigateToSalesHistory>(_onNavigateToSalesHistory);
     on<NavigateToStockDetail>(_onNavigateToStockDetail);
+    on<NavigateToSaleDetail>(_onNavigateToSaleDetail);
     on<NavigateToNotifications>(_onNavigateToNotifications);
     on<SearchQueryChanged>(_onSearchQueryChanged);
     on<ClearNavigationRoute>(_onClearNavigationRoute);
@@ -287,6 +289,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     Emitter<HomeState> emit,
   ) {
     emit(state.copyWith(navigationRoute: '/stock/product/${event.productId}'));
+  }
+
+  void _onNavigateToSaleDetail(
+    NavigateToSaleDetail event,
+    Emitter<HomeState> emit,
+  ) {
+    emit(state.copyWith(
+      navigationRoute: AppRoutes.saleDetail.replaceAll(':id', event.saleId.toString()),
+    ));
   }
 
   void _onNavigateToNotifications(

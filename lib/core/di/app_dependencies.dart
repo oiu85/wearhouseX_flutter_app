@@ -10,6 +10,7 @@ import '../../features/auth/di/auth_di.dart';
 import '../../features/stock/data/di/stock_di.dart';
 import '../../features/sales/data/di/sales_di.dart';
 import '../../features/profile/data/di/profile_di.dart';
+import '../../features/menu/data/di/menu_di.dart';
 
 final getIt = GetIt.instance;
 
@@ -18,47 +19,50 @@ final getIt = GetIt.instance;
 Future<GetIt> configureDependencies() async {
   // Initialize SharedPreferences first
   final prefs = await SharedPreferences.getInstance();
-  
+
   // Register SharedPreferences manually
   getIt.registerSingleton<SharedPreferences>(prefs);
-  
+
   // Register storage service
   getIt.registerLazySingleton<AppStorageService>(
-    () => SharedPreferencesStorageService(getIt<SharedPreferences>()),
+        () => SharedPreferencesStorageService(getIt<SharedPreferences>()),
   );
-  
+
   // Register GuestModeGuard
   getIt.registerLazySingleton<GuestModeGuard>(
-    () => GuestModeGuard(getIt<AppStorageService>()),
+        () => GuestModeGuard(getIt<AppStorageService>()),
   );
-  
+
   // Register NavigationStateNotifier as singleton
   getIt.registerSingleton<NavigationStateNotifier>(
     NavigationStateNotifier(),
   );
-  
+
   // Register NetworkClient (@singleton)
   getIt.registerSingleton<NetworkClient>(
     NetworkClient(getIt<AppStorageService>()),
   );
 
-        // Register Auth feature dependencies
-        registerAuthDependencies(getIt);
+  // Register Auth feature dependencies
+  registerAuthDependencies(getIt);
 
-        // Register Stock feature dependencies
-        registerStockDependencies(getIt);
+  // Register Stock feature dependencies
+  registerStockDependencies(getIt);
 
-        // Register Home feature dependencies
-        registerHomeDependencies(getIt);
+  // Register Home feature dependencies
+  registerHomeDependencies(getIt);
 
-        // Register Sales feature dependencies
-        registerSalesDependencies(getIt);
+  // Register Sales feature dependencies
+  registerSalesDependencies(getIt);
 
-        // Register Profile feature dependencies
-        registerProfileDependencies(getIt);
+  // Register Profile feature dependencies
+  registerProfileDependencies(getIt);
 
-        // Register Settings feature dependencies
-        registerSettingsDependencies(getIt);
-  
+  // Register Settings feature dependencies
+  registerSettingsDependencies(getIt);
+
+  // Register Menu feature dependencies
+  registerMenuDependencies(getIt);
+
   return getIt;
 }

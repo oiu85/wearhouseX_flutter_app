@@ -28,6 +28,7 @@ class SaleDetailPage extends StatefulWidget {
 
 class _SaleDetailPageState extends State<SaleDetailPage> {
   final SaleDetailBloc _saleDetailBloc = GetIt.I<SaleDetailBloc>();
+  bool _wasDownloading = false;
 
   @override
   void initState() {
@@ -59,6 +60,20 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
                     current.errorMessage!.contains('Failed')));
       },
       listener: (context, state) {
+        // Handle download success - show snackbar when download completes successfully
+        if (_wasDownloading &&
+            !state.isDownloadingInvoice &&
+            state.errorMessage == null &&
+            state.sale != null) {
+          AppSnackbar.showSuccess(
+            context,
+            'sales.downloadSuccess',
+            translation: true,
+          );
+        }
+        // Update tracking variable
+        _wasDownloading = state.isDownloadingInvoice;
+        
         // Handle download/share errors
         if (state.errorMessage != null &&
             (state.errorMessage!.contains('download') ||
@@ -70,11 +85,6 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
             state.errorMessage!,
             translation: false,
           );
-        }
-        // Handle download success
-        if (!state.isDownloadingInvoice && state.sale != null) {
-          // Check if we just finished downloading (previous state was downloading)
-          // Success feedback is handled by the file system
         }
         // Handle share success
         if (!state.isSharingInvoice && state.sale != null) {
@@ -288,6 +298,7 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
                           backgroundColor: theme.colorScheme.secondary,
                           textColor: theme.colorScheme.onSecondary,
                           icon: Icons.download,
+                          isLoading: state.isDownloadingInvoice,
                         ),
                       ),
                       SizedBox(width: 12.w),
@@ -302,6 +313,7 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
                           backgroundColor: theme.colorScheme.primary,
                           textColor: theme.colorScheme.onPrimary,
                           icon: Icons.share,
+                          isLoading: state.isSharingInvoice,
                         ),
                       ),
                     ],

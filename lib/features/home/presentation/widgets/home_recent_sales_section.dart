@@ -10,11 +10,13 @@ import '../../domain/entities/sale_entity.dart';
 class HomeRecentSalesSection extends StatelessWidget {
   final List<SaleEntity> recentSales;
   final VoidCallback? onViewAll;
+  final ValueChanged<SaleEntity>? onSaleTap;
 
   const HomeRecentSalesSection({
     super.key,
     required this.recentSales,
     this.onViewAll,
+    this.onSaleTap,
   });
 
   @override
@@ -68,7 +70,7 @@ class HomeRecentSalesSection extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(16.r),
-          onTap: () {},
+          onTap: onSaleTap != null ? () => onSaleTap!(sale) : null,
           child: Padding(
             padding: EdgeInsets.all(16.w),
             child: Row(

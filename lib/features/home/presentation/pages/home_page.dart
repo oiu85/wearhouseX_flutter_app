@@ -9,6 +9,7 @@ import '../../../../core/status/ui_helper.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_event.dart';
 import '../bloc/home_state.dart';
+import '../../domain/entities/sale_entity.dart';
 import '../widgets/home_app_bar.dart';
 import '../widgets/home_greeting_section.dart';
 import '../widgets/home_stats_section.dart';
@@ -89,6 +90,10 @@ class _HomePageState extends State<HomePage> {
 
   void _onProductTap(int productId) {
     _homeBloc.add(NavigateToStockDetail(productId));
+  }
+
+  void _onSaleTap(SaleEntity sale) {
+    _homeBloc.add(NavigateToSaleDetail(sale.id));
   }
 
   void _onSearchChanged(String query) {
@@ -208,6 +213,7 @@ class _HomePageState extends State<HomePage> {
           child: HomeRecentSalesSection(
             recentSales: state.recentSales,
             onViewAll: _onViewAllSales,
+            onSaleTap: _onSaleTap,
           ),
         ),
 

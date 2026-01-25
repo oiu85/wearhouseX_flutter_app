@@ -48,6 +48,16 @@ class NavigateToStockDetail extends HomeEvent {
   List<Object?> get props => [productId];
 }
 
+/// Navigate to sale detail page
+class NavigateToSaleDetail extends HomeEvent {
+  final int saleId;
+
+  const NavigateToSaleDetail(this.saleId);
+
+  @override
+  List<Object?> get props => [saleId];
+}
+
 /// Navigate to notifications page
 class NavigateToNotifications extends HomeEvent {
   const NavigateToNotifications();
