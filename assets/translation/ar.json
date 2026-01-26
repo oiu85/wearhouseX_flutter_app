@@ -462,5 +462,26 @@
     "totalQuantity": "إجمالي الكمية",
     "stockValue": "قيمة المخزون",
     "lowStockAlerts": "تنبيهات المخزون المنخفض"
+  },
+  "stockRequest": {
+    "title": "طلب مخزون",
+    "product": "المنتج",
+    "selectProduct": "اختر المنتج",
+    "chooseProduct": "اختر منتجاً",
+    "quantity": "الكمية",
+    "enterQuantity": "أدخل الكمية",
+    "submitRequest": "إرسال الطلب",
+    "requestSubmitted": "تم إرسال طلب المخزون بنجاح",
+    "requestFailed": "فشل إرسال الطلب",
+    "productRequired": "يرجى اختيار منتج",
+    "quantityRequired": "يرجى إدخال الكمية",
+    "quantityInvalid": "يرجى إدخال كمية صحيحة",
+    "quantityMustBePositive": "يجب أن تكون الكمية أكبر من 0",
+    "noProductsAvailable": "لا توجد منتجات متاحة",
+    "loadingProducts": "جاري تحميل المنتجات...",
+    "warehouseStock": "مخزون المستودع",
+    "units": "وحدة",
+    "maxAvailable": "الحد الأقصى المتاح",
+    "quantityExceedsStock": "الكمية المطلوبة تتجاوز المخزون المتاح في المستودع"
   }
 }

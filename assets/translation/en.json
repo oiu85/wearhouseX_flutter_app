@@ -462,5 +462,26 @@
     "totalQuantity": "Total Quantity",
     "stockValue": "Stock Value",
     "lowStockAlerts": "Low Stock Alerts"
+  },
+  "stockRequest": {
+    "title": "Request Stock",
+    "product": "Product",
+    "selectProduct": "Select Product",
+    "chooseProduct": "Choose a product",
+    "quantity": "Quantity",
+    "enterQuantity": "Enter quantity",
+    "submitRequest": "Submit Request",
+    "requestSubmitted": "Stock request submitted successfully",
+    "requestFailed": "Failed to submit request",
+    "productRequired": "Please select a product",
+    "quantityRequired": "Please enter quantity",
+    "quantityInvalid": "Please enter a valid quantity",
+    "quantityMustBePositive": "Quantity must be greater than 0",
+    "noProductsAvailable": "No products available",
+    "loadingProducts": "Loading products...",
+    "warehouseStock": "Warehouse Stock",
+    "units": "units",
+    "maxAvailable": "Max Available",
+    "quantityExceedsStock": "Requested quantity exceeds available warehouse stock"
   }
 }

@@ -3,11 +3,13 @@ import 'package:flutter_app_wearhouse/core/localization/locale_keys.g.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/shared/app_scaffold.dart';
 import '../../../../core/component/buttons/custom_filled_button.dart';
 import '../../../../core/localization/app_text.dart';
 import '../../../../core/shared/app_snackbar.dart';
 import '../../../../core/status/ui_helper.dart';
+import '../../../../core/routing/app_routes.dart';
 import '../../../sales/presentation/bloc/sales_bloc.dart';
 import '../../../sales/presentation/bloc/sales_event.dart';
 import '../../../sales/presentation/bloc/sales_state.dart';
@@ -292,12 +294,20 @@ class _StockDetailPageState extends State<StockDetailPage> {
             padding: EdgeInsets.all(16.w),
             child: SafeArea(
               child: CustomFilledButton(
-                text: LocaleKeys.stockDetail_sellProduct.tr(),
-                onPressed: null,
+                text: 'Request Stock',
+                onPressed: () {
+                  if (state.stockItem?.productId != null) {
+                    context.push(
+                      '${AppRoutes.stockRequest}?productId=${state.stockItem!.productId}&productName=${Uri.encodeComponent(state.stockItem!.product.name)}',
+                    );
+                  } else {
+                    context.push(AppRoutes.stockRequest);
+                  }
+                },
                 width: double.infinity,
-                backgroundColor: theme.colorScheme.surfaceContainerHighest,
-                textColor: theme.colorScheme.onSurface.withOpacity(0.5),
-                icon: Icons.shopping_cart_rounded,
+                backgroundColor: theme.colorScheme.primary,
+                textColor: theme.colorScheme.onPrimary,
+                icon: Icons.inventory_2_rounded,
               ),
             ),
           ),

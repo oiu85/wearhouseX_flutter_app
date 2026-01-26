@@ -26,6 +26,9 @@ abstract class StockRemoteDataSource {
   
   /// Get a single stock item by ID (legacy method)
   Future<Either<NetworkFailure, StockItemModel>> getStockItemById(int stockItemId);
+  
+  /// Get all products from admin inventory (for stock requests)
+  Future<Either<NetworkFailure, List<ProductModel>>> getAllProducts();
 }
 
 /// Implementation of StockRemoteDataSource
@@ -194,6 +197,30 @@ class StockRemoteDataSourceImpl implements StockRemoteDataSource {
           return Left(
             NetworkFailure(
               message: 'Stock item not found: ${e.toString()}',
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  @override
+  Future<Either<NetworkFailure, List<ProductModel>>> getAllProducts() async {
+    final result = await networkClient.get(ApiConfig.driverProducts);
+
+    return result.fold(
+      (failure) => Left(failure),
+      (response) {
+        try {
+          final data = response.data['data'] as List<dynamic>;
+          final products = data
+              .map((json) => ProductModel.fromJson(json as Map<String, dynamic>))
+              .toList();
+          return Right(products);
+        } catch (e) {
+          return Left(
+            NetworkFailure(
+              message: 'Failed to parse products: ${e.toString()}',
             ),
           );
         }

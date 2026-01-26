@@ -30,4 +30,7 @@ class ApiConfig {
 
   // DASHBOARD ENDPOINTS
   static const String dashboard = '/driver/dashboard';
+
+  // PRODUCTS ENDPOINTS (for drivers - stock requests)
+  static const String driverProducts = '/driver/products';
 }

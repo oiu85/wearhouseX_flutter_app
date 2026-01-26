@@ -437,5 +437,25 @@ abstract class  LocaleKeys {
   static const stock_stockValue = 'stock.stockValue';
   static const stock_lowStockAlerts = 'stock.lowStockAlerts';
   static const stock = 'stock';
+  static const stockRequest_title = 'stockRequest.title';
+  static const stockRequest_product = 'stockRequest.product';
+  static const stockRequest_selectProduct = 'stockRequest.selectProduct';
+  static const stockRequest_chooseProduct = 'stockRequest.chooseProduct';
+  static const stockRequest_quantity = 'stockRequest.quantity';
+  static const stockRequest_enterQuantity = 'stockRequest.enterQuantity';
+  static const stockRequest_submitRequest = 'stockRequest.submitRequest';
+  static const stockRequest_requestSubmitted = 'stockRequest.requestSubmitted';
+  static const stockRequest_requestFailed = 'stockRequest.requestFailed';
+  static const stockRequest_productRequired = 'stockRequest.productRequired';
+  static const stockRequest_quantityRequired = 'stockRequest.quantityRequired';
+  static const stockRequest_quantityInvalid = 'stockRequest.quantityInvalid';
+  static const stockRequest_quantityMustBePositive = 'stockRequest.quantityMustBePositive';
+  static const stockRequest_noProductsAvailable = 'stockRequest.noProductsAvailable';
+  static const stockRequest_loadingProducts = 'stockRequest.loadingProducts';
+  static const stockRequest_warehouseStock = 'stockRequest.warehouseStock';
+  static const stockRequest_units = 'stockRequest.units';
+  static const stockRequest_maxAvailable = 'stockRequest.maxAvailable';
+  static const stockRequest_quantityExceedsStock = 'stockRequest.quantityExceedsStock';
+  static const stockRequest = 'stockRequest';
 
 }

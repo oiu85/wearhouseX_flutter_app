@@ -26,6 +26,8 @@ abstract class AppRoutes {
   static const String payment = '/payment';
   static const String profile = '/profile';
   static const String settings = '/settings';
+  static const String notifications = '/notifications';
+  static const String stockRequest = '/stock-request';
   static const String myDonations = '/my-donations';
   static const String mySubscriptions = '/my-subscriptions';
   static const String contactUs = '/contact-us';

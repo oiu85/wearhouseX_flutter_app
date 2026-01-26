@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_wearhouse/core/shared/app_scaffold.dart';
-import 'package:flutter_app_wearhouse/core/shared/app_snackbar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/status/ui_helper.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_event.dart';
@@ -136,15 +134,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
           if (state.navigationRoute != null) {
             final route = state.navigationRoute!;
             _homeBloc.add(const ClearNavigationRoute());
-            if (route == '/notifications') {
-              AppSnackbar.showInfo(
-                context,
-                LocaleKeys.menu_comingSoon,
-                translation: true,
-              );
-            } else {
-              context.push(route);
-            }
+            context.push(route);
           }
         },
         child: BlocBuilder<HomeBloc, HomeState>(

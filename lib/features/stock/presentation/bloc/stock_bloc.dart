@@ -24,6 +24,7 @@ class StockBloc extends Bloc<StockEvent, StockState> {
     on<FilterByCategory>(_onFilterByCategory);
     on<SortStock>(_onSortStock);
     on<LoadStockStatistics>(_onLoadStockStatistics);
+    on<LoadAllProducts>(_onLoadAllProducts);
   }
 
   Future<void> _onLoadUserInfo(
@@ -184,6 +185,29 @@ class StockBloc extends Bloc<StockEvent, StockState> {
       (statistics) {
         emit(state.copyWith(
           stockStatistics: statistics,
+        ));
+      },
+    );
+  }
+
+  Future<void> _onLoadAllProducts(
+    LoadAllProducts event,
+    Emitter<StockState> emit,
+  ) async {
+    emit(state.copyWith(productsStatus: const BlocStatus.loading()));
+
+    final result = await repository.getAllProducts();
+
+    result.fold(
+      (failure) {
+        emit(state.copyWith(
+          productsStatus: BlocStatus.fail(error: failure.message),
+        ));
+      },
+      (products) {
+        emit(state.copyWith(
+          allProducts: products,
+          productsStatus: const BlocStatus.success(),
         ));
       },
     );

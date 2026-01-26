@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import '../../../auth/domain/entities/failure.dart';
+import '../../domain/entities/product_entity.dart';
 import '../../domain/entities/stock_item_entity.dart';
 import '../../domain/entities/stock_statistics_entity.dart';
 import '../../domain/repositories/stock_repository.dart';
@@ -126,6 +127,27 @@ class StockRepositoryImpl implements StockRepository {
         } catch (e) {
           return Left(
             ServerFailure('Failed to convert stock item: ${e.toString()}'),
+          );
+        }
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<ProductEntity>>> getAllProducts() async {
+    final result = await remoteDataSource.getAllProducts();
+
+    return result.fold(
+      (networkFailure) => Left(
+        NetworkFailure(networkFailure.message),
+      ),
+      (products) {
+        try {
+          final entities = products.map((model) => model.toEntity()).toList();
+          return Right(entities);
+        } catch (e) {
+          return Left(
+            ServerFailure('Failed to convert products: ${e.toString()}'),
           );
         }
       },

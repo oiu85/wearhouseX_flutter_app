@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../localization/app_text.dart';
+import 'package:go_router/go_router.dart';
 
 
 class AppScaffold extends StatelessWidget {
@@ -93,20 +92,19 @@ class AppScaffold extends StatelessWidget {
       elevation: 0,
       actions: [
         Builder(
-          builder: (context) => IconButton(
-            onPressed: () {
-              // TODO: Navigate to notifications page when implemented
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: AppText('notificationsComingSoon'),
-                ),
-              );
-            },
-            icon: Icon(
-              Icons.notifications_outlined,
-              size: 30.sp,
-            ),
-          ),
+          builder: (context) {
+            // Import go_router for navigation
+            return IconButton(
+              onPressed: () {
+                // Navigate to notifications page
+                context.push('/notifications');
+              },
+              icon: Icon(
+                Icons.notifications_outlined,
+                size: 30.sp,
+              ),
+            );
+          },
         ),
       ],
     );

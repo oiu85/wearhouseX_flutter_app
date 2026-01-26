@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import '../../../auth/domain/entities/failure.dart';
+import '../entities/product_entity.dart';
 import '../entities/stock_item_entity.dart';
 import '../entities/stock_statistics_entity.dart';
 
@@ -21,4 +22,7 @@ abstract class StockRepository {
   });
   
   Future<Either<Failure, StockItemEntity>> getStockItemById(int stockItemId);
+  
+  /// Get all products from admin inventory (for stock requests)
+  Future<Either<Failure, List<ProductEntity>>> getAllProducts();
 }

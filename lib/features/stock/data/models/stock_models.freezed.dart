@@ -283,7 +283,7 @@ as String?,
 /// @nodoc
 mixin _$ProductModel {
 
- int get id; String get name;@JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson) String get priceString;@JsonKey(name: 'category_id', fromJson: _categoryIdFromJson) int get categoryId; String? get description; String? get image; CategoryModel? get category;
+ int get id; String get name;@JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson) String get priceString;@JsonKey(name: 'category_id', fromJson: _categoryIdFromJson) int get categoryId; String? get description; String? get image; CategoryModel? get category;@JsonKey(name: 'warehouse_quantity', fromJson: _intFromJson, defaultValue: 0) int? get warehouseQuantity;
 /// Create a copy of ProductModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -294,16 +294,16 @@ $ProductModelCopyWith<ProductModel> get copyWith => _$ProductModelCopyWithImpl<P
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.priceString, priceString) || other.priceString == priceString)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.description, description) || other.description == description)&&(identical(other.image, image) || other.image == image)&&(identical(other.category, category) || other.category == category));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.priceString, priceString) || other.priceString == priceString)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.description, description) || other.description == description)&&(identical(other.image, image) || other.image == image)&&(identical(other.category, category) || other.category == category)&&(identical(other.warehouseQuantity, warehouseQuantity) || other.warehouseQuantity == warehouseQuantity));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,name,priceString,categoryId,description,image,category);
+int get hashCode => Object.hash(runtimeType,id,name,priceString,categoryId,description,image,category,warehouseQuantity);
 
 @override
 String toString() {
-  return 'ProductModel(id: $id, name: $name, priceString: $priceString, categoryId: $categoryId, description: $description, image: $image, category: $category)';
+  return 'ProductModel(id: $id, name: $name, priceString: $priceString, categoryId: $categoryId, description: $description, image: $image, category: $category, warehouseQuantity: $warehouseQuantity)';
 }
 
 
@@ -314,7 +314,7 @@ abstract mixin class $ProductModelCopyWith<$Res>  {
   factory $ProductModelCopyWith(ProductModel value, $Res Function(ProductModel) _then) = _$ProductModelCopyWithImpl;
 @useResult
 $Res call({
- int id, String name,@JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson) String priceString,@JsonKey(name: 'category_id', fromJson: _categoryIdFromJson) int categoryId, String? description, String? image, CategoryModel? category
+ int id, String name,@JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson) String priceString,@JsonKey(name: 'category_id', fromJson: _categoryIdFromJson) int categoryId, String? description, String? image, CategoryModel? category,@JsonKey(name: 'warehouse_quantity', fromJson: _intFromJson, defaultValue: 0) int? warehouseQuantity
 });
 
 
@@ -331,7 +331,7 @@ class _$ProductModelCopyWithImpl<$Res>
 
 /// Create a copy of ProductModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? priceString = null,Object? categoryId = null,Object? description = freezed,Object? image = freezed,Object? category = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? priceString = null,Object? categoryId = null,Object? description = freezed,Object? image = freezed,Object? category = freezed,Object? warehouseQuantity = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -340,7 +340,8 @@ as String,categoryId: null == categoryId ? _self.categoryId : categoryId // igno
 as int,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,image: freezed == image ? _self.image : image // ignore: cast_nullable_to_non_nullable
 as String?,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
-as CategoryModel?,
+as CategoryModel?,warehouseQuantity: freezed == warehouseQuantity ? _self.warehouseQuantity : warehouseQuantity // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 /// Create a copy of ProductModel
@@ -437,10 +438,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name, @JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson)  String priceString, @JsonKey(name: 'category_id', fromJson: _categoryIdFromJson)  int categoryId,  String? description,  String? image,  CategoryModel? category)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name, @JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson)  String priceString, @JsonKey(name: 'category_id', fromJson: _categoryIdFromJson)  int categoryId,  String? description,  String? image,  CategoryModel? category, @JsonKey(name: 'warehouse_quantity', fromJson: _intFromJson, defaultValue: 0)  int? warehouseQuantity)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProductModel() when $default != null:
-return $default(_that.id,_that.name,_that.priceString,_that.categoryId,_that.description,_that.image,_that.category);case _:
+return $default(_that.id,_that.name,_that.priceString,_that.categoryId,_that.description,_that.image,_that.category,_that.warehouseQuantity);case _:
   return orElse();
 
 }
@@ -458,10 +459,10 @@ return $default(_that.id,_that.name,_that.priceString,_that.categoryId,_that.des
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name, @JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson)  String priceString, @JsonKey(name: 'category_id', fromJson: _categoryIdFromJson)  int categoryId,  String? description,  String? image,  CategoryModel? category)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name, @JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson)  String priceString, @JsonKey(name: 'category_id', fromJson: _categoryIdFromJson)  int categoryId,  String? description,  String? image,  CategoryModel? category, @JsonKey(name: 'warehouse_quantity', fromJson: _intFromJson, defaultValue: 0)  int? warehouseQuantity)  $default,) {final _that = this;
 switch (_that) {
 case _ProductModel():
-return $default(_that.id,_that.name,_that.priceString,_that.categoryId,_that.description,_that.image,_that.category);case _:
+return $default(_that.id,_that.name,_that.priceString,_that.categoryId,_that.description,_that.image,_that.category,_that.warehouseQuantity);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -478,10 +479,10 @@ return $default(_that.id,_that.name,_that.priceString,_that.categoryId,_that.des
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name, @JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson)  String priceString, @JsonKey(name: 'category_id', fromJson: _categoryIdFromJson)  int categoryId,  String? description,  String? image,  CategoryModel? category)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name, @JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson)  String priceString, @JsonKey(name: 'category_id', fromJson: _categoryIdFromJson)  int categoryId,  String? description,  String? image,  CategoryModel? category, @JsonKey(name: 'warehouse_quantity', fromJson: _intFromJson, defaultValue: 0)  int? warehouseQuantity)?  $default,) {final _that = this;
 switch (_that) {
 case _ProductModel() when $default != null:
-return $default(_that.id,_that.name,_that.priceString,_that.categoryId,_that.description,_that.image,_that.category);case _:
+return $default(_that.id,_that.name,_that.priceString,_that.categoryId,_that.description,_that.image,_that.category,_that.warehouseQuantity);case _:
   return null;
 
 }
@@ -493,7 +494,7 @@ return $default(_that.id,_that.name,_that.priceString,_that.categoryId,_that.des
 
 
 class _ProductModel implements ProductModel {
-  const _ProductModel({required this.id, required this.name, @JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson) required this.priceString, @JsonKey(name: 'category_id', fromJson: _categoryIdFromJson) required this.categoryId, this.description, this.image, this.category});
+  const _ProductModel({required this.id, required this.name, @JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson) required this.priceString, @JsonKey(name: 'category_id', fromJson: _categoryIdFromJson) required this.categoryId, this.description, this.image, this.category, @JsonKey(name: 'warehouse_quantity', fromJson: _intFromJson, defaultValue: 0) this.warehouseQuantity});
   
 
 @override final  int id;
@@ -503,6 +504,7 @@ class _ProductModel implements ProductModel {
 @override final  String? description;
 @override final  String? image;
 @override final  CategoryModel? category;
+@override@JsonKey(name: 'warehouse_quantity', fromJson: _intFromJson, defaultValue: 0) final  int? warehouseQuantity;
 
 /// Create a copy of ProductModel
 /// with the given fields replaced by the non-null parameter values.
@@ -514,16 +516,16 @@ _$ProductModelCopyWith<_ProductModel> get copyWith => __$ProductModelCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProductModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.priceString, priceString) || other.priceString == priceString)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.description, description) || other.description == description)&&(identical(other.image, image) || other.image == image)&&(identical(other.category, category) || other.category == category));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProductModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.priceString, priceString) || other.priceString == priceString)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.description, description) || other.description == description)&&(identical(other.image, image) || other.image == image)&&(identical(other.category, category) || other.category == category)&&(identical(other.warehouseQuantity, warehouseQuantity) || other.warehouseQuantity == warehouseQuantity));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,name,priceString,categoryId,description,image,category);
+int get hashCode => Object.hash(runtimeType,id,name,priceString,categoryId,description,image,category,warehouseQuantity);
 
 @override
 String toString() {
-  return 'ProductModel(id: $id, name: $name, priceString: $priceString, categoryId: $categoryId, description: $description, image: $image, category: $category)';
+  return 'ProductModel(id: $id, name: $name, priceString: $priceString, categoryId: $categoryId, description: $description, image: $image, category: $category, warehouseQuantity: $warehouseQuantity)';
 }
 
 
@@ -534,7 +536,7 @@ abstract mixin class _$ProductModelCopyWith<$Res> implements $ProductModelCopyWi
   factory _$ProductModelCopyWith(_ProductModel value, $Res Function(_ProductModel) _then) = __$ProductModelCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String name,@JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson) String priceString,@JsonKey(name: 'category_id', fromJson: _categoryIdFromJson) int categoryId, String? description, String? image, CategoryModel? category
+ int id, String name,@JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson) String priceString,@JsonKey(name: 'category_id', fromJson: _categoryIdFromJson) int categoryId, String? description, String? image, CategoryModel? category,@JsonKey(name: 'warehouse_quantity', fromJson: _intFromJson, defaultValue: 0) int? warehouseQuantity
 });
 
 
@@ -551,7 +553,7 @@ class __$ProductModelCopyWithImpl<$Res>
 
 /// Create a copy of ProductModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? priceString = null,Object? categoryId = null,Object? description = freezed,Object? image = freezed,Object? category = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? priceString = null,Object? categoryId = null,Object? description = freezed,Object? image = freezed,Object? category = freezed,Object? warehouseQuantity = freezed,}) {
   return _then(_ProductModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -560,7 +562,8 @@ as String,categoryId: null == categoryId ? _self.categoryId : categoryId // igno
 as int,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,image: freezed == image ? _self.image : image // ignore: cast_nullable_to_non_nullable
 as String?,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
-as CategoryModel?,
+as CategoryModel?,warehouseQuantity: freezed == warehouseQuantity ? _self.warehouseQuantity : warehouseQuantity // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 

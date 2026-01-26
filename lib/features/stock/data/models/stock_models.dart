@@ -42,6 +42,7 @@ abstract class ProductModel with _$ProductModel {
     String? description,
     String? image,
     CategoryModel? category,
+    @JsonKey(name: 'warehouse_quantity', fromJson: _intFromJson, defaultValue: 0) int? warehouseQuantity,
   }) = _ProductModel;
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
@@ -67,6 +68,7 @@ abstract class ProductModel with _$ProductModel {
       description: json['description'] as String?,
       image: json['image'] as String?,
       category: categoryModel,
+      warehouseQuantity: _intFromJson(json['warehouse_quantity']),
     );
   }
 }
@@ -96,6 +98,7 @@ extension ProductModelExtension on ProductModel {
       description: description,
       image: image,
       category: category?.toEntity(),
+      warehouseQuantity: warehouseQuantity ?? 0,
     );
   }
 }

@@ -14,6 +14,8 @@ import '../../features/sales/presentation/pages/sales_history_page.dart';
 import '../../features/sales/presentation/pages/sale_detail_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
+import '../../features/notifications/presentation/pages/notifications_page.dart';
+import '../../features/stock_request/presentation/pages/stock_request_page.dart';
 import '../../core/presentation/pages/main_navigation_page.dart';
 import 'app_routes.dart';
 import 'navigation_observer.dart';
@@ -26,55 +28,81 @@ class AppRouter {
       AppRouteObserver(getIt<NavigationStateNotifier>()),
     ],
     redirect: (context, state) async {
-      final storageService = getIt<AppStorageService>();
-      final guestModeGuard = getIt<GuestModeGuard>();
-      final loc = state.matchedLocation;
-      
-      // On web, skip splash/onboarding and go straight to home
-      if (kIsWeb) {
-        if (loc == AppRoutes.splash || loc.startsWith('/onboarding')) {
-          return AppRoutes.home;
+      try {
+        final storageService = getIt<AppStorageService>();
+        final guestModeGuard = getIt<GuestModeGuard>();
+        final loc = state.matchedLocation;
+        
+        // On web, skip splash/onboarding and go straight to home
+        if (kIsWeb) {
+          if (loc == AppRoutes.splash || loc.startsWith('/onboarding')) {
+            return AppRoutes.home;
+          }
+          return null;
         }
+        
+        // Always allow splash screen to show (it handles navigation internally)
+        // If user tries to access splash, let it show
+        if (loc == AppRoutes.splash) {
+          return null; // Allow splash to show
+        }
+        
+        // Check if user is authenticated with timeout
+        bool isUserLoggedIn = false;
+        try {
+          isUserLoggedIn = await guestModeGuard.isUserLoggedIn()
+              .timeout(const Duration(seconds: 2), onTimeout: () {
+            debugPrint('isUserLoggedIn timeout, defaulting to false');
+            return false;
+          });
+        } catch (e) {
+          debugPrint('Error checking user login status: $e');
+          isUserLoggedIn = false;
+        }
+        
+        // If user is authenticated and tries to access login/signup/forgotPassword, redirect to home
+        if (isUserLoggedIn) {
+          if (loc == AppRoutes.login || 
+              loc == AppRoutes.signup || 
+              loc == AppRoutes.forgotPassword) {
+            return AppRoutes.home;
+          }
+          // If authenticated, prevent access to onboarding pages
+          if (loc.startsWith('/onboarding')) {
+            return AppRoutes.home;
+          }
+          return null;
+        }
+        
+        // User is not authenticated - check onboarding status with timeout
+        bool isOnboardingSkipped = false;
+        try {
+          isOnboardingSkipped = await storageService.isOnboardingSkipped()
+              .timeout(const Duration(seconds: 2), onTimeout: () {
+            debugPrint('isOnboardingSkipped timeout, defaulting to false');
+            return false;
+          });
+        } catch (e) {
+          debugPrint('Error checking onboarding status: $e');
+          isOnboardingSkipped = false;
+        }
+        
+        // If onboarding was skipped but user is not logged in, prevent access to onboarding pages
+        // Allow auth pages (login, signup, etc.) to be accessible
+        if (isOnboardingSkipped) {
+          if (loc.startsWith('/onboarding')) {
+            // If user tries to access onboarding but it's skipped and they're not logged in, go to login
+            return AppRoutes.login;
+          }
+          return null;
+        }
+        
+        return null;
+      } catch (e) {
+        debugPrint('Error in router redirect: $e');
+        // On error, allow navigation to proceed (fail open)
         return null;
       }
-      
-      // Always allow splash screen to show (it handles navigation internally)
-      // If user tries to access splash, let it show
-      if (loc == AppRoutes.splash) {
-        return null; // Allow splash to show
-      }
-      
-      // Check if user is authenticated
-      final isUserLoggedIn = await guestModeGuard.isUserLoggedIn();
-      
-      // If user is authenticated and tries to access login/signup/forgotPassword, redirect to home
-      if (isUserLoggedIn) {
-        if (loc == AppRoutes.login || 
-            loc == AppRoutes.signup || 
-            loc == AppRoutes.forgotPassword) {
-          return AppRoutes.home;
-        }
-        // If authenticated, prevent access to onboarding pages
-        if (loc.startsWith('/onboarding')) {
-          return AppRoutes.home;
-        }
-        return null;
-      }
-      
-      // User is not authenticated - check onboarding status
-      final isOnboardingSkipped = await storageService.isOnboardingSkipped();
-      
-      // If onboarding was skipped but user is not logged in, prevent access to onboarding pages
-      // Allow auth pages (login, signup, etc.) to be accessible
-      if (isOnboardingSkipped) {
-        if (loc.startsWith('/onboarding')) {
-          // If user tries to access onboarding but it's skipped and they're not logged in, go to login
-          return AppRoutes.login;
-        }
-        return null;
-      }
-      
-      return null;
     },
     routes: [
       // Splash route (root)
@@ -160,6 +188,27 @@ class AppRouter {
         path: AppRoutes.settings,
         name: 'settings',
         builder: (context, state) => const SettingsPage(),
+      ),
+      // Notifications route
+      GoRoute(
+        path: AppRoutes.notifications,
+        name: 'notifications',
+        builder: (context, state) => const NotificationsPage(),
+      ),
+      // Stock request route
+      GoRoute(
+        path: AppRoutes.stockRequest,
+        name: 'stockRequest',
+        builder: (context, state) {
+          final productId = state.uri.queryParameters['productId'];
+          final productName = state.uri.queryParameters['productName'];
+          final quantity = state.uri.queryParameters['quantity'];
+          return StockRequestPage(
+            productId: productId != null ? int.tryParse(productId) : null,
+            productName: productName,
+            initialQuantity: quantity != null ? int.tryParse(quantity) : null,
+          );
+        },
       ),
     ],
   );

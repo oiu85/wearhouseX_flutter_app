@@ -9,6 +9,7 @@ class ProductEntity {
   final String? description;
   final String? image;
   final CategoryEntity? category;
+  final int warehouseQuantity;
 
   const ProductEntity({
     required this.id,
@@ -18,5 +19,6 @@ class ProductEntity {
     this.description,
     this.image,
     this.category,
+    this.warehouseQuantity = 0,
   });
 }

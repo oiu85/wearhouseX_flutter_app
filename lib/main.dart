@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,19 +9,31 @@ import 'core/shared/responsive.dart';
 import 'core/theme/theme_transition.dart';
 import 'core/di/app_dependencies.dart';
 import 'core/storage/app_storage_service.dart';
+import 'core/services/fcm_service.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); //* Ensure the binding is initialized
 
-  // Initialize Firebase if available (optional)
-  // try {
-    // Uncomment and configure if Firebase is needed
-    // await Firebase.initializeApp(
-    //   options: DefaultFirebaseOptions.currentPlatform,
-    // );
-  // } catch (e) {
-  //   debugPrint('Firebase initialization skipped: $e');
-  // }
+  // Initialize Firebase FIRST (before dependency injection)
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    debugPrint('Firebase initialized successfully');
+  } catch (e) {
+    debugPrint('Firebase initialization failed: $e');
+    // Continue app initialization even if Firebase fails
+  }
+
+  // Initialize dependency injection (must be awaited)
+  await configureDependencies();
+
+  // Initialize FCM service after DI is set up (non-blocking)
+  // Don't await - let it initialize in the background
+  getIt<FcmService>().initialize().catchError((error) {
+    debugPrint('FCM service initialization failed: $error');
+  });
 
   // Initialize Stripe SDK if needed (optional)
   // try {
@@ -31,9 +44,6 @@ void main() async {
   // } catch (e) {
   //   debugPrint('Stripe initialization skipped: $e');
   // }
-
-  // Initialize dependency injection (must be awaited)
-  await configureDependencies();
 
   // Lock orientation to portrait mode only
   await SystemChrome.setPreferredOrientations([
@@ -131,7 +141,7 @@ class _MyAppState extends State<MyApp> {
               data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
               child: MaterialApp.router(
                 routerConfig: AppRouter.router,
-                title: 'Zaker', //* App name
+                title: 'WeareHouse X', //* App name
                 theme: appTheme(context), //* Light theme
                 darkTheme: appDarkTheme(context), //* Dark theme
                 themeMode: _themeMode, //* Theme mode

@@ -1,5 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import '../../../../core/status/bloc_status.dart';
+import '../../../../core/services/fcm_service.dart';
 import '../../domain/entities/failure.dart';
 import '../../domain/repositories/auth_repository.dart';
 import 'auth_event.dart';
@@ -52,7 +55,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           errorMessage: errorMessage,
         ));
       },
-      (user) {
+      (user) async {
+        // Register FCM token after successful login
+        try {
+          final fcmService = GetIt.instance<FcmService>();
+          await fcmService.initialize();
+        } catch (e) {
+          // FCM registration failure shouldn't block login
+          debugPrint('Failed to register FCM token: $e');
+        }
+
         emit(state.copyWith(
           status: const BlocStatus.success(),
           user: user,

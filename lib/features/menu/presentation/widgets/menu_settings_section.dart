@@ -58,15 +58,20 @@ class MenuSettingsSection extends StatelessWidget {
             title: 'menu.notifications',
             subtitle: 'menu.manageNotifications',
             onTap: () {
-              //* Notification settings - to be implemented
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: AppText(
-                    'menu.comingSoon',
-                    translation: true,
-                  ),
-                ),
-              );
+              //* Navigate to notifications page
+              context.push(AppRoutes.notifications);
+            },
+          ),
+          Divider(height: 1, color: theme.colorScheme.outline.withOpacity(0.2)),
+          _buildSettingItem(
+            context,
+            theme,
+            icon: Icons.inventory_2,
+            title: 'Request Stock',
+            subtitle: 'Request stock from admin',
+            onTap: () {
+              //* Navigate to stock request page
+              context.push(AppRoutes.stockRequest);
             },
           ),
         ],

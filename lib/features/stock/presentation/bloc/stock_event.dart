@@ -69,3 +69,8 @@ class LoadStockStatistics extends StockEvent {
   @override
   List<Object?> get props => [lowStockThreshold];
 }
+
+/// Load all products from admin inventory (for stock requests)
+class LoadAllProducts extends StockEvent {
+  const LoadAllProducts();
+}
