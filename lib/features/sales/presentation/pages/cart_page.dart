@@ -47,12 +47,16 @@ class _CartPageState extends State<CartPage> with AutomaticKeepAliveClientMixin 
   }
 
   Future<void> _onRefresh() async {
+    // Trigger both cart loading and products refresh
     _createSaleBloc.add(const LoadCartFromStorage());
+    _createSaleBloc.add(const LoadAllProducts());
+    
     try {
+      // Wait for products to load from API
       await _createSaleBloc.stream
           .skip(1)
           .firstWhere(
-            (state) => state.status.isSuccess() || state.status.isFail(),
+            (state) => state.productsStatus.isSuccess() || state.productsStatus.isFail(),
           )
           .timeout(const Duration(seconds: 30));
     } catch (e) {
