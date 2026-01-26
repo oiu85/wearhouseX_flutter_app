@@ -26,6 +26,10 @@ class CreateSaleBloc extends Bloc<CreateSaleEvent, CreateSaleState> {
     on<UpdateCartItemCustomPrice>(_onUpdateCartItemCustomPrice);
     on<UpdateCartItemPricePercentage>(_onUpdateCartItemPricePercentage);
     on<ApplyGlobalPricePercentage>(_onApplyGlobalPricePercentage);
+    on<ToggleProductSelection>(_onToggleProductSelection);
+    on<AddMultipleProductsToCart>(_onAddMultipleProductsToCart);
+    on<ClearMultiSelectSelections>(_onClearMultiSelectSelections);
+    on<ToggleMultiSelectExpanded>(_onToggleMultiSelectExpanded);
     on<CreateSaleSubmitted>(_onCreateSaleSubmitted);
     on<CreateSaleReset>(_onCreateSaleReset);
     on<ClearCart>(_onClearCart);
@@ -313,6 +317,87 @@ class CreateSaleBloc extends Bloc<CreateSaleEvent, CreateSaleState> {
       cartItems: [],
       status: const BlocStatus.success(),
       errorMessage: null,
+    ));
+  }
+
+  void _onToggleProductSelection(
+    ToggleProductSelection event,
+    Emitter<CreateSaleState> emit,
+  ) {
+    final updatedSelections = Set<int>.from(state.selectedProductIds);
+    if (updatedSelections.contains(event.productId)) {
+      updatedSelections.remove(event.productId);
+    } else {
+      updatedSelections.add(event.productId);
+    }
+
+    emit(state.copyWith(
+      selectedProductIds: updatedSelections,
+    ));
+  }
+
+  Future<void> _onAddMultipleProductsToCart(
+    AddMultipleProductsToCart event,
+    Emitter<CreateSaleState> emit,
+  ) async {
+    if (event.products.isEmpty) return;
+
+    final updatedItems = List<CartItem>.from(state.cartItems);
+
+    for (final productData in event.products) {
+      if (productData.availableQuantity <= 0) continue;
+
+      final existingItemIndex = updatedItems.indexWhere(
+        (item) => item.productId == productData.productId,
+      );
+
+      if (existingItemIndex >= 0) {
+        // Update quantity if item already exists
+        final existingItem = updatedItems[existingItemIndex];
+        final newQuantity = existingItem.quantity + 1;
+
+        if (newQuantity > productData.availableQuantity) {
+          continue; // Skip if exceeds available quantity
+        }
+
+        updatedItems[existingItemIndex] = existingItem.copyWith(quantity: newQuantity);
+      } else {
+        // Add new item to cart
+        final newItem = CartItem(
+          productId: productData.productId,
+          productName: productData.productName,
+          price: productData.price,
+          quantity: 1,
+          availableQuantity: productData.availableQuantity,
+        );
+        updatedItems.add(newItem);
+      }
+    }
+
+    emit(state.copyWith(
+      cartItems: updatedItems,
+      status: const BlocStatus.success(),
+      errorMessage: null,
+      selectedProductIds: {},
+    ));
+    await _saveCartToStorage(updatedItems);
+  }
+
+  void _onClearMultiSelectSelections(
+    ClearMultiSelectSelections event,
+    Emitter<CreateSaleState> emit,
+  ) {
+    emit(state.copyWith(
+      selectedProductIds: {},
+    ));
+  }
+
+  void _onToggleMultiSelectExpanded(
+    ToggleMultiSelectExpanded event,
+    Emitter<CreateSaleState> emit,
+  ) {
+    emit(state.copyWith(
+      isMultiSelectExpanded: !state.isMultiSelectExpanded,
     ));
   }
 }

@@ -4,7 +4,7 @@ class ApiConfig {
   // Update this to match your backend URL
   // For local development: 'http://localhost:8000/api'
   // For production: your production API URL
-  static const String baseUrl = 'http://10.95.138.100:8000/api';
+  static const String baseUrl = 'http://216.139.29.65:8000/api';
 
   // AUTH ENDPOINTS
   static const String driverLogin = '/driver/login';

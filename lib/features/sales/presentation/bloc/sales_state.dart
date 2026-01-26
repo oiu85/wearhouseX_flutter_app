@@ -14,6 +14,8 @@ class CreateSaleState extends Equatable {
   final List<CartItem> cartItems;
   final SaleEntity? createdSale;
   final String? errorMessage;
+  final Set<int> selectedProductIds;
+  final bool isMultiSelectExpanded;
 
   const CreateSaleState({
     required this.status,
@@ -21,6 +23,8 @@ class CreateSaleState extends Equatable {
     required this.cartItems,
     this.createdSale,
     this.errorMessage,
+    required this.selectedProductIds,
+    required this.isMultiSelectExpanded,
   });
 
   factory CreateSaleState.initial() => const CreateSaleState(
@@ -29,6 +33,8 @@ class CreateSaleState extends Equatable {
         cartItems: [],
         createdSale: null,
         errorMessage: null,
+        selectedProductIds: {},
+        isMultiSelectExpanded: false,
       );
 
   CreateSaleState copyWith({
@@ -37,6 +43,8 @@ class CreateSaleState extends Equatable {
     List<CartItem>? cartItems,
     SaleEntity? createdSale,
     String? errorMessage,
+    Set<int>? selectedProductIds,
+    bool? isMultiSelectExpanded,
   }) {
     return CreateSaleState(
       status: status ?? this.status,
@@ -44,6 +52,8 @@ class CreateSaleState extends Equatable {
       cartItems: cartItems ?? this.cartItems,
       createdSale: createdSale ?? this.createdSale,
       errorMessage: errorMessage ?? this.errorMessage,
+      selectedProductIds: selectedProductIds ?? this.selectedProductIds,
+      isMultiSelectExpanded: isMultiSelectExpanded ?? this.isMultiSelectExpanded,
     );
   }
 
@@ -59,7 +69,15 @@ class CreateSaleState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [status, customerName, cartItems, createdSale, errorMessage];
+  List<Object?> get props => [
+        status,
+        customerName,
+        cartItems,
+        createdSale,
+        errorMessage,
+        selectedProductIds,
+        isMultiSelectExpanded,
+      ];
 }
 
 /// Cart item model for create sale

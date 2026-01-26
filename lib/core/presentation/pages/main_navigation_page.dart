@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import '../../../features/sales/presentation/bloc/sales_state.dart';
+import '../../../features/sales/presentation/bloc/sales_event.dart';
 import '../../component/others/custom_bottom_nav_bar.dart';
 import '../../di/app_dependencies.dart';
 import '../../../features/home/presentation/bloc/home_bloc.dart';
@@ -40,14 +40,24 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
     _currentIndex = widget.initialIndex;
     _pageController = PageController(initialPage: widget.initialIndex);
     
-    // Initialize BLoCs to share data across tabs
+    // Initialize BLoCs to share data across tabs (singletons from GetIt)
     _homeBloc = getIt<HomeBloc>();
     _stockBloc = getIt<StockBloc>();
     _createSaleBloc = getIt<CreateSaleBloc>();
     
-    // Load initial data
-    _homeBloc.add(const home_event.LoadUserInfo());
-    _homeBloc.add(const home_event.LoadDashboard());
+    // Load initial data only if not already loaded
+    // Pages will check their state and only load if needed
+    final homeState = _homeBloc.state;
+    if (homeState.status.isInitial() || homeState.dashboard == null) {
+      _homeBloc.add(const home_event.LoadUserInfo());
+      _homeBloc.add(const home_event.LoadDashboard());
+    }
+    
+    // Load cart from storage if not already loaded
+    final cartState = _createSaleBloc.state;
+    if (cartState.status.isInitial() || cartState.cartItems.isEmpty) {
+      _createSaleBloc.add(const LoadCartFromStorage());
+    }
   }
 
   @override

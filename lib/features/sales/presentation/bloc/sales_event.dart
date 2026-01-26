@@ -121,6 +121,52 @@ class ApplyGlobalPricePercentage extends CreateSaleEvent {
   List<Object?> get props => [percentage];
 }
 
+class ToggleProductSelection extends CreateSaleEvent {
+  final int productId;
+
+  const ToggleProductSelection(this.productId);
+
+  @override
+  List<Object?> get props => [productId];
+}
+
+class AddMultipleProductsToCart extends CreateSaleEvent {
+  final List<AddProductToCartData> products;
+
+  const AddMultipleProductsToCart({
+    required this.products,
+  });
+
+  @override
+  List<Object?> get props => [products];
+}
+
+class ClearMultiSelectSelections extends CreateSaleEvent {
+  const ClearMultiSelectSelections();
+}
+
+class ToggleMultiSelectExpanded extends CreateSaleEvent {
+  const ToggleMultiSelectExpanded();
+}
+
+/// Data class for adding multiple products
+class AddProductToCartData extends Equatable {
+  final int productId;
+  final String productName;
+  final double price;
+  final int availableQuantity;
+
+  const AddProductToCartData({
+    required this.productId,
+    required this.productName,
+    required this.price,
+    required this.availableQuantity,
+  });
+
+  @override
+  List<Object?> get props => [productId, productName, price, availableQuantity];
+}
+
 // ============================================
 // SALES LIST EVENTS
 // ============================================

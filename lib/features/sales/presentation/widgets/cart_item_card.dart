@@ -57,7 +57,9 @@ class CartItemCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(height: 8.h),
-                    Row(
+                    Wrap(
+                      spacing: 8.w,
+                      runSpacing: 4.h,
                       children: [
                         AppText(
                           '\$${item.price.toStringAsFixed(2)}',
@@ -69,7 +71,6 @@ class CartItemCard extends StatelessWidget {
                           ),
                         ),
                         if (item.customPrice != null) ...[
-                          SizedBox(width: 4.w),
                           AppText(
                             '→ \$${item.customPrice!.toStringAsFixed(2)}',
                             translation: false,
@@ -81,7 +82,6 @@ class CartItemCard extends StatelessWidget {
                           ),
                         ],
                         if (item.pricePercentage != null) ...[
-                          SizedBox(width: 4.w),
                           AppText(
                             '(${item.pricePercentage!.toStringAsFixed(1)}%)',
                             translation: false,
@@ -91,7 +91,6 @@ class CartItemCard extends StatelessWidget {
                             ),
                           ),
                         ],
-                        SizedBox(width: 8.w),
                         AppText(
                           '× ${item.quantity}',
                           translation: false,
@@ -100,7 +99,6 @@ class CartItemCard extends StatelessWidget {
                             fontSize: 13.sp,
                           ),
                         ),
-                        SizedBox(width: 8.w),
                         AppText(
                           '= \$${item.subtotal.toStringAsFixed(2)}',
                           translation: false,

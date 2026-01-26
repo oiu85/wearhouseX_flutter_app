@@ -23,17 +23,28 @@ class StockPage extends StatefulWidget {
   State<StockPage> createState() => _StockPageState();
 }
 
-class _StockPageState extends State<StockPage> {
+class _StockPageState extends State<StockPage> with AutomaticKeepAliveClientMixin {
   final TextEditingController _searchController = TextEditingController();
   final StockBloc _stockBloc = GetIt.I<StockBloc>();
+  bool _hasInitialized = false;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
-    //* Load user info, stock, and statistics on initial mount
-    _stockBloc.add(const LoadUserInfo());
-    _stockBloc.add(const LoadStock());
-    _stockBloc.add(const LoadStockStatistics());
+    //* Load user info, stock, and statistics only on first mount
+    final currentState = _stockBloc.state;
+    if (!_hasInitialized && (currentState.status.isInitial() || currentState.stockItems.isEmpty)) {
+      _stockBloc.add(const LoadUserInfo());
+      _stockBloc.add(const LoadStock());
+      _stockBloc.add(const LoadStockStatistics());
+      _hasInitialized = true;
+    }
+    
+    //* Sync search controller with state
+    _searchController.text = currentState.searchQuery;
   }
 
   @override
@@ -93,6 +104,7 @@ class _StockPageState extends State<StockPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context); // Required for AutomaticKeepAliveClientMixin
     final theme = Theme.of(context);
 
     return BlocBuilder<StockBloc, StockState>(

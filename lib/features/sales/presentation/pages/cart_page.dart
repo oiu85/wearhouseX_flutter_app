@@ -16,8 +16,7 @@ import '../bloc/sales_state.dart';
 import '../widgets/cart_item_card.dart';
 import '../widgets/order_summary_widget.dart';
 import '../widgets/checkout_summary_dialog.dart';
-import '../widgets/cart_fast_select_button.dart';
-import '../widgets/cart_multi_select_bottom_sheet.dart';
+import '../widgets/cart_multi_select_dropdown.dart';
 import '../widgets/cart_global_price_percentage.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -29,8 +28,23 @@ class CartPage extends StatefulWidget {
   State<CartPage> createState() => _CartPageState();
 }
 
-class _CartPageState extends State<CartPage> {
+class _CartPageState extends State<CartPage> with AutomaticKeepAliveClientMixin {
   final CreateSaleBloc _createSaleBloc = GetIt.I<CreateSaleBloc>();
+  bool _hasInitialized = false;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    //* Load cart from storage only on first mount
+    final currentState = _createSaleBloc.state;
+    if (!_hasInitialized && (currentState.status.isInitial() || currentState.cartItems.isEmpty)) {
+      _createSaleBloc.add(const LoadCartFromStorage());
+      _hasInitialized = true;
+    }
+  }
 
   Future<void> _onRefresh() async {
     _createSaleBloc.add(const LoadCartFromStorage());
@@ -87,15 +101,6 @@ class _CartPageState extends State<CartPage> {
     context.push(AppRoutes.stock);
   }
 
-  void _onFastSelect() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => const CartMultiSelectBottomSheet(),
-    );
-  }
-
   void _onApplyGlobalPercentage(double percentage) {
     _createSaleBloc.add(
       ApplyGlobalPricePercentage(percentage: percentage),
@@ -104,6 +109,7 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context); // Required for AutomaticKeepAliveClientMixin
     final theme = Theme.of(context);
 
     return BlocListener<CreateSaleBloc, CreateSaleState>(
@@ -184,7 +190,37 @@ class _CartPageState extends State<CartPage> {
       return CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 16.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AppText(
+                    LocaleKeys.sales_cart,
+                    translation: true,
+                    style: theme.textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.onSurface,
+                      fontSize: 24.sp,
+                      height: 1.3,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  // Always-visible multi-select dropdown
+                  const CartMultiSelectDropdown(),
+                  SizedBox(height: 16.h),
+                  // Always-visible global price percentage
+                  CartGlobalPricePercentage(
+                    onApplyPercentage: _onApplyGlobalPercentage,
+                  ),
+                ],
+              ),
+            ),
+          ),
           SliverFillRemaining(
+            hasScrollBody: false,
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -241,16 +277,14 @@ class _CartPageState extends State<CartPage> {
                   ),
                 ),
                 SizedBox(height: 16.h),
-                CartFastSelectButton(onTap: _onFastSelect),
+                // Always-visible multi-select dropdown
+                const CartMultiSelectDropdown(),
+                SizedBox(height: 16.h),
+                // Always-visible global price percentage
+                CartGlobalPricePercentage(
+                  onApplyPercentage: _onApplyGlobalPercentage,
+                ),
               ],
-            ),
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: CartGlobalPricePercentage(
-              onApplyPercentage: _onApplyGlobalPercentage,
             ),
           ),
         ),

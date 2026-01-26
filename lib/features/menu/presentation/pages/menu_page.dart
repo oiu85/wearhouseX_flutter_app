@@ -23,13 +23,22 @@ class MenuPage extends StatefulWidget {
   State<MenuPage> createState() => _MenuPageState();
 }
 
-class _MenuPageState extends State<MenuPage> {
+class _MenuPageState extends State<MenuPage> with AutomaticKeepAliveClientMixin {
   final MenuBloc _menuBloc = GetIt.I<MenuBloc>();
+  bool _hasInitialized = false;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
-    _menuBloc.add(const LoadUserInfo());
+    //* Load user info only on first mount
+    final currentState = _menuBloc.state;
+    if (!_hasInitialized && (currentState.status.isInitial() || currentState.userInfo == null)) {
+      _menuBloc.add(const LoadUserInfo());
+      _hasInitialized = true;
+    }
   }
 
   void _handleLogout(BuildContext context) async {
@@ -47,6 +56,7 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context); // Required for AutomaticKeepAliveClientMixin
     final theme = Theme.of(context);
 
     return BlocProvider.value(

@@ -31,18 +31,27 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   final HomeBloc _homeBloc = GetIt.I<HomeBloc>();
   final TextEditingController _searchController = TextEditingController();
+  bool _hasInitialized = false;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
-    //* Load user info and dashboard data on initial mount
-    _homeBloc.add(const LoadUserInfo());
-    _homeBloc.add(const LoadDashboard());
+    //* Load user info and dashboard data only on first mount
+    final currentState = _homeBloc.state;
+    if (!_hasInitialized && (currentState.status.isInitial() || currentState.dashboard == null)) {
+      _homeBloc.add(const LoadUserInfo());
+      _homeBloc.add(const LoadDashboard());
+      _hasInitialized = true;
+    }
     
     //* Sync search controller with state
+    _searchController.text = currentState.searchQuery;
     _searchController.addListener(() {
       if (_searchController.text != _homeBloc.state.searchQuery) {
         _homeBloc.add(SearchQueryChanged(_searchController.text));
@@ -106,6 +115,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context); // Required for AutomaticKeepAliveClientMixin
     final theme = Theme.of(context);
 
     return BlocBuilder<HomeBloc, HomeState>(

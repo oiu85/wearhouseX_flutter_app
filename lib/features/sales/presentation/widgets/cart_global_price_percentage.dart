@@ -54,7 +54,7 @@ class _CartGlobalPricePercentageState
     final theme = Theme.of(context);
 
     return Container(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(4.w),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16.r),
@@ -100,21 +100,21 @@ class _CartGlobalPricePercentageState
                 ),
               ),
               SizedBox(width: 12.w),
-              CustomFilledButton(
-                text: LocaleKeys.sales_apply,
-                onPressed: _previewPercentage != null ? _applyPercentage : null,
-                backgroundColor: theme.colorScheme.primary,
-                textColor: theme.colorScheme.onPrimary,
-                height: 50.h,
-                borderRadius: 12.r,
-                icon: Icons.check_circle_rounded,
-              ),
             ],
           ),
           if (_previewPercentage != null) ...[
             SizedBox(height: 12.h),
+            CustomFilledButton(
+              text: LocaleKeys.sales_apply,
+              onPressed: _previewPercentage != null ? _applyPercentage : null,
+              backgroundColor: theme.colorScheme.primary,
+              textColor: theme.colorScheme.onPrimary,
+              height: 50.h,
+              borderRadius: 12.r,
+              icon: Icons.check_circle_rounded,
+            ),
             Container(
-              padding: EdgeInsets.all(12.w),
+              padding: EdgeInsets.all(2.w),
               decoration: BoxDecoration(
                 color: theme.colorScheme.primaryContainer.withOpacity(0.3),
                 borderRadius: BorderRadius.circular(8.r),
