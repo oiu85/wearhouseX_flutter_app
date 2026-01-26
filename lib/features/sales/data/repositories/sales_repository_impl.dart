@@ -154,7 +154,7 @@ class SalesRepositoryImpl implements SalesRepository {
         try {
           final data = responseData['data'] as List<dynamic>;
           final stockItems = data
-              .map((json) => StockItemModel.fromJson(json as Map<String, dynamic>))
+              .map((json) => StockItemResponseModel.fromJson(json as Map<String, dynamic>))
               .toList();
           final entities = stockItems.map((model) => model.toEntity()).toList();
           return Right(entities);
