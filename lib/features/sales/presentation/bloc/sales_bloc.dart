@@ -20,6 +20,8 @@ class CreateSaleBloc extends Bloc<CreateSaleEvent, CreateSaleState> {
     required this.cartLocalDataSource,
   }) : super(CreateSaleState.initial()) {
     on<LoadCartFromStorage>(_onLoadCartFromStorage);
+    on<LoadAllProducts>(_onLoadAllProducts);
+    on<SearchProducts>(_onSearchProducts);
     on<AddProductToCart>(_onAddProductToCart);
     on<RemoveProductFromCart>(_onRemoveProductFromCart);
     on<UpdateCartItemQuantity>(_onUpdateCartItemQuantity);
@@ -34,8 +36,9 @@ class CreateSaleBloc extends Bloc<CreateSaleEvent, CreateSaleState> {
     on<CreateSaleReset>(_onCreateSaleReset);
     on<ClearCart>(_onClearCart);
     
-    // Load cart from storage on initialization
+    // Load cart from storage and products on initialization
     add(const LoadCartFromStorage());
+    add(const LoadAllProducts());
   }
 
   Future<void> _onLoadCartFromStorage(
@@ -398,6 +401,54 @@ class CreateSaleBloc extends Bloc<CreateSaleEvent, CreateSaleState> {
   ) {
     emit(state.copyWith(
       isMultiSelectExpanded: !state.isMultiSelectExpanded,
+    ));
+  }
+
+  Future<void> _onLoadAllProducts(
+    LoadAllProducts event,
+    Emitter<CreateSaleState> emit,
+  ) async {
+    emit(state.copyWith(productsStatus: const BlocStatus.loading()));
+
+    final result = await repository.getAllDriverStock();
+
+    result.fold(
+      (failure) {
+        emit(state.copyWith(
+          productsStatus: BlocStatus.fail(error: failure.message),
+        ));
+      },
+      (products) {
+        emit(state.copyWith(
+          allProducts: products,
+          filteredProducts: products,
+          productsStatus: const BlocStatus.success(),
+        ));
+      },
+    );
+  }
+
+  void _onSearchProducts(
+    SearchProducts event,
+    Emitter<CreateSaleState> emit,
+  ) {
+    final query = event.query.toLowerCase();
+    
+    if (query.isEmpty) {
+      emit(state.copyWith(
+        filteredProducts: state.allProducts,
+        productSearchQuery: '',
+      ));
+      return;
+    }
+
+    final filtered = state.allProducts.where((product) {
+      return product.product.name.toLowerCase().contains(query);
+    }).toList();
+
+    emit(state.copyWith(
+      filteredProducts: filtered,
+      productSearchQuery: event.query,
     ));
   }
 }

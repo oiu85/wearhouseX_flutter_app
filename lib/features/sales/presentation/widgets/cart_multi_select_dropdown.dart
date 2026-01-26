@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
-import '../../../stock/presentation/bloc/stock_bloc.dart';
 import '../bloc/sales_bloc.dart';
 import '../bloc/sales_event.dart';
 import '../bloc/sales_state.dart';
@@ -17,7 +16,6 @@ class CartMultiSelectDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final stockBloc = GetIt.I<StockBloc>();
     final createSaleBloc = GetIt.I<CreateSaleBloc>();
 
     return BlocBuilder<CreateSaleBloc, CreateSaleState>(
@@ -57,7 +55,6 @@ class CartMultiSelectDropdown extends StatelessWidget {
                 ),
                 CartMultiSelectContent(
                   saleState: saleState,
-                  stockBloc: stockBloc,
                   createSaleBloc: createSaleBloc,
                 ),
               ],

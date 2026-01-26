@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import '../../../../core/status/bloc_status.dart';
 import '../../domain/entities/stock_request_entity.dart';
+import '../../domain/entities/stock_request_cart_item.dart';
 
 /// Stock request state
 class StockRequestState extends Equatable {
@@ -14,6 +15,14 @@ class StockRequestState extends Equatable {
   final String? selectedProductName;
   final String quantity;
   final int? selectedProductWarehouseStock; // Warehouse stock for selected product
+  
+  // Multi-product cart
+  final List<StockRequestCartItem> cart;
+  final int successfulSubmissions;
+  final int totalSubmissions;
+  
+  // Track pending product IDs to prevent duplicates
+  final Set<int> pendingProductIds;
   
   // Validation errors
   final String? productError;
@@ -33,6 +42,10 @@ class StockRequestState extends Equatable {
     this.selectedProductName,
     this.quantity = '',
     this.selectedProductWarehouseStock,
+    this.cart = const [],
+    this.successfulSubmissions = 0,
+    this.totalSubmissions = 0,
+    this.pendingProductIds = const {},
     this.productError,
     this.quantityError,
     this.snackbarMessage,
@@ -45,6 +58,8 @@ class StockRequestState extends Equatable {
       status: BlocStatus.initial(),
       requests: [],
       quantity: '',
+      cart: [],
+      pendingProductIds: {},
     );
   }
 
@@ -57,6 +72,10 @@ class StockRequestState extends Equatable {
     String? selectedProductName,
     String? quantity,
     int? selectedProductWarehouseStock,
+    List<StockRequestCartItem>? cart,
+    int? successfulSubmissions,
+    int? totalSubmissions,
+    Set<int>? pendingProductIds,
     String? productError,
     String? quantityError,
     String? snackbarMessage,
@@ -72,6 +91,10 @@ class StockRequestState extends Equatable {
       selectedProductName: selectedProductName ?? this.selectedProductName,
       quantity: quantity ?? this.quantity,
       selectedProductWarehouseStock: selectedProductWarehouseStock ?? this.selectedProductWarehouseStock,
+      cart: cart ?? this.cart,
+      successfulSubmissions: successfulSubmissions ?? this.successfulSubmissions,
+      totalSubmissions: totalSubmissions ?? this.totalSubmissions,
+      pendingProductIds: pendingProductIds ?? this.pendingProductIds,
       productError: productError,
       quantityError: quantityError,
       snackbarMessage: snackbarMessage,
@@ -86,6 +109,18 @@ class StockRequestState extends Equatable {
       productError == null && 
       quantityError == null;
 
+  bool get isCartValid => cart.isNotEmpty;
+
+  int get cartItemCount => cart.length;
+
+  int get totalCartQuantity => cart.fold(0, (sum, item) => sum + item.quantity);
+  
+  /// Check if a product has a pending order
+  bool hasPendingOrder(int productId) => pendingProductIds.contains(productId);
+  
+  /// Check if product is in cart
+  bool isInCart(int productId) => cart.any((item) => item.productId == productId);
+
   @override
   List<Object?> get props => [
         status,
@@ -96,6 +131,10 @@ class StockRequestState extends Equatable {
         selectedProductName,
         quantity,
         selectedProductWarehouseStock,
+        cart,
+        successfulSubmissions,
+        totalSubmissions,
+        pendingProductIds,
         productError,
         quantityError,
         snackbarMessage,

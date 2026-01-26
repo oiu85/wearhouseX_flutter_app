@@ -4,8 +4,8 @@ import 'package:get_it/get_it.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../../../../core/component/text_fields/custom_text_field.dart';
 import '../../../../core/localization/locale_keys.g.dart';
-import '../../../stock/presentation/bloc/stock_bloc.dart';
-import '../../../stock/presentation/bloc/stock_event.dart';
+import '../bloc/sales_bloc.dart';
+import '../bloc/sales_event.dart';
 
 /// Search field widget for multi-select dropdown
 /// All logic is in the BLoC - this is a pure UI component
@@ -19,13 +19,12 @@ class CartMultiSelectSearchField extends StatefulWidget {
 
 class _CartMultiSelectSearchFieldState
     extends State<CartMultiSelectSearchField> {
-  final StockBloc _stockBloc = GetIt.I<StockBloc>();
+  final CreateSaleBloc _createSaleBloc = GetIt.I<CreateSaleBloc>();
   final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _stockBloc.add(const LoadStock());
     _searchController.addListener(_onSearchChanged);
   }
 
@@ -37,7 +36,7 @@ class _CartMultiSelectSearchFieldState
   }
 
   void _onSearchChanged() {
-    _stockBloc.add(SearchStock(_searchController.text));
+    _createSaleBloc.add(SearchProducts(_searchController.text));
   }
 
   @override

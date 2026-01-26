@@ -67,8 +67,8 @@ class MenuSettingsSection extends StatelessWidget {
             context,
             theme,
             icon: Icons.inventory_2,
-            title: 'Request Stock',
-            subtitle: 'Request stock from admin',
+            title: 'stockRequest.title',
+            subtitle: 'stockRequest.requestStockFromAdmin',
             onTap: () {
               //* Navigate to stock request page
               context.push(AppRoutes.stockRequest);

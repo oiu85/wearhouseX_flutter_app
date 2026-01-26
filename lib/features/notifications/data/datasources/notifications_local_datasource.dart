@@ -12,13 +12,14 @@ class NotificationsLocalDataSource {
   NotificationsLocalDataSource(this._prefs);
 
   /// Get all notifications from local storage
+  /// Returns notifications sorted from newest to oldest
   List<NotificationEntity> getNotifications() {
     final jsonString = _prefs.getString(_notificationsKey);
     if (jsonString == null) return [];
 
     try {
       final List<dynamic> jsonList = json.decode(jsonString);
-      return jsonList
+      final notifications = jsonList
           .map((json) => NotificationEntity(
                 id: json['id'] as String,
                 title: json['title'] as String,
@@ -28,6 +29,11 @@ class NotificationsLocalDataSource {
                 isRead: json['is_read'] as bool? ?? false,
               ))
           .toList();
+      
+      // Sort notifications from newest to oldest
+      notifications.sort((a, b) => b.receivedAt.compareTo(a.receivedAt));
+      
+      return notifications;
     } catch (e) {
       return [];
     }

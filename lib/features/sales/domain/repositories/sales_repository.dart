@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import '../../../auth/domain/entities/failure.dart';
+import '../../../stock/domain/entities/stock_item_entity.dart';
 import '../entities/sale_entity.dart';
 import '../entities/sale_item_entity.dart';
 import '../entities/sale_statistics_entity.dart';
@@ -31,4 +32,7 @@ abstract class SalesRepository {
 
   /// Get invoice PDF as bytes
   Future<Either<Failure, List<int>>> getInvoicePdf(int saleId);
+
+  /// Get all products from driver stock (for cart dropdown)
+  Future<Either<Failure, List<StockItemEntity>>> getAllDriverStock();
 }

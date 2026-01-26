@@ -61,6 +61,7 @@ class StockState extends Equatable {
     List<CategoryEntity>? categories,
     String? searchQuery,
     int? selectedCategoryId,
+    bool clearSelectedCategory = false,
     SortType? sortType,
     String? errorMessage,
     String? userName,
@@ -75,7 +76,9 @@ class StockState extends Equatable {
       filteredStockItems: filteredStockItems ?? this.filteredStockItems,
       categories: categories ?? this.categories,
       searchQuery: searchQuery ?? this.searchQuery,
-      selectedCategoryId: selectedCategoryId ?? this.selectedCategoryId,
+      selectedCategoryId: clearSelectedCategory 
+          ? null 
+          : (selectedCategoryId ?? this.selectedCategoryId),
       sortType: sortType ?? this.sortType,
       errorMessage: errorMessage ?? this.errorMessage,
       userName: userName ?? this.userName,

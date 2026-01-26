@@ -235,6 +235,7 @@ class StockBloc extends Bloc<StockEvent, StockState> {
 
     emit(state.copyWith(
       selectedCategoryId: event.categoryId,
+      clearSelectedCategory: event.categoryId == null,
       filteredStockItems: sortedItems,
     ));
   }

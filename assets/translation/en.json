@@ -482,6 +482,24 @@
     "warehouseStock": "Warehouse Stock",
     "units": "units",
     "maxAvailable": "Max Available",
-    "quantityExceedsStock": "Requested quantity exceeds available warehouse stock"
+    "quantityExceedsStock": "Requested quantity exceeds available warehouse stock",
+    "requestStockFromAdmin": "Request stock from warehouse",
+    "addProduct": "Add Product",
+    "removeProduct": "Remove",
+    "productList": "Products List",
+    "totalItems": "Total Items",
+    "noProductsAdded": "No products added yet",
+    "addProductsToRequest": "Add products to your stock request",
+    "multiProductRequest": "Multi-Product Request",
+    "allRequestsSubmitted": "All stock requests submitted successfully",
+    "partialSuccess": "{count} of {total} requests submitted successfully",
+    "allRequestsFailed": "Failed to submit stock requests",
+    "pendingOrderExists": "You already have a pending order for this product",
+    "someRequestsFailed": "Some requests failed. Check details below.",
+    "requestsSubmittedWithErrors": "{success} requests submitted, {failed} failed",
+    "pendingOrdersInfo": "You have {count} pending order(s). Products with pending orders cannot be requested again.",
+    "productAddedToCart": "Product added to cart",
+    "productUpdatedInCart": "Product quantity updated in cart",
+    "productRemovedFromCart": "Product removed from cart"
   }
 }

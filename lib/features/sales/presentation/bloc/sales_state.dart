@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import '../../../../core/status/bloc_status.dart';
+import '../../../stock/domain/entities/stock_item_entity.dart';
 import '../../domain/entities/sale_entity.dart';
 import '../../domain/entities/sale_item_entity.dart';
 import '../../domain/entities/sale_statistics_entity.dart';
@@ -16,6 +17,10 @@ class CreateSaleState extends Equatable {
   final String? errorMessage;
   final Set<int> selectedProductIds;
   final bool isMultiSelectExpanded;
+  final List<StockItemEntity> allProducts;
+  final List<StockItemEntity> filteredProducts;
+  final String productSearchQuery;
+  final BlocStatus productsStatus;
 
   const CreateSaleState({
     required this.status,
@@ -25,6 +30,10 @@ class CreateSaleState extends Equatable {
     this.errorMessage,
     required this.selectedProductIds,
     required this.isMultiSelectExpanded,
+    required this.allProducts,
+    required this.filteredProducts,
+    required this.productSearchQuery,
+    required this.productsStatus,
   });
 
   factory CreateSaleState.initial() => const CreateSaleState(
@@ -35,6 +44,10 @@ class CreateSaleState extends Equatable {
         errorMessage: null,
         selectedProductIds: {},
         isMultiSelectExpanded: false,
+        allProducts: [],
+        filteredProducts: [],
+        productSearchQuery: '',
+        productsStatus: BlocStatus.initial(),
       );
 
   CreateSaleState copyWith({
@@ -45,6 +58,10 @@ class CreateSaleState extends Equatable {
     String? errorMessage,
     Set<int>? selectedProductIds,
     bool? isMultiSelectExpanded,
+    List<StockItemEntity>? allProducts,
+    List<StockItemEntity>? filteredProducts,
+    String? productSearchQuery,
+    BlocStatus? productsStatus,
   }) {
     return CreateSaleState(
       status: status ?? this.status,
@@ -54,6 +71,10 @@ class CreateSaleState extends Equatable {
       errorMessage: errorMessage ?? this.errorMessage,
       selectedProductIds: selectedProductIds ?? this.selectedProductIds,
       isMultiSelectExpanded: isMultiSelectExpanded ?? this.isMultiSelectExpanded,
+      allProducts: allProducts ?? this.allProducts,
+      filteredProducts: filteredProducts ?? this.filteredProducts,
+      productSearchQuery: productSearchQuery ?? this.productSearchQuery,
+      productsStatus: productsStatus ?? this.productsStatus,
     );
   }
 
@@ -77,6 +98,10 @@ class CreateSaleState extends Equatable {
         errorMessage,
         selectedProductIds,
         isMultiSelectExpanded,
+        allProducts,
+        filteredProducts,
+        productSearchQuery,
+        productsStatus,
       ];
 }
 

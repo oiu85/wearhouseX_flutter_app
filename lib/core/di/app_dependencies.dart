@@ -9,6 +9,7 @@ import '../storage/app_storage_service.dart';
 import '../network/network_client.dart';
 import '../auth/guest_mode_guard.dart';
 import '../services/fcm_service.dart';
+import '../theme/theme_manager.dart';
 import '../../features/auth/di/auth_di.dart';
 import '../../features/stock/data/di/stock_di.dart';
 import '../../features/sales/data/di/sales_di.dart';
@@ -49,6 +50,11 @@ Future<GetIt> configureDependencies() async {
   // Register FCM Service (@singleton)
   getIt.registerSingleton<FcmService>(
     FcmService(),
+  );
+
+  // Register ThemeManager (@singleton)
+  getIt.registerSingleton<ThemeManager>(
+    ThemeManager(getIt<AppStorageService>()),
   );
 
   // Register Auth feature dependencies

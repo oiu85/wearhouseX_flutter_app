@@ -166,10 +166,10 @@ bool _boolFromJson(dynamic value) {
 @freezed
 abstract class StockItemModel with _$StockItemModel {
   const factory StockItemModel({
-    required int id,
-    @JsonKey(name: 'driver_id') required int driverId,
-    @JsonKey(name: 'product_id') required int productId,
-    required int quantity,
+    @JsonKey(fromJson: _intFromJson) required int id,
+    @JsonKey(name: 'driver_id', fromJson: _intFromJson) required int driverId,
+    @JsonKey(name: 'product_id', fromJson: _intFromJson) required int productId,
+    @JsonKey(fromJson: _intFromJson) required int quantity,
     @JsonKey(toJson: _productToJson, fromJson: _productFromJson) required ProductModel product,
     @JsonKey(name: 'updated_at') String? updatedAt,
   }) = _StockItemModel;

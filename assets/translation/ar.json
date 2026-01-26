@@ -482,6 +482,24 @@
     "warehouseStock": "مخزون المستودع",
     "units": "وحدة",
     "maxAvailable": "الحد الأقصى المتاح",
-    "quantityExceedsStock": "الكمية المطلوبة تتجاوز المخزون المتاح في المستودع"
+    "quantityExceedsStock": "الكمية المطلوبة تتجاوز المخزون المتاح في المستودع",
+    "requestStockFromAdmin": "طلب مخزون من المستودع",
+    "addProduct": "إضافة منتج",
+    "removeProduct": "إزالة",
+    "productList": "قائمة المنتجات",
+    "totalItems": "إجمالي العناصر",
+    "noProductsAdded": "لم يتم إضافة منتجات بعد",
+    "addProductsToRequest": "أضف منتجات إلى طلب المخزون",
+    "multiProductRequest": "طلب متعدد المنتجات",
+    "allRequestsSubmitted": "تم إرسال جميع طلبات المخزون بنجاح",
+    "partialSuccess": "تم إرسال {count} من {total} طلب بنجاح",
+    "allRequestsFailed": "فشل إرسال طلبات المخزون",
+    "pendingOrderExists": "لديك بالفعل طلب معلق لهذا المنتج",
+    "someRequestsFailed": "فشلت بعض الطلبات. تحقق من التفاصيل أدناه.",
+    "requestsSubmittedWithErrors": "تم إرسال {success} طلب، فشل {failed}",
+    "pendingOrdersInfo": "لديك {count} طلب معلق. لا يمكن طلب المنتجات ذات الطلبات المعلقة مرة أخرى.",
+    "productAddedToCart": "تمت إضافة المنتج إلى السلة",
+    "productUpdatedInCart": "تم تحديث كمية المنتج في السلة",
+    "productRemovedFromCart": "تمت إزالة المنتج من السلة"
   }
 }

@@ -184,7 +184,7 @@ class _StockPageState extends State<StockPage> with AutomaticKeepAliveClientMixi
               ),
             ),
       
-          //* Stock List
+          //* Stock List - Shows filtered items based on category and search
           if (state.filteredStockItems.isEmpty)
             SliverFillRemaining(
               child: NoDataWidget(message: LocaleKeys.home_noStockItems),

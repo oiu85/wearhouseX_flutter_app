@@ -7,6 +7,7 @@ import 'core/routing/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/shared/responsive.dart';
 import 'core/theme/theme_transition.dart';
+import 'core/theme/theme_manager.dart';
 import 'core/di/app_dependencies.dart';
 import 'core/storage/app_storage_service.dart';
 import 'core/services/fcm_service.dart';
@@ -101,30 +102,33 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late ThemeMode _themeMode;
-  late AppStorageService _storageService;
+  late ThemeManager _themeManager;
 
   @override
   void initState() {
     super.initState();
-    _themeMode = widget.initialThemeMode;
-    _storageService = getIt<AppStorageService>();
-    _loadThemeMode();
+    _themeManager = getIt<ThemeManager>();
+    
+    // Listen to theme changes from ThemeManager
+    _themeManager.addListener(_onThemeChanged);
+    
     // Listen to system theme changes
     WidgetsBinding.instance.platformDispatcher.onPlatformBrightnessChanged = () {
-      if (_themeMode == ThemeMode.system) {
+      if (_themeManager.themeMode == ThemeMode.system) {
         setState(() {});
       }
     };
   }
 
-  Future<void> _loadThemeMode() async {
-    final savedThemeMode = await _storageService.getThemeMode();
-    if (savedThemeMode != null && savedThemeMode != _themeMode) {
-      setState(() {
-        _themeMode = savedThemeMode;
-      });
-    }
+  void _onThemeChanged() {
+    // Rebuild the entire app when theme changes
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    _themeManager.removeListener(_onThemeChanged);
+    super.dispose();
   }
 
   @override
@@ -144,14 +148,14 @@ class _MyAppState extends State<MyApp> {
                 title: 'WeareHouse X', //* App name
                 theme: appTheme(context), //* Light theme
                 darkTheme: appDarkTheme(context), //* Dark theme
-                themeMode: _themeMode, //* Theme mode
+                themeMode: _themeManager.themeMode, //* Theme mode from ThemeManager
                 debugShowCheckedModeBanner: false,
                 localizationsDelegates: context.localizationDelegates, //* Localizations delegates
                 supportedLocales: context.supportedLocales, //* Supported locales
                 locale: context.locale, //* Locale
                 builder: (context, child) {
                   return ThemeTransition(
-                    themeMode: _themeMode, //* Theme mode in the theme transition
+                    themeMode: _themeManager.themeMode, //* Theme mode from ThemeManager
                     child: child ?? const SizedBox(),
                   );
                 },

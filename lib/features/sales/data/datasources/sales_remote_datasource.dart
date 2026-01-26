@@ -30,6 +30,9 @@ abstract class SalesRemoteDataSource {
 
   /// Get invoice PDF as bytes
   Future<Either<NetworkFailure, List<int>>> getInvoicePdf(int saleId);
+
+  /// Get all driver stock (for cart dropdown)
+  Future<Either<NetworkFailure, Map<String, dynamic>>> getAllDriverStock();
 }
 
 /// Implementation of SalesRemoteDataSource
@@ -192,6 +195,27 @@ class SalesRemoteDataSourceImpl implements SalesRemoteDataSource {
           );
         }
         return Right(bytes);
+      },
+    );
+  }
+
+  @override
+  Future<Either<NetworkFailure, Map<String, dynamic>>> getAllDriverStock() async {
+    final result = await networkClient.get(ApiConfig.driverMyStock);
+
+    return result.fold(
+      (failure) => Left(failure),
+      (response) {
+        try {
+          final data = response.data as Map<String, dynamic>;
+          return Right(data);
+        } catch (e) {
+          return Left(
+            NetworkFailure(
+              message: 'Failed to parse driver stock data: ${e.toString()}',
+            ),
+          );
+        }
       },
     );
   }

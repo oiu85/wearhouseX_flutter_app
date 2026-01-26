@@ -149,6 +149,19 @@ class ToggleMultiSelectExpanded extends CreateSaleEvent {
   const ToggleMultiSelectExpanded();
 }
 
+class LoadAllProducts extends CreateSaleEvent {
+  const LoadAllProducts();
+}
+
+class SearchProducts extends CreateSaleEvent {
+  final String query;
+
+  const SearchProducts(this.query);
+
+  @override
+  List<Object?> get props => [query];
+}
+
 /// Data class for adding multiple products
 class AddProductToCartData extends Equatable {
   final int productId;

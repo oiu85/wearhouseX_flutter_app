@@ -45,14 +45,63 @@ class SetQuantity extends StockRequestEvent {
   List<Object?> get props => [quantity];
 }
 
+/// Add product to cart
+class AddProductToCart extends StockRequestEvent {
+  final int productId;
+  final String productName;
+  final int quantity;
+  final int warehouseStock;
+
+  const AddProductToCart({
+    required this.productId,
+    required this.productName,
+    required this.quantity,
+    required this.warehouseStock,
+  });
+
+  @override
+  List<Object?> get props => [productId, productName, quantity, warehouseStock];
+}
+
+/// Remove product from cart
+class RemoveProductFromCart extends StockRequestEvent {
+  final int productId;
+
+  const RemoveProductFromCart(this.productId);
+
+  @override
+  List<Object?> get props => [productId];
+}
+
+/// Update product quantity in cart
+class UpdateCartProductQuantity extends StockRequestEvent {
+  final int productId;
+  final int quantity;
+
+  const UpdateCartProductQuantity(this.productId, this.quantity);
+
+  @override
+  List<Object?> get props => [productId, quantity];
+}
+
+/// Clear cart
+class ClearCart extends StockRequestEvent {
+  const ClearCart();
+}
+
 /// Validate form
 class ValidateForm extends StockRequestEvent {
   const ValidateForm();
 }
 
-/// Submit stock request
+/// Submit stock request (single product - legacy)
 class SubmitStockRequest extends StockRequestEvent {
   const SubmitStockRequest();
+}
+
+/// Submit multi-product stock request
+class SubmitMultiProductRequest extends StockRequestEvent {
+  const SubmitMultiProductRequest();
 }
 
 /// Load stock requests

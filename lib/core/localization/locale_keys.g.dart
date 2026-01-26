@@ -456,6 +456,24 @@ abstract class  LocaleKeys {
   static const stockRequest_units = 'stockRequest.units';
   static const stockRequest_maxAvailable = 'stockRequest.maxAvailable';
   static const stockRequest_quantityExceedsStock = 'stockRequest.quantityExceedsStock';
+  static const stockRequest_requestStockFromAdmin = 'stockRequest.requestStockFromAdmin';
+  static const stockRequest_addProduct = 'stockRequest.addProduct';
+  static const stockRequest_removeProduct = 'stockRequest.removeProduct';
+  static const stockRequest_productList = 'stockRequest.productList';
+  static const stockRequest_totalItems = 'stockRequest.totalItems';
+  static const stockRequest_noProductsAdded = 'stockRequest.noProductsAdded';
+  static const stockRequest_addProductsToRequest = 'stockRequest.addProductsToRequest';
+  static const stockRequest_multiProductRequest = 'stockRequest.multiProductRequest';
+  static const stockRequest_allRequestsSubmitted = 'stockRequest.allRequestsSubmitted';
+  static const stockRequest_partialSuccess = 'stockRequest.partialSuccess';
+  static const stockRequest_allRequestsFailed = 'stockRequest.allRequestsFailed';
+  static const stockRequest_pendingOrderExists = 'stockRequest.pendingOrderExists';
+  static const stockRequest_someRequestsFailed = 'stockRequest.someRequestsFailed';
+  static const stockRequest_requestsSubmittedWithErrors = 'stockRequest.requestsSubmittedWithErrors';
+  static const stockRequest_pendingOrdersInfo = 'stockRequest.pendingOrdersInfo';
+  static const stockRequest_productAddedToCart = 'stockRequest.productAddedToCart';
+  static const stockRequest_productUpdatedInCart = 'stockRequest.productUpdatedInCart';
+  static const stockRequest_productRemovedFromCart = 'stockRequest.productRemovedFromCart';
   static const stockRequest = 'stockRequest';
 
 }

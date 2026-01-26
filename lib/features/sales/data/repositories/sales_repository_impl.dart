@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../../auth/domain/entities/failure.dart';
+import '../../../stock/data/models/stock_models.dart';
+import '../../../stock/domain/entities/stock_item_entity.dart';
 import '../../domain/entities/sale_entity.dart';
 import '../../domain/entities/sale_item_entity.dart';
 import '../../domain/entities/sale_statistics_entity.dart';
@@ -137,6 +139,31 @@ class SalesRepositoryImpl implements SalesRepository {
         NetworkFailure(networkFailure.message),
       ),
       (bytes) => Right(bytes),
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<StockItemEntity>>> getAllDriverStock() async {
+    final result = await remoteDataSource.getAllDriverStock();
+
+    return result.fold(
+      (networkFailure) => Left(
+        NetworkFailure(networkFailure.message),
+      ),
+      (responseData) {
+        try {
+          final data = responseData['data'] as List<dynamic>;
+          final stockItems = data
+              .map((json) => StockItemModel.fromJson(json as Map<String, dynamic>))
+              .toList();
+          final entities = stockItems.map((model) => model.toEntity()).toList();
+          return Right(entities);
+        } catch (e) {
+          return Left(
+            ServerFailure('Failed to convert stock items: ${e.toString()}'),
+          );
+        }
+      },
     );
   }
 }
