@@ -37,7 +37,7 @@ abstract class ProductModel with _$ProductModel {
   const factory ProductModel({
     required int id,
     required String name,
-    @JsonKey(name: 'price', fromJson: _priceFromJson) required String priceString,
+    @JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson) required String priceString,
     @JsonKey(name: 'category_id', fromJson: _categoryIdFromJson) required int categoryId,
     String? description,
     String? image,
@@ -46,19 +46,28 @@ abstract class ProductModel with _$ProductModel {
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     // Custom parsing to handle:
-    // 1. price as num (double) or String - convert to String
-    // 2. category_id from nested category object or direct value
-    final priceValue = json['price'];
-    final priceString = _priceFromJson(priceValue);
-    
+    // 1. category_id from nested category object or direct value
+    // 2. Parse category if present
     final categoryId = _categoryIdFromJson(json['category_id'] ?? json['category']?['id']);
     
-    final jsonFixed = {
-      ...json,
-      'price': priceString, // Convert price to String for generated code
-      'category_id': categoryId,
-    };
-    return _$ProductModelFromJson(jsonFixed);
+    CategoryModel? categoryModel;
+    if (json['category'] != null && json['category'] is Map) {
+      try {
+        categoryModel = CategoryModel.fromJson(json['category'] as Map<String, dynamic>);
+      } catch (e) {
+        categoryModel = null;
+      }
+    }
+    
+    return ProductModel(
+      id: (json['id'] as num).toInt(),
+      name: json['name'] as String,
+      priceString: _priceFromJson(json['price']),
+      categoryId: categoryId,
+      description: json['description'] as String?,
+      image: json['image'] as String?,
+      category: categoryModel,
+    );
   }
 }
 
@@ -83,7 +92,7 @@ extension ProductModelExtension on ProductModel {
       id: id,
       name: name,
       price: double.tryParse(priceString) ?? 0.0,
-      categoryId: categoryId ?? 0,
+      categoryId: categoryId,
       description: description,
       image: image,
       category: category?.toEntity(),
@@ -128,6 +137,9 @@ String _priceFromJson(dynamic value) {
   return value.toString();
 }
 
+/// Helper function to convert priceString to JSON (returns as String)
+String _priceToJson(String value) => value;
+
 /// Helper function to safely convert to double
 double _doubleFromJson(dynamic value) {
   if (value == null) return 0.0;
@@ -155,13 +167,43 @@ abstract class StockItemModel with _$StockItemModel {
     @JsonKey(name: 'driver_id') required int driverId,
     @JsonKey(name: 'product_id') required int productId,
     required int quantity,
-    required ProductModel product,
+    @JsonKey(toJson: _productToJson, fromJson: _productFromJson) required ProductModel product,
     @JsonKey(name: 'updated_at') String? updatedAt,
   }) = _StockItemModel;
 
   factory StockItemModel.fromJson(Map<String, dynamic> json) =>
       _$StockItemModelFromJson(json);
 }
+
+/// Helper function to convert ProductModel to JSON
+/// Manually serializes to match backend structure
+Map<String, dynamic> _productToJson(ProductModel product) {
+  final json = <String, dynamic>{
+    'id': product.id,
+    'name': product.name,
+    'price': product.priceString, // Serialize priceString as 'price' to match backend
+    'category_id': product.categoryId,
+  };
+  if (product.description != null) {
+    json['description'] = product.description;
+  }
+  if (product.image != null) {
+    json['image'] = product.image;
+  }
+  if (product.category != null) {
+    // Serialize category manually to match backend structure
+    final category = product.category!;
+    json['category'] = {
+      'id': category.id,
+      'name': category.name,
+      if (category.description != null) 'description': category.description,
+    };
+  }
+  return json;
+}
+
+/// Helper function to convert JSON to ProductModel
+ProductModel _productFromJson(Map<String, dynamic> json) => ProductModel.fromJson(json);
 
 /// Extension to convert StockItemResponseModel to StockItemEntity
 extension StockItemResponseModelExtension on StockItemResponseModel {
@@ -218,30 +260,16 @@ extension StockItemModelExtension on StockItemModel {
 abstract class StockDetailModel with _$StockDetailModel {
   const factory StockDetailModel({
     required int id,
-    required ProductModel product,
+    @JsonKey(toJson: _productToJson, fromJson: _productFromJson) required ProductModel product,
     required int quantity,
-    required double stockValue,
+    @JsonKey(name: 'stock_value', fromJson: _doubleFromJson) required double stockValue,
     @JsonKey(name: 'is_low_stock') required bool isLowStock,
     @JsonKey(name: 'last_updated') String? lastUpdated,
     @JsonKey(name: 'assignment_history') List<AssignmentHistoryModel>? assignmentHistory,
   }) = _StockDetailModel;
 
-  factory StockDetailModel.fromJson(Map<String, dynamic> json) {
-    // Custom parsing to handle:
-    // 1. stock_value (snake_case) from API -> stockValue (camelCase)
-    // 2. Safe type conversions for all numeric fields
-    final stockValueRaw = json['stock_value'] ?? json['stockValue'];
-    final fixedJson = <String, dynamic>{
-      'id': json['id'] is num ? json['id'] : _intFromJson(json['id']),
-      'product': json['product'],
-      'quantity': json['quantity'] is num ? json['quantity'] : _intFromJson(json['quantity']),
-      'stockValue': stockValueRaw is num ? stockValueRaw : _doubleFromJson(stockValueRaw),
-      'is_low_stock': json['is_low_stock'] ?? json['isLowStock'] ?? false,
-      'last_updated': json['last_updated'] ?? json['lastUpdated'],
-      'assignment_history': json['assignment_history'] ?? json['assignmentHistory'],
-    };
-    return _$StockDetailModelFromJson(fixedJson);
-  }
+  factory StockDetailModel.fromJson(Map<String, dynamic> json) =>
+      _$StockDetailModelFromJson(json);
 }
 
 /// Assignment history model

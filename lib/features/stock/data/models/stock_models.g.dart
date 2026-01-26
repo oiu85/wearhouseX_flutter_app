@@ -20,30 +20,6 @@ Map<String, dynamic> _$CategoryModelToJson(_CategoryModel instance) =>
       'description': instance.description,
     };
 
-_ProductModel _$ProductModelFromJson(Map<String, dynamic> json) =>
-    _ProductModel(
-      id: (json['id'] as num).toInt(),
-      name: json['name'] as String,
-      priceString: json['price'] as String,
-      categoryId: (json['category_id'] as num).toInt(),
-      description: json['description'] as String?,
-      image: json['image'] as String?,
-      category: json['category'] == null
-          ? null
-          : CategoryModel.fromJson(json['category'] as Map<String, dynamic>),
-    );
-
-Map<String, dynamic> _$ProductModelToJson(_ProductModel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-      'price': instance.priceString,
-      'category_id': instance.categoryId,
-      'description': instance.description,
-      'image': instance.image,
-      'category': instance.category,
-    };
-
 _StockItemResponseModel _$StockItemResponseModelFromJson(
   Map<String, dynamic> json,
 ) => _StockItemResponseModel(
@@ -82,7 +58,7 @@ _StockItemModel _$StockItemModelFromJson(Map<String, dynamic> json) =>
       driverId: (json['driver_id'] as num).toInt(),
       productId: (json['product_id'] as num).toInt(),
       quantity: (json['quantity'] as num).toInt(),
-      product: ProductModel.fromJson(json['product'] as Map<String, dynamic>),
+      product: _productFromJson(json['product'] as Map<String, dynamic>),
       updatedAt: json['updated_at'] as String?,
     );
 
@@ -92,16 +68,16 @@ Map<String, dynamic> _$StockItemModelToJson(_StockItemModel instance) =>
       'driver_id': instance.driverId,
       'product_id': instance.productId,
       'quantity': instance.quantity,
-      'product': instance.product,
+      'product': _productToJson(instance.product),
       'updated_at': instance.updatedAt,
     };
 
 _StockDetailModel _$StockDetailModelFromJson(Map<String, dynamic> json) =>
     _StockDetailModel(
       id: (json['id'] as num).toInt(),
-      product: ProductModel.fromJson(json['product'] as Map<String, dynamic>),
+      product: _productFromJson(json['product'] as Map<String, dynamic>),
       quantity: (json['quantity'] as num).toInt(),
-      stockValue: (json['stockValue'] as num).toDouble(),
+      stockValue: _doubleFromJson(json['stock_value']),
       isLowStock: json['is_low_stock'] as bool,
       lastUpdated: json['last_updated'] as String?,
       assignmentHistory: (json['assignment_history'] as List<dynamic>?)
@@ -114,9 +90,9 @@ _StockDetailModel _$StockDetailModelFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$StockDetailModelToJson(_StockDetailModel instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'product': instance.product,
+      'product': _productToJson(instance.product),
       'quantity': instance.quantity,
-      'stockValue': instance.stockValue,
+      'stock_value': instance.stockValue,
       'is_low_stock': instance.isLowStock,
       'last_updated': instance.lastUpdated,
       'assignment_history': instance.assignmentHistory,

@@ -846,7 +846,7 @@ as List<CreateSaleItemRequestModel>,
 /// @nodoc
 mixin _$CreateSaleItemRequestModel {
 
-@JsonKey(name: 'product_id') int get productId;@JsonKey(fromJson: _intFromJson) int get quantity;
+@JsonKey(name: 'product_id') int get productId;@JsonKey(fromJson: _intFromJson) int get quantity;@JsonKey(name: 'custom_price', includeIfNull: false) double? get customPrice;
 /// Create a copy of CreateSaleItemRequestModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -859,16 +859,16 @@ $CreateSaleItemRequestModelCopyWith<CreateSaleItemRequestModel> get copyWith => 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateSaleItemRequestModel&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.quantity, quantity) || other.quantity == quantity));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateSaleItemRequestModel&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.customPrice, customPrice) || other.customPrice == customPrice));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,productId,quantity);
+int get hashCode => Object.hash(runtimeType,productId,quantity,customPrice);
 
 @override
 String toString() {
-  return 'CreateSaleItemRequestModel(productId: $productId, quantity: $quantity)';
+  return 'CreateSaleItemRequestModel(productId: $productId, quantity: $quantity, customPrice: $customPrice)';
 }
 
 
@@ -879,7 +879,7 @@ abstract mixin class $CreateSaleItemRequestModelCopyWith<$Res>  {
   factory $CreateSaleItemRequestModelCopyWith(CreateSaleItemRequestModel value, $Res Function(CreateSaleItemRequestModel) _then) = _$CreateSaleItemRequestModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'product_id') int productId,@JsonKey(fromJson: _intFromJson) int quantity
+@JsonKey(name: 'product_id') int productId,@JsonKey(fromJson: _intFromJson) int quantity,@JsonKey(name: 'custom_price', includeIfNull: false) double? customPrice
 });
 
 
@@ -896,11 +896,12 @@ class _$CreateSaleItemRequestModelCopyWithImpl<$Res>
 
 /// Create a copy of CreateSaleItemRequestModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? productId = null,Object? quantity = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? productId = null,Object? quantity = null,Object? customPrice = freezed,}) {
   return _then(_self.copyWith(
 productId: null == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
 as int,quantity: null == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
-as int,
+as int,customPrice: freezed == customPrice ? _self.customPrice : customPrice // ignore: cast_nullable_to_non_nullable
+as double?,
   ));
 }
 
@@ -985,10 +986,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'product_id')  int productId, @JsonKey(fromJson: _intFromJson)  int quantity)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'product_id')  int productId, @JsonKey(fromJson: _intFromJson)  int quantity, @JsonKey(name: 'custom_price', includeIfNull: false)  double? customPrice)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CreateSaleItemRequestModel() when $default != null:
-return $default(_that.productId,_that.quantity);case _:
+return $default(_that.productId,_that.quantity,_that.customPrice);case _:
   return orElse();
 
 }
@@ -1006,10 +1007,10 @@ return $default(_that.productId,_that.quantity);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'product_id')  int productId, @JsonKey(fromJson: _intFromJson)  int quantity)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'product_id')  int productId, @JsonKey(fromJson: _intFromJson)  int quantity, @JsonKey(name: 'custom_price', includeIfNull: false)  double? customPrice)  $default,) {final _that = this;
 switch (_that) {
 case _CreateSaleItemRequestModel():
-return $default(_that.productId,_that.quantity);case _:
+return $default(_that.productId,_that.quantity,_that.customPrice);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1026,10 +1027,10 @@ return $default(_that.productId,_that.quantity);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'product_id')  int productId, @JsonKey(fromJson: _intFromJson)  int quantity)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'product_id')  int productId, @JsonKey(fromJson: _intFromJson)  int quantity, @JsonKey(name: 'custom_price', includeIfNull: false)  double? customPrice)?  $default,) {final _that = this;
 switch (_that) {
 case _CreateSaleItemRequestModel() when $default != null:
-return $default(_that.productId,_that.quantity);case _:
+return $default(_that.productId,_that.quantity,_that.customPrice);case _:
   return null;
 
 }
@@ -1041,11 +1042,12 @@ return $default(_that.productId,_that.quantity);case _:
 @JsonSerializable()
 
 class _CreateSaleItemRequestModel implements CreateSaleItemRequestModel {
-  const _CreateSaleItemRequestModel({@JsonKey(name: 'product_id') required this.productId, @JsonKey(fromJson: _intFromJson) required this.quantity});
+  const _CreateSaleItemRequestModel({@JsonKey(name: 'product_id') required this.productId, @JsonKey(fromJson: _intFromJson) required this.quantity, @JsonKey(name: 'custom_price', includeIfNull: false) this.customPrice});
   factory _CreateSaleItemRequestModel.fromJson(Map<String, dynamic> json) => _$CreateSaleItemRequestModelFromJson(json);
 
 @override@JsonKey(name: 'product_id') final  int productId;
 @override@JsonKey(fromJson: _intFromJson) final  int quantity;
+@override@JsonKey(name: 'custom_price', includeIfNull: false) final  double? customPrice;
 
 /// Create a copy of CreateSaleItemRequestModel
 /// with the given fields replaced by the non-null parameter values.
@@ -1060,16 +1062,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateSaleItemRequestModel&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.quantity, quantity) || other.quantity == quantity));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateSaleItemRequestModel&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.customPrice, customPrice) || other.customPrice == customPrice));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,productId,quantity);
+int get hashCode => Object.hash(runtimeType,productId,quantity,customPrice);
 
 @override
 String toString() {
-  return 'CreateSaleItemRequestModel(productId: $productId, quantity: $quantity)';
+  return 'CreateSaleItemRequestModel(productId: $productId, quantity: $quantity, customPrice: $customPrice)';
 }
 
 
@@ -1080,7 +1082,7 @@ abstract mixin class _$CreateSaleItemRequestModelCopyWith<$Res> implements $Crea
   factory _$CreateSaleItemRequestModelCopyWith(_CreateSaleItemRequestModel value, $Res Function(_CreateSaleItemRequestModel) _then) = __$CreateSaleItemRequestModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'product_id') int productId,@JsonKey(fromJson: _intFromJson) int quantity
+@JsonKey(name: 'product_id') int productId,@JsonKey(fromJson: _intFromJson) int quantity,@JsonKey(name: 'custom_price', includeIfNull: false) double? customPrice
 });
 
 
@@ -1097,11 +1099,12 @@ class __$CreateSaleItemRequestModelCopyWithImpl<$Res>
 
 /// Create a copy of CreateSaleItemRequestModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? productId = null,Object? quantity = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? productId = null,Object? quantity = null,Object? customPrice = freezed,}) {
   return _then(_CreateSaleItemRequestModel(
 productId: null == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
 as int,quantity: null == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
-as int,
+as int,customPrice: freezed == customPrice ? _self.customPrice : customPrice // ignore: cast_nullable_to_non_nullable
+as double?,
   ));
 }
 

@@ -7,12 +7,14 @@ import '../bloc/sales_state.dart';
 class CartItemCard extends StatelessWidget {
   final CartItem item;
   final ValueChanged<int> onQuantityChanged;
+  final ValueChanged<double?>? onCustomPriceChanged;
   final VoidCallback onRemove;
 
   const CartItemCard({
     super.key,
     required this.item,
     required this.onQuantityChanged,
+    this.onCustomPriceChanged,
     required this.onRemove,
   });
 
@@ -66,6 +68,29 @@ class CartItemCard extends StatelessWidget {
                             fontSize: 13.sp,
                           ),
                         ),
+                        if (item.customPrice != null) ...[
+                          SizedBox(width: 4.w),
+                          AppText(
+                            '→ \$${item.customPrice!.toStringAsFixed(2)}',
+                            translation: false,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13.sp,
+                            ),
+                          ),
+                        ],
+                        if (item.pricePercentage != null) ...[
+                          SizedBox(width: 4.w),
+                          AppText(
+                            '(${item.pricePercentage!.toStringAsFixed(1)}%)',
+                            translation: false,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.tertiary,
+                              fontSize: 11.sp,
+                            ),
+                          ),
+                        ],
                         SizedBox(width: 8.w),
                         AppText(
                           '× ${item.quantity}',
@@ -87,6 +112,32 @@ class CartItemCard extends StatelessWidget {
                         ),
                       ],
                     ),
+                    if (onCustomPriceChanged != null) ...[
+                      SizedBox(height: 12.h),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              initialValue: item.customPrice?.toStringAsFixed(2) ?? '',
+                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                              decoration: InputDecoration(
+                                labelText: 'Custom Price',
+                                hintText: 'Enter custom price',
+                                isDense: true,
+                                contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8.r),
+                                ),
+                              ),
+                              onChanged: (value) {
+                                final price = double.tryParse(value);
+                                onCustomPriceChanged?.call(price);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -123,20 +174,32 @@ class CartItemCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 12.w),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.primaryContainer.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
-                    child: AppText(
-                      '${item.quantity}',
-                      translation: false,
+                  SizedBox(
+                    width: 60.w,
+                    child: TextFormField(
+                      initialValue: item.quantity.toString(),
+                      keyboardType: TextInputType.number,
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                        isDense: true,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        filled: true,
+                        fillColor: theme.colorScheme.primaryContainer.withOpacity(0.3),
+                      ),
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: theme.colorScheme.primary,
                         fontSize: 16.sp,
                       ),
+                      onChanged: (value) {
+                        final quantity = int.tryParse(value);
+                        if (quantity != null && quantity > 0 && quantity <= item.availableQuantity) {
+                          onQuantityChanged(quantity);
+                        }
+                      },
                     ),
                   ),
                   SizedBox(width: 12.w),

@@ -28,6 +28,8 @@ class CartLocalDataSourceImpl implements CartLocalDataSource {
       'price': item.price,
       'quantity': item.quantity,
       'availableQuantity': item.availableQuantity,
+      'customPrice': item.customPrice,
+      'pricePercentage': item.pricePercentage,
     }).toList();
     
     final jsonString = jsonEncode(jsonList);
@@ -51,6 +53,12 @@ class CartLocalDataSourceImpl implements CartLocalDataSource {
           price: (map['price'] as num).toDouble(),
           quantity: map['quantity'] as int,
           availableQuantity: map['availableQuantity'] as int,
+          customPrice: map['customPrice'] != null
+              ? (map['customPrice'] as num).toDouble()
+              : null,
+          pricePercentage: map['pricePercentage'] != null
+              ? (map['pricePercentage'] as num).toDouble()
+              : null,
         );
       }).toList();
     } catch (e) {

@@ -439,7 +439,15 @@
     "noItemsInCart": "Your cart is empty",
     "addMoreProducts": "Add More Products",
     "date": "Date",
-    "items": "Items"
+    "items": "Items",
+    "fastSelect": "Fast Select",
+    "addSelected": "Add Selected",
+    "selected": "selected",
+    "searchProducts": "Search products...",
+    "globalPricePercentage": "Global Price Percentage",
+    "enterPercentage": "Enter percentage (e.g., 10 for 10%)",
+    "apply": "Apply",
+    "percentagePreview": "This will apply {percentage}% markup to all items"
   },
   "dashboard": {
     "todaySales": "Today's Sales",

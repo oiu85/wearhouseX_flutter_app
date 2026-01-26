@@ -5,6 +5,7 @@ class SaleItemEntity {
   final int quantity;
   final double price;
   final double subtotal;
+  final double? customPrice;
 
   const SaleItemEntity({
     required this.productId,
@@ -12,5 +13,6 @@ class SaleItemEntity {
     required this.quantity,
     required this.price,
     required this.subtotal,
+    this.customPrice,
   });
 }

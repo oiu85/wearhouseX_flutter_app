@@ -376,7 +376,15 @@
     "noItemsInCart": "السلة فارغة",
     "addMoreProducts": "إضافة المزيد من المنتجات",
     "date": "التاريخ",
-    "items": "العناصر"
+    "items": "العناصر",
+    "fastSelect": "اختيار سريع",
+    "addSelected": "إضافة المحدد",
+    "selected": "محدد",
+    "searchProducts": "البحث عن المنتجات...",
+    "globalPricePercentage": "نسبة السعر الإجمالية",
+    "enterPercentage": "أدخل النسبة (مثلاً: 10 لـ 10%)",
+    "apply": "تطبيق",
+    "percentagePreview": "سيتم تطبيق {percentage}% زيادة على جميع العناصر"
   },
   "profile": {
     "title": "الملف الشخصي",

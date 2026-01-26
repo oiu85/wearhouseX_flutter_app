@@ -23,6 +23,7 @@ class SalesRepositoryImpl implements SalesRepository {
     final requestItems = items.map((item) => CreateSaleItemRequestModel(
       productId: item.productId,
       quantity: item.quantity,
+      customPrice: item.customPrice,
     )).toList();
 
     final result = await remoteDataSource.createSale(

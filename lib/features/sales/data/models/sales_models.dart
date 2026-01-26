@@ -82,6 +82,7 @@ abstract class CreateSaleItemRequestModel with _$CreateSaleItemRequestModel {
   const factory CreateSaleItemRequestModel({
     @JsonKey(name: 'product_id') required int productId,
     @JsonKey(fromJson: _intFromJson) required int quantity,
+    @JsonKey(name: 'custom_price', includeIfNull: false) double? customPrice,
   }) = _CreateSaleItemRequestModel;
 
   factory CreateSaleItemRequestModel.fromJson(Map<String, dynamic> json) =>

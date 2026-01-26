@@ -280,19 +280,16 @@ as String?,
 
 }
 
-
 /// @nodoc
 mixin _$ProductModel {
 
- int get id; String get name;@JsonKey(name: 'price') String get priceString;@JsonKey(name: 'category_id') int get categoryId; String? get description; String? get image; CategoryModel? get category;
+ int get id; String get name;@JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson) String get priceString;@JsonKey(name: 'category_id', fromJson: _categoryIdFromJson) int get categoryId; String? get description; String? get image; CategoryModel? get category;
 /// Create a copy of ProductModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $ProductModelCopyWith<ProductModel> get copyWith => _$ProductModelCopyWithImpl<ProductModel>(this as ProductModel, _$identity);
 
-  /// Serializes this ProductModel to a JSON map.
-  Map<String, dynamic> toJson();
 
 
 @override
@@ -300,7 +297,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.priceString, priceString) || other.priceString == priceString)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.description, description) || other.description == description)&&(identical(other.image, image) || other.image == image)&&(identical(other.category, category) || other.category == category));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,id,name,priceString,categoryId,description,image,category);
 
@@ -317,7 +314,7 @@ abstract mixin class $ProductModelCopyWith<$Res>  {
   factory $ProductModelCopyWith(ProductModel value, $Res Function(ProductModel) _then) = _$ProductModelCopyWithImpl;
 @useResult
 $Res call({
- int id, String name,@JsonKey(name: 'price') String priceString,@JsonKey(name: 'category_id') int categoryId, String? description, String? image, CategoryModel? category
+ int id, String name,@JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson) String priceString,@JsonKey(name: 'category_id', fromJson: _categoryIdFromJson) int categoryId, String? description, String? image, CategoryModel? category
 });
 
 
@@ -440,7 +437,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name, @JsonKey(name: 'price')  String priceString, @JsonKey(name: 'category_id')  int categoryId,  String? description,  String? image,  CategoryModel? category)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name, @JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson)  String priceString, @JsonKey(name: 'category_id', fromJson: _categoryIdFromJson)  int categoryId,  String? description,  String? image,  CategoryModel? category)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProductModel() when $default != null:
 return $default(_that.id,_that.name,_that.priceString,_that.categoryId,_that.description,_that.image,_that.category);case _:
@@ -461,7 +458,7 @@ return $default(_that.id,_that.name,_that.priceString,_that.categoryId,_that.des
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name, @JsonKey(name: 'price')  String priceString, @JsonKey(name: 'category_id')  int categoryId,  String? description,  String? image,  CategoryModel? category)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name, @JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson)  String priceString, @JsonKey(name: 'category_id', fromJson: _categoryIdFromJson)  int categoryId,  String? description,  String? image,  CategoryModel? category)  $default,) {final _that = this;
 switch (_that) {
 case _ProductModel():
 return $default(_that.id,_that.name,_that.priceString,_that.categoryId,_that.description,_that.image,_that.category);case _:
@@ -481,7 +478,7 @@ return $default(_that.id,_that.name,_that.priceString,_that.categoryId,_that.des
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name, @JsonKey(name: 'price')  String priceString, @JsonKey(name: 'category_id')  int categoryId,  String? description,  String? image,  CategoryModel? category)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name, @JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson)  String priceString, @JsonKey(name: 'category_id', fromJson: _categoryIdFromJson)  int categoryId,  String? description,  String? image,  CategoryModel? category)?  $default,) {final _that = this;
 switch (_that) {
 case _ProductModel() when $default != null:
 return $default(_that.id,_that.name,_that.priceString,_that.categoryId,_that.description,_that.image,_that.category);case _:
@@ -493,16 +490,16 @@ return $default(_that.id,_that.name,_that.priceString,_that.categoryId,_that.des
 }
 
 /// @nodoc
-@JsonSerializable()
+
 
 class _ProductModel implements ProductModel {
-  const _ProductModel({required this.id, required this.name, @JsonKey(name: 'price') required this.priceString, @JsonKey(name: 'category_id') required this.categoryId, this.description, this.image, this.category});
-  factory _ProductModel.fromJson(Map<String, dynamic> json) => _$ProductModelFromJson(json);
+  const _ProductModel({required this.id, required this.name, @JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson) required this.priceString, @JsonKey(name: 'category_id', fromJson: _categoryIdFromJson) required this.categoryId, this.description, this.image, this.category});
+  
 
 @override final  int id;
 @override final  String name;
-@override@JsonKey(name: 'price') final  String priceString;
-@override@JsonKey(name: 'category_id') final  int categoryId;
+@override@JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson) final  String priceString;
+@override@JsonKey(name: 'category_id', fromJson: _categoryIdFromJson) final  int categoryId;
 @override final  String? description;
 @override final  String? image;
 @override final  CategoryModel? category;
@@ -513,17 +510,14 @@ class _ProductModel implements ProductModel {
 @pragma('vm:prefer-inline')
 _$ProductModelCopyWith<_ProductModel> get copyWith => __$ProductModelCopyWithImpl<_ProductModel>(this, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$ProductModelToJson(this, );
-}
+
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProductModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.priceString, priceString) || other.priceString == priceString)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.description, description) || other.description == description)&&(identical(other.image, image) || other.image == image)&&(identical(other.category, category) || other.category == category));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,id,name,priceString,categoryId,description,image,category);
 
@@ -540,7 +534,7 @@ abstract mixin class _$ProductModelCopyWith<$Res> implements $ProductModelCopyWi
   factory _$ProductModelCopyWith(_ProductModel value, $Res Function(_ProductModel) _then) = __$ProductModelCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String name,@JsonKey(name: 'price') String priceString,@JsonKey(name: 'category_id') int categoryId, String? description, String? image, CategoryModel? category
+ int id, String name,@JsonKey(name: 'price', fromJson: _priceFromJson, toJson: _priceToJson) String priceString,@JsonKey(name: 'category_id', fromJson: _categoryIdFromJson) int categoryId, String? description, String? image, CategoryModel? category
 });
 
 
@@ -890,7 +884,7 @@ as String?,
 /// @nodoc
 mixin _$StockItemModel {
 
- int get id;@JsonKey(name: 'driver_id') int get driverId;@JsonKey(name: 'product_id') int get productId; int get quantity; ProductModel get product;@JsonKey(name: 'updated_at') String? get updatedAt;
+ int get id;@JsonKey(name: 'driver_id') int get driverId;@JsonKey(name: 'product_id') int get productId; int get quantity;@JsonKey(toJson: _productToJson, fromJson: _productFromJson) ProductModel get product;@JsonKey(name: 'updated_at') String? get updatedAt;
 /// Create a copy of StockItemModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -923,7 +917,7 @@ abstract mixin class $StockItemModelCopyWith<$Res>  {
   factory $StockItemModelCopyWith(StockItemModel value, $Res Function(StockItemModel) _then) = _$StockItemModelCopyWithImpl;
 @useResult
 $Res call({
- int id,@JsonKey(name: 'driver_id') int driverId,@JsonKey(name: 'product_id') int productId, int quantity, ProductModel product,@JsonKey(name: 'updated_at') String? updatedAt
+ int id,@JsonKey(name: 'driver_id') int driverId,@JsonKey(name: 'product_id') int productId, int quantity,@JsonKey(toJson: _productToJson, fromJson: _productFromJson) ProductModel product,@JsonKey(name: 'updated_at') String? updatedAt
 });
 
 
@@ -1042,7 +1036,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'driver_id')  int driverId, @JsonKey(name: 'product_id')  int productId,  int quantity,  ProductModel product, @JsonKey(name: 'updated_at')  String? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'driver_id')  int driverId, @JsonKey(name: 'product_id')  int productId,  int quantity, @JsonKey(toJson: _productToJson, fromJson: _productFromJson)  ProductModel product, @JsonKey(name: 'updated_at')  String? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _StockItemModel() when $default != null:
 return $default(_that.id,_that.driverId,_that.productId,_that.quantity,_that.product,_that.updatedAt);case _:
@@ -1063,7 +1057,7 @@ return $default(_that.id,_that.driverId,_that.productId,_that.quantity,_that.pro
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'driver_id')  int driverId, @JsonKey(name: 'product_id')  int productId,  int quantity,  ProductModel product, @JsonKey(name: 'updated_at')  String? updatedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'driver_id')  int driverId, @JsonKey(name: 'product_id')  int productId,  int quantity, @JsonKey(toJson: _productToJson, fromJson: _productFromJson)  ProductModel product, @JsonKey(name: 'updated_at')  String? updatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _StockItemModel():
 return $default(_that.id,_that.driverId,_that.productId,_that.quantity,_that.product,_that.updatedAt);case _:
@@ -1083,7 +1077,7 @@ return $default(_that.id,_that.driverId,_that.productId,_that.quantity,_that.pro
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(name: 'driver_id')  int driverId, @JsonKey(name: 'product_id')  int productId,  int quantity,  ProductModel product, @JsonKey(name: 'updated_at')  String? updatedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(name: 'driver_id')  int driverId, @JsonKey(name: 'product_id')  int productId,  int quantity, @JsonKey(toJson: _productToJson, fromJson: _productFromJson)  ProductModel product, @JsonKey(name: 'updated_at')  String? updatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _StockItemModel() when $default != null:
 return $default(_that.id,_that.driverId,_that.productId,_that.quantity,_that.product,_that.updatedAt);case _:
@@ -1098,14 +1092,14 @@ return $default(_that.id,_that.driverId,_that.productId,_that.quantity,_that.pro
 @JsonSerializable()
 
 class _StockItemModel implements StockItemModel {
-  const _StockItemModel({required this.id, @JsonKey(name: 'driver_id') required this.driverId, @JsonKey(name: 'product_id') required this.productId, required this.quantity, required this.product, @JsonKey(name: 'updated_at') this.updatedAt});
+  const _StockItemModel({required this.id, @JsonKey(name: 'driver_id') required this.driverId, @JsonKey(name: 'product_id') required this.productId, required this.quantity, @JsonKey(toJson: _productToJson, fromJson: _productFromJson) required this.product, @JsonKey(name: 'updated_at') this.updatedAt});
   factory _StockItemModel.fromJson(Map<String, dynamic> json) => _$StockItemModelFromJson(json);
 
 @override final  int id;
 @override@JsonKey(name: 'driver_id') final  int driverId;
 @override@JsonKey(name: 'product_id') final  int productId;
 @override final  int quantity;
-@override final  ProductModel product;
+@override@JsonKey(toJson: _productToJson, fromJson: _productFromJson) final  ProductModel product;
 @override@JsonKey(name: 'updated_at') final  String? updatedAt;
 
 /// Create a copy of StockItemModel
@@ -1141,7 +1135,7 @@ abstract mixin class _$StockItemModelCopyWith<$Res> implements $StockItemModelCo
   factory _$StockItemModelCopyWith(_StockItemModel value, $Res Function(_StockItemModel) _then) = __$StockItemModelCopyWithImpl;
 @override @useResult
 $Res call({
- int id,@JsonKey(name: 'driver_id') int driverId,@JsonKey(name: 'product_id') int productId, int quantity, ProductModel product,@JsonKey(name: 'updated_at') String? updatedAt
+ int id,@JsonKey(name: 'driver_id') int driverId,@JsonKey(name: 'product_id') int productId, int quantity,@JsonKey(toJson: _productToJson, fromJson: _productFromJson) ProductModel product,@JsonKey(name: 'updated_at') String? updatedAt
 });
 
 
@@ -1186,7 +1180,7 @@ $ProductModelCopyWith<$Res> get product {
 /// @nodoc
 mixin _$StockDetailModel {
 
- int get id; ProductModel get product; int get quantity; double get stockValue;@JsonKey(name: 'is_low_stock') bool get isLowStock;@JsonKey(name: 'last_updated') String? get lastUpdated;@JsonKey(name: 'assignment_history') List<AssignmentHistoryModel>? get assignmentHistory;
+ int get id;@JsonKey(toJson: _productToJson, fromJson: _productFromJson) ProductModel get product; int get quantity;@JsonKey(name: 'stock_value', fromJson: _doubleFromJson) double get stockValue;@JsonKey(name: 'is_low_stock') bool get isLowStock;@JsonKey(name: 'last_updated') String? get lastUpdated;@JsonKey(name: 'assignment_history') List<AssignmentHistoryModel>? get assignmentHistory;
 /// Create a copy of StockDetailModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1219,7 +1213,7 @@ abstract mixin class $StockDetailModelCopyWith<$Res>  {
   factory $StockDetailModelCopyWith(StockDetailModel value, $Res Function(StockDetailModel) _then) = _$StockDetailModelCopyWithImpl;
 @useResult
 $Res call({
- int id, ProductModel product, int quantity, double stockValue,@JsonKey(name: 'is_low_stock') bool isLowStock,@JsonKey(name: 'last_updated') String? lastUpdated,@JsonKey(name: 'assignment_history') List<AssignmentHistoryModel>? assignmentHistory
+ int id,@JsonKey(toJson: _productToJson, fromJson: _productFromJson) ProductModel product, int quantity,@JsonKey(name: 'stock_value', fromJson: _doubleFromJson) double stockValue,@JsonKey(name: 'is_low_stock') bool isLowStock,@JsonKey(name: 'last_updated') String? lastUpdated,@JsonKey(name: 'assignment_history') List<AssignmentHistoryModel>? assignmentHistory
 });
 
 
@@ -1339,7 +1333,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  ProductModel product,  int quantity,  double stockValue, @JsonKey(name: 'is_low_stock')  bool isLowStock, @JsonKey(name: 'last_updated')  String? lastUpdated, @JsonKey(name: 'assignment_history')  List<AssignmentHistoryModel>? assignmentHistory)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(toJson: _productToJson, fromJson: _productFromJson)  ProductModel product,  int quantity, @JsonKey(name: 'stock_value', fromJson: _doubleFromJson)  double stockValue, @JsonKey(name: 'is_low_stock')  bool isLowStock, @JsonKey(name: 'last_updated')  String? lastUpdated, @JsonKey(name: 'assignment_history')  List<AssignmentHistoryModel>? assignmentHistory)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _StockDetailModel() when $default != null:
 return $default(_that.id,_that.product,_that.quantity,_that.stockValue,_that.isLowStock,_that.lastUpdated,_that.assignmentHistory);case _:
@@ -1360,7 +1354,7 @@ return $default(_that.id,_that.product,_that.quantity,_that.stockValue,_that.isL
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  ProductModel product,  int quantity,  double stockValue, @JsonKey(name: 'is_low_stock')  bool isLowStock, @JsonKey(name: 'last_updated')  String? lastUpdated, @JsonKey(name: 'assignment_history')  List<AssignmentHistoryModel>? assignmentHistory)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(toJson: _productToJson, fromJson: _productFromJson)  ProductModel product,  int quantity, @JsonKey(name: 'stock_value', fromJson: _doubleFromJson)  double stockValue, @JsonKey(name: 'is_low_stock')  bool isLowStock, @JsonKey(name: 'last_updated')  String? lastUpdated, @JsonKey(name: 'assignment_history')  List<AssignmentHistoryModel>? assignmentHistory)  $default,) {final _that = this;
 switch (_that) {
 case _StockDetailModel():
 return $default(_that.id,_that.product,_that.quantity,_that.stockValue,_that.isLowStock,_that.lastUpdated,_that.assignmentHistory);case _:
@@ -1380,7 +1374,7 @@ return $default(_that.id,_that.product,_that.quantity,_that.stockValue,_that.isL
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  ProductModel product,  int quantity,  double stockValue, @JsonKey(name: 'is_low_stock')  bool isLowStock, @JsonKey(name: 'last_updated')  String? lastUpdated, @JsonKey(name: 'assignment_history')  List<AssignmentHistoryModel>? assignmentHistory)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(toJson: _productToJson, fromJson: _productFromJson)  ProductModel product,  int quantity, @JsonKey(name: 'stock_value', fromJson: _doubleFromJson)  double stockValue, @JsonKey(name: 'is_low_stock')  bool isLowStock, @JsonKey(name: 'last_updated')  String? lastUpdated, @JsonKey(name: 'assignment_history')  List<AssignmentHistoryModel>? assignmentHistory)?  $default,) {final _that = this;
 switch (_that) {
 case _StockDetailModel() when $default != null:
 return $default(_that.id,_that.product,_that.quantity,_that.stockValue,_that.isLowStock,_that.lastUpdated,_that.assignmentHistory);case _:
@@ -1395,13 +1389,13 @@ return $default(_that.id,_that.product,_that.quantity,_that.stockValue,_that.isL
 @JsonSerializable()
 
 class _StockDetailModel implements StockDetailModel {
-  const _StockDetailModel({required this.id, required this.product, required this.quantity, required this.stockValue, @JsonKey(name: 'is_low_stock') required this.isLowStock, @JsonKey(name: 'last_updated') this.lastUpdated, @JsonKey(name: 'assignment_history') final  List<AssignmentHistoryModel>? assignmentHistory}): _assignmentHistory = assignmentHistory;
+  const _StockDetailModel({required this.id, @JsonKey(toJson: _productToJson, fromJson: _productFromJson) required this.product, required this.quantity, @JsonKey(name: 'stock_value', fromJson: _doubleFromJson) required this.stockValue, @JsonKey(name: 'is_low_stock') required this.isLowStock, @JsonKey(name: 'last_updated') this.lastUpdated, @JsonKey(name: 'assignment_history') final  List<AssignmentHistoryModel>? assignmentHistory}): _assignmentHistory = assignmentHistory;
   factory _StockDetailModel.fromJson(Map<String, dynamic> json) => _$StockDetailModelFromJson(json);
 
 @override final  int id;
-@override final  ProductModel product;
+@override@JsonKey(toJson: _productToJson, fromJson: _productFromJson) final  ProductModel product;
 @override final  int quantity;
-@override final  double stockValue;
+@override@JsonKey(name: 'stock_value', fromJson: _doubleFromJson) final  double stockValue;
 @override@JsonKey(name: 'is_low_stock') final  bool isLowStock;
 @override@JsonKey(name: 'last_updated') final  String? lastUpdated;
  final  List<AssignmentHistoryModel>? _assignmentHistory;
@@ -1447,7 +1441,7 @@ abstract mixin class _$StockDetailModelCopyWith<$Res> implements $StockDetailMod
   factory _$StockDetailModelCopyWith(_StockDetailModel value, $Res Function(_StockDetailModel) _then) = __$StockDetailModelCopyWithImpl;
 @override @useResult
 $Res call({
- int id, ProductModel product, int quantity, double stockValue,@JsonKey(name: 'is_low_stock') bool isLowStock,@JsonKey(name: 'last_updated') String? lastUpdated,@JsonKey(name: 'assignment_history') List<AssignmentHistoryModel>? assignmentHistory
+ int id,@JsonKey(toJson: _productToJson, fromJson: _productFromJson) ProductModel product, int quantity,@JsonKey(name: 'stock_value', fromJson: _doubleFromJson) double stockValue,@JsonKey(name: 'is_low_stock') bool isLowStock,@JsonKey(name: 'last_updated') String? lastUpdated,@JsonKey(name: 'assignment_history') List<AssignmentHistoryModel>? assignmentHistory
 });
 
 

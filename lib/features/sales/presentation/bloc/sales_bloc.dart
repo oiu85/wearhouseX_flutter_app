@@ -23,6 +23,9 @@ class CreateSaleBloc extends Bloc<CreateSaleEvent, CreateSaleState> {
     on<AddProductToCart>(_onAddProductToCart);
     on<RemoveProductFromCart>(_onRemoveProductFromCart);
     on<UpdateCartItemQuantity>(_onUpdateCartItemQuantity);
+    on<UpdateCartItemCustomPrice>(_onUpdateCartItemCustomPrice);
+    on<UpdateCartItemPricePercentage>(_onUpdateCartItemPricePercentage);
+    on<ApplyGlobalPricePercentage>(_onApplyGlobalPricePercentage);
     on<CreateSaleSubmitted>(_onCreateSaleSubmitted);
     on<CreateSaleReset>(_onCreateSaleReset);
     on<ClearCart>(_onClearCart);
@@ -154,6 +157,80 @@ class CreateSaleBloc extends Bloc<CreateSaleEvent, CreateSaleState> {
 
     final updatedItems = List<CartItem>.from(state.cartItems);
     updatedItems[itemIndex] = item.copyWith(quantity: event.quantity);
+
+    emit(state.copyWith(
+      cartItems: updatedItems,
+      status: const BlocStatus.success(),
+      errorMessage: null,
+    ));
+    await _saveCartToStorage(updatedItems);
+  }
+
+  Future<void> _onUpdateCartItemCustomPrice(
+    UpdateCartItemCustomPrice event,
+    Emitter<CreateSaleState> emit,
+  ) async {
+    final itemIndex = state.cartItems.indexWhere(
+      (item) => item.productId == event.productId,
+    );
+
+    if (itemIndex < 0) return;
+
+    final item = state.cartItems[itemIndex];
+    final updatedItems = List<CartItem>.from(state.cartItems);
+    updatedItems[itemIndex] = item.copyWith(
+      customPrice: event.customPrice,
+      pricePercentage: null, // Clear percentage when custom price is set
+    );
+
+    emit(state.copyWith(
+      cartItems: updatedItems,
+      status: const BlocStatus.success(),
+      errorMessage: null,
+    ));
+    await _saveCartToStorage(updatedItems);
+  }
+
+  Future<void> _onUpdateCartItemPricePercentage(
+    UpdateCartItemPricePercentage event,
+    Emitter<CreateSaleState> emit,
+  ) async {
+    final itemIndex = state.cartItems.indexWhere(
+      (item) => item.productId == event.productId,
+    );
+
+    if (itemIndex < 0) return;
+
+    final item = state.cartItems[itemIndex];
+    final calculatedPrice = event.percentage != null
+        ? item.price * (1 + event.percentage! / 100)
+        : null;
+
+    final updatedItems = List<CartItem>.from(state.cartItems);
+    updatedItems[itemIndex] = item.copyWith(
+      customPrice: calculatedPrice,
+      pricePercentage: event.percentage,
+    );
+
+    emit(state.copyWith(
+      cartItems: updatedItems,
+      status: const BlocStatus.success(),
+      errorMessage: null,
+    ));
+    await _saveCartToStorage(updatedItems);
+  }
+
+  Future<void> _onApplyGlobalPricePercentage(
+    ApplyGlobalPricePercentage event,
+    Emitter<CreateSaleState> emit,
+  ) async {
+    final updatedItems = state.cartItems.map((item) {
+      final calculatedPrice = item.price * (1 + event.percentage / 100);
+      return item.copyWith(
+        customPrice: calculatedPrice,
+        pricePercentage: event.percentage,
+      );
+    }).toList();
 
     emit(state.copyWith(
       cartItems: updatedItems,

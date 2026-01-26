@@ -70,6 +70,7 @@ _CreateSaleItemRequestModel _$CreateSaleItemRequestModelFromJson(
 ) => _CreateSaleItemRequestModel(
   productId: (json['product_id'] as num).toInt(),
   quantity: _intFromJson(json['quantity']),
+  customPrice: (json['custom_price'] as num?)?.toDouble(),
 );
 
 Map<String, dynamic> _$CreateSaleItemRequestModelToJson(
@@ -77,6 +78,7 @@ Map<String, dynamic> _$CreateSaleItemRequestModelToJson(
 ) => <String, dynamic>{
   'product_id': instance.productId,
   'quantity': instance.quantity,
+  'custom_price': ?instance.customPrice,
 };
 
 _SaleStatisticsModel _$SaleStatisticsModelFromJson(Map<String, dynamic> json) =>

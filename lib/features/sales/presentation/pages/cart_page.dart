@@ -16,6 +16,9 @@ import '../bloc/sales_state.dart';
 import '../widgets/cart_item_card.dart';
 import '../widgets/order_summary_widget.dart';
 import '../widgets/checkout_summary_dialog.dart';
+import '../widgets/cart_fast_select_button.dart';
+import '../widgets/cart_multi_select_bottom_sheet.dart';
+import '../widgets/cart_global_price_percentage.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 /// Cart page displaying cart items and checkout functionality
@@ -65,6 +68,7 @@ class _CartPageState extends State<CartPage> {
               quantity: cartItem.quantity,
               price: cartItem.price,
               subtotal: cartItem.subtotal,
+              customPrice: cartItem.customPrice,
             );
           }).toList();
 
@@ -81,6 +85,21 @@ class _CartPageState extends State<CartPage> {
 
   void _onViewStock() {
     context.push(AppRoutes.stock);
+  }
+
+  void _onFastSelect() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => const CartMultiSelectBottomSheet(),
+    );
+  }
+
+  void _onApplyGlobalPercentage(double percentage) {
+    _createSaleBloc.add(
+      ApplyGlobalPricePercentage(percentage: percentage),
+    );
   }
 
   @override
@@ -207,18 +226,36 @@ class _CartPageState extends State<CartPage> {
         SliverToBoxAdapter(
           child: Padding(
             padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 16.h),
-            child: AppText(
-              LocaleKeys.sales_cart,
-              translation: true,
-              style: theme.textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: theme.colorScheme.onSurface,
-                fontSize: 24.sp,
-                height: 1.3,
-                letterSpacing: -0.5,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppText(
+                  LocaleKeys.sales_cart,
+                  translation: true,
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface,
+                    fontSize: 24.sp,
+                    height: 1.3,
+                    letterSpacing: -0.5,
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                CartFastSelectButton(onTap: _onFastSelect),
+              ],
             ),
           ),
+        ),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: CartGlobalPricePercentage(
+              onApplyPercentage: _onApplyGlobalPercentage,
+            ),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: SizedBox(height: 16.h),
         ),
         SliverPadding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -233,6 +270,14 @@ class _CartPageState extends State<CartPage> {
                       UpdateCartItemQuantity(
                         productId: item.productId,
                         quantity: quantity,
+                      ),
+                    );
+                  },
+                  onCustomPriceChanged: (customPrice) {
+                    _createSaleBloc.add(
+                      UpdateCartItemCustomPrice(
+                        productId: item.productId,
+                        customPrice: customPrice,
                       ),
                     );
                   },

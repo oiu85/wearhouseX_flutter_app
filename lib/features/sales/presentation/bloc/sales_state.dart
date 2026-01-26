@@ -50,7 +50,7 @@ class CreateSaleState extends Equatable {
   double get totalAmount {
     return cartItems.fold(
       0.0,
-      (sum, item) => sum + (item.price * item.quantity),
+      (sum, item) => sum + item.subtotal,
     );
   }
 
@@ -69,6 +69,8 @@ class CartItem extends Equatable {
   final double price;
   final int quantity;
   final int availableQuantity;
+  final double? customPrice;
+  final double? pricePercentage;
 
   const CartItem({
     required this.productId,
@@ -76,12 +78,17 @@ class CartItem extends Equatable {
     required this.price,
     required this.quantity,
     required this.availableQuantity,
+    this.customPrice,
+    this.pricePercentage,
   });
 
-  double get subtotal => price * quantity;
+  double get effectivePrice => customPrice ?? price;
+  double get subtotal => effectivePrice * quantity;
 
   CartItem copyWith({
     int? quantity,
+    double? customPrice,
+    double? pricePercentage,
   }) {
     return CartItem(
       productId: productId,
@@ -89,11 +96,21 @@ class CartItem extends Equatable {
       price: price,
       quantity: quantity ?? this.quantity,
       availableQuantity: availableQuantity,
+      customPrice: customPrice ?? this.customPrice,
+      pricePercentage: pricePercentage ?? this.pricePercentage,
     );
   }
 
   @override
-  List<Object?> get props => [productId, productName, price, quantity, availableQuantity];
+  List<Object?> get props => [
+        productId,
+        productName,
+        price,
+        quantity,
+        availableQuantity,
+        customPrice,
+        pricePercentage,
+      ];
 }
 
 // ============================================

@@ -84,6 +84,43 @@ class ClearCart extends CreateSaleEvent {
   const ClearCart();
 }
 
+class UpdateCartItemCustomPrice extends CreateSaleEvent {
+  final int productId;
+  final double? customPrice;
+
+  const UpdateCartItemCustomPrice({
+    required this.productId,
+    required this.customPrice,
+  });
+
+  @override
+  List<Object?> get props => [productId, customPrice];
+}
+
+class UpdateCartItemPricePercentage extends CreateSaleEvent {
+  final int productId;
+  final double? percentage;
+
+  const UpdateCartItemPricePercentage({
+    required this.productId,
+    required this.percentage,
+  });
+
+  @override
+  List<Object?> get props => [productId, percentage];
+}
+
+class ApplyGlobalPricePercentage extends CreateSaleEvent {
+  final double percentage;
+
+  const ApplyGlobalPricePercentage({
+    required this.percentage,
+  });
+
+  @override
+  List<Object?> get props => [percentage];
+}
+
 // ============================================
 // SALES LIST EVENTS
 // ============================================
