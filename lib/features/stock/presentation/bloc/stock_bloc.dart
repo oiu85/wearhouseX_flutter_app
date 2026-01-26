@@ -4,7 +4,6 @@ import '../../../../core/status/bloc_status.dart';
 import '../../../../core/storage/app_storage_service.dart';
 import '../../domain/entities/category_entity.dart';
 import '../../domain/entities/stock_item_entity.dart';
-import '../../domain/entities/stock_statistics_entity.dart';
 import '../../domain/repositories/stock_repository.dart';
 import 'stock_event.dart';
 import 'stock_state.dart';
@@ -120,6 +119,9 @@ class StockBloc extends Bloc<StockEvent, StockState> {
     RefreshStock event,
     Emitter<StockState> emit,
   ) async {
+    // Set status to loadingMore to show refresh indicator while keeping content visible
+    emit(state.copyWith(status: const BlocStatus.loadingMore()));
+
     // Convert sort type to API format
     String? sortParam;
     String? orderParam = 'asc';
