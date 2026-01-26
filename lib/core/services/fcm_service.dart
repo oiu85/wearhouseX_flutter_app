@@ -134,6 +134,8 @@ class FcmService {
         'High Importance Notifications',
         description: 'This channel is used for important notifications',
         importance: Importance.high,
+        playSound: true,
+        enableVibration: true,
       );
 
       final androidImplementation = _localNotifications
@@ -164,12 +166,21 @@ class FcmService {
   /// Handle foreground messages
   Future<void> _handleForegroundMessage(RemoteMessage message) async {
     debugPrint('Received foreground message: ${message.messageId}');
+    debugPrint('Message title: ${message.notification?.title}');
+    debugPrint('Message body: ${message.notification?.body}');
+    debugPrint('Message data: ${message.data}');
 
-    // Save notification to local storage
-    await _saveNotification(message);
+    try {
+      // Save notification to local storage
+      await _saveNotification(message);
 
-    // Show local notification
-    await _showLocalNotification(message);
+      // Show local notification
+      await _showLocalNotification(message);
+      
+      debugPrint('Foreground message handled successfully');
+    } catch (e) {
+      debugPrint('Error handling foreground message: $e');
+    }
   }
 
   /// Save notification to local storage
@@ -202,6 +213,8 @@ class FcmService {
       channelDescription: 'This channel is used for important notifications',
       importance: Importance.high,
       priority: Priority.high,
+      playSound: true,
+      enableVibration: true,
     );
 
     const iosDetails = DarwinNotificationDetails(
@@ -275,7 +288,10 @@ class FcmService {
 
   /// Register FCM token with backend (non-blocking with timeout)
   Future<void> _registerTokenWithBackend() async {
-    if (_fcmToken == null) return;
+    if (_fcmToken == null) {
+      debugPrint('FCM token is null, cannot register with backend');
+      return;
+    }
 
     try {
       final platform = Platform.isAndroid
@@ -283,6 +299,8 @@ class FcmService {
           : Platform.isIOS
               ? 'ios'
               : 'web';
+
+      debugPrint('Registering FCM token with backend: ${_fcmToken!.substring(0, 20)}... (platform: $platform)');
 
       final result = await _networkClient.post(
         '/fcm-token',
@@ -296,15 +314,32 @@ class FcmService {
       );
 
       result.fold(
-        (failure) => debugPrint('Failed to register FCM token: ${failure.message}'),
-        (response) => debugPrint('FCM token registered with backend'),
+        (failure) {
+          debugPrint('Failed to register FCM token: ${failure.message}');
+          // Retry after 5 seconds
+          Future.delayed(const Duration(seconds: 5), () {
+            debugPrint('Retrying FCM token registration...');
+            _registerTokenWithBackend();
+          });
+        },
+        (response) {
+          debugPrint('FCM token registered successfully with backend');
+        },
       );
     } on TimeoutException {
-      debugPrint('FCM token registration timeout - continuing without blocking');
-      // Don't throw - this is non-critical and shouldn't block app startup
+      debugPrint('FCM token registration timeout - will retry later');
+      // Retry after 5 seconds
+      Future.delayed(const Duration(seconds: 5), () {
+        debugPrint('Retrying FCM token registration after timeout...');
+        _registerTokenWithBackend();
+      });
     } catch (e) {
       debugPrint('Failed to register FCM token with backend: $e');
-      // Don't throw - this is non-critical and shouldn't block app startup
+      // Retry after 5 seconds
+      Future.delayed(const Duration(seconds: 5), () {
+        debugPrint('Retrying FCM token registration after error...');
+        _registerTokenWithBackend();
+      });
     }
   }
 
