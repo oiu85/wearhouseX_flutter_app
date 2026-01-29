@@ -33,19 +33,20 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       password: event.password,
     );
 
-    result.fold(
-      (failure) {
+    await result.fold(
+      (failure) async {
         String errorMessage = failure.message;
-        
+
         if (failure is AuthFailure) {
-          errorMessage = 'Authentication failed. Please check your credentials.';
+          errorMessage =
+              'Authentication failed. Please check your credentials.';
         } else if (failure is NetworkFailure) {
-          if (failure.message.contains('401') || 
+          if (failure.message.contains('401') ||
               failure.message.contains('403') ||
               failure.message.contains('credentials')) {
             errorMessage = 'Invalid email or password.';
           } else if (failure.message.contains('connection') ||
-                     failure.message.contains('timeout')) {
+              failure.message.contains('timeout')) {
             errorMessage = 'Connection error. Please check your internet.';
           }
         }
