@@ -447,7 +447,13 @@
     "globalPricePercentage": "Global Price Percentage",
     "enterPercentage": "Enter percentage (e.g., 10 for 10%)",
     "apply": "Apply",
-    "percentagePreview": "This will apply {percentage}% markup to all items"
+    "percentagePreview": "This will apply {percentage}% markup to all items",
+    "unitPrice": "Unit Price",
+    "customPrice": "Custom Price",
+    "subtotal": "Subtotal",
+    "quantity": "Quantity",
+    "available": "available",
+    "enterCustomPrice": "Enter custom price"
   },
   "dashboard": {
     "todaySales": "Today's Sales",

@@ -365,6 +365,12 @@ abstract class  LocaleKeys {
   static const sales_enterPercentage = 'sales.enterPercentage';
   static const sales_apply = 'sales.apply';
   static const sales_percentagePreview = 'sales.percentagePreview';
+  static const sales_unitPrice = 'sales.unitPrice';
+  static const sales_customPrice = 'sales.customPrice';
+  static const sales_subtotal = 'sales.subtotal';
+  static const sales_quantity = 'sales.quantity';
+  static const sales_available = 'sales.available';
+  static const sales_enterCustomPrice = 'sales.enterCustomPrice';
   static const sales = 'sales';
   static const profile_title = 'profile.title';
   static const profile_name = 'profile.name';

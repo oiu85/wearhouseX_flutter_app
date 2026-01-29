@@ -384,7 +384,13 @@
     "globalPricePercentage": "نسبة السعر الإجمالية",
     "enterPercentage": "أدخل النسبة (مثلاً: 10 لـ 10%)",
     "apply": "تطبيق",
-    "percentagePreview": "سيتم تطبيق {percentage}% زيادة على جميع العناصر"
+    "percentagePreview": "سيتم تطبيق {percentage}% زيادة على جميع العناصر",
+    "unitPrice": "سعر الوحدة",
+    "customPrice": "سعر مخصص",
+    "subtotal": "المجموع الفرعي",
+    "quantity": "الكمية",
+    "available": "متاح",
+    "enterCustomPrice": "أدخل السعر المخصص"
   },
   "profile": {
     "title": "الملف الشخصي",
